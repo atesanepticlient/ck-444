@@ -1,0 +1,109 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+
+model User{
+  id                String @id @default(cuid()) @unique
+  phone             String @unique
+  password          String
+  playerId          String @unique
+  isBanned          Boolean
+  referId           String @unique
+  wallet            Wallet?
+  deposit           Deposit[]
+  createdAt           DateTime @default(now())
+  cardContainer     CardContainer?
+}
+
+model Wallet {
+  id                      String @id @default(cuid()) @unique
+  balance                 Decimal
+  signinBonus             Boolean @default(false)
+  referralBonus           Boolean @default(false)
+  currency                String @default("BDT")
+  userId                  String @unique
+  user                    User @relation(fields: [userId], references: [id])
+ 
+}
+
+model Bonus {
+  id                      String @id @default(cuid()) @unique
+  signinBonus             Int @default(5)
+  referralBonus           Int @default(5)
+}
+
+model DepositWallet {
+  id                      String @id @default(cuid()) @unique
+  walletName              String
+  walletLogo              String
+  walletNumber            String
+  instructions            String
+  warning                 String?
+  trxType                 String
+  minDeposit              Decimal
+  maximumDeposit          Decimal
+  isActive                Boolean @default(true)
+  deposits                Deposit[]
+}
+
+enum DepositStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Deposit {
+  id                      String @id @default(cuid()) @unique
+  amount                  Decimal
+  bonus                   Decimal?
+  bonusFor                String
+  senderNumber            String
+  trxID                   String?
+  walletId                String
+  trackingNumber          String @unique
+  expire                  DateTime
+  status                  DepositStatus @default(PENDING)
+  wallet                  DepositWallet @relation(fields: [walletId], references: [id])
+  userId                  String
+  user                    User @relation(fields: [userId],references: [id])
+  createdAt               DateTime @default(now())
+}
+
+enum CardType {
+  BKASH
+  NAGAD
+}
+
+model CardContainer{
+  id                      String @id @default(cuid()) @unique
+  ownerNamer              String
+  password                String
+  userId                  String @unique
+  user                    User @relation(fields: [userId], references: [id])
+  createdAt               DateTime @default(now())
+  cards                   Card[]
+}
+
+model Card{
+  id                      String @id @default(cuid()) @unique
+  cardNumber              String
+  walletNumber            String
+  cardType                CardType
+  containerId             String 
+  container               CardContainer @relation(fields: [containerId], references: [id])
+  createdAt               DateTime @default(now())
+}
