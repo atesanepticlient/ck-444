@@ -19,7 +19,11 @@ const AnnouncementModal: React.FC = () => {
 
         <div className="bg-[#00333A]/90 p-2 border-2 border-[#00333A] rounded-b-md ">
           <div className="">
-            <Image src={announcement} alt="announcement" className="w-full " />
+            <Image
+              src={announcement}
+              alt="announcement"
+              className="w-full h-[360px]"
+            />
           </div>
 
           <div className="pt-2 flex items-center gap-2">
