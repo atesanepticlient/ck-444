@@ -5,6 +5,6 @@ const baseQuery = fetchBaseQuery({ baseUrl: "/" });
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: baseQuery,
-  tagTypes: ["deposit"],
+  tagTypes: ["deposit", "card", "withdraw"],
   endpoints: () => ({}),
 });

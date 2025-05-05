@@ -1,5 +1,4 @@
 "use client";
-import { Link } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
@@ -8,7 +7,7 @@ const SiteHeader = ({
   children,
   title,
 }: {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   title: string;
 }) => {
   const router = useRouter();

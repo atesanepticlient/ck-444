@@ -13,13 +13,16 @@ export interface MakeDepositRequestOutput {
   payload: {
     trackingNuber: string;
     paymentCallback: string;
-   
   };
 }
 
+export type ExtendedWallet = Prisma.DepositWalletGetPayload<object> & {
+  paymentWallet: Prisma.PaymentWalletGetPayload<object>;
+};
+
 export interface GetDepositDataOutput {
   payload: {
-    wallets: Prisma.DepositWalletGetPayload<object>[];
+    wallets: ExtendedWallet[];
     bonus: Prisma.BonusGetPayload<object>;
   };
   success: boolean;

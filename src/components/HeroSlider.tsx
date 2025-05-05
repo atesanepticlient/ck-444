@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 
 import slider from "@/../public/slider/slider1.jpeg";
@@ -10,15 +10,13 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 
-
-
 // import required modules
 import { Pagination } from "swiper/modules";
 import Image from "next/image";
 const HeroSlider = () => {
   return (
     <div className="my-4">
-      <Swiper pagination={true} modules={[Pagination]} className="mySwiper">
+      <Swiper spaceBetween={10} pagination={true} modules={[Pagination]} className="mySwiper">
         <SwiperSlide>
           <Image
             src={slider}

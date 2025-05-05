@@ -1,3 +1,4 @@
+import AnnouncementModal from "@/components/announcement-modal";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import HomeApp from "@/components/HomeApp";
@@ -9,6 +10,7 @@ export default function Home() {
       <Header />
       <HomeApp />
       <Footer />
+      <AnnouncementModal />
     </TabLayout>
   );
 }

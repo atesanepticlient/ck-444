@@ -33,3 +33,27 @@ export const loginSchema = zod.object({
     .regex(/^(?:\+8801|8801|01)[3-9]\d{8}$/, "Invalid Phone Number"),
   password: zod.string(),
 });
+
+export const newCardCreateSchema = zod.object({
+  payeerName: zod.string().min(1, "Payeer name required"),
+  walletNumber: zod
+    .string()
+    .min(1, "Wallet Number is required")
+    .regex(/^(?:\+8801|8801|01)[3-9]\d{8}$/, "Invalid Wallet Number"),
+  password: zod.string().min(6, "Password must be at least 6 characters long"),
+  paymentWalletId: zod.string(),
+});
+
+export const cardCreateSchema = zod.object({
+  walletNumber: zod
+    .string()
+    .min(1, "Wallet Number is required")
+    .regex(/^(?:\+8801|8801|01)[3-9]\d{8}$/, "Invalid Wallet Number"),
+  password: zod.string().min(1, "Password is required"),
+  paymentWalletId: zod.string(),
+});
+
+export const withdrawSchema = zod.object({
+  amount: zod.string().min(1, "Enter amount"),
+  password: zod.string().min(1, "Password is required"),
+});

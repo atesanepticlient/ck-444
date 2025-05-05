@@ -7,6 +7,7 @@ import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import StoreProvider from "./StoreProvider";
 import { Suspense } from "react";
+import ShadcnToastProvider from "./shadcn-toast-provider";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -37,7 +38,8 @@ export default async function RootLayout({
         <Suspense>
           <SessionProvider session={session}>
             <Toaster />
-            <StoreProvider >{children}</StoreProvider>
+            <ShadcnToastProvider />
+            <StoreProvider>{children}</StoreProvider>
           </SessionProvider>
         </Suspense>
       </body>

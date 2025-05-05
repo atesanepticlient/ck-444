@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 // The exported code uses Tailwind CSS. Install Tailwind CSS in your dev environment to ensure all styles work.
@@ -19,6 +20,7 @@ import { MdSecurity } from "react-icons/md";
 import { TiUserAdd } from "react-icons/ti";
 import { FiDownload } from "react-icons/fi";
 import { MdOutlineSupportAgent } from "react-icons/md";
+import Link from "next/link";
 
 const App: React.FC = () => {
   const [balance, setBalance] = useState(1250.75);
@@ -138,99 +140,125 @@ const App: React.FC = () => {
       </div>
       {/* Main Action Buttons */}
       <div className="grid grid-cols-3 gap-2 px-4 py-2">
-        <button className="font-bold text-center text-orange-700 bg-teal-900 rounded-3xl border border-solid bg-[linear-gradient(rgb(255,230,0),rgb(255,184,0))] border-orange-200 border-opacity-50  leading-[50px] w-full shadow-[rgb(255,242,166)_0px_3.64267px_0px_1px_inset,rgb(182,65,0)_0px_3.64267px_0px_0px] flex  justify-center items-center h-[6px] ">
-          <PiHandDepositFill className="text-xl mb-1 w-7 h-7" />
-          <span className="text-lg font-medium">Deposit</span>
-        </button>
-        <button className="font-bold text-center text-orange-700 bg-teal-900 rounded-3xl border border-solid bg-[linear-gradient(rgb(255,230,0),rgb(255,184,0))] border-orange-200 border-opacity-50  leading-[50px] w-full shadow-[rgb(255,242,166)_0px_3.64267px_0px_1px_inset,rgb(182,65,0)_0px_3.64267px_0px_0px] flex  justify-center items-center h-[6px] ">
-          <PiHandWithdrawFill className="text-xl mb-1 w-7 h-7" />
-          <span className="text-lg font-medium">Withdraw</span>
-        </button>
-        <button className="font-bold text-center text-orange-700 bg-teal-900 rounded-3xl border border-solid bg-[linear-gradient(rgb(255,230,0),rgb(255,184,0))] border-orange-200 border-opacity-50  leading-[50px] w-full shadow-[rgb(255,242,166)_0px_3.64267px_0px_1px_inset,rgb(182,65,0)_0px_3.64267px_0px_0px] flex  justify-center items-center h-[6px] ">
-          <FaCreditCard className="text-xl mb-1 w-7 h-7" />
-          <span className="text-lg font-medium">My Card</span>
-        </button>
+        <Link href="/deposit">
+          <button className="font-bold  text-center text-orange-700 bg-teal-900 rounded-3xl border border-solid bg-[linear-gradient(rgb(255,230,0),rgb(255,184,0))] border-orange-200 border-opacity-50  leading-[50px] w-full shadow-[rgb(255,242,166)_0px_3.64267px_0px_1px_inset,rgb(182,65,0)_0px_3.64267px_0px_0px] flex  justify-center items-center h-[60px] ">
+            <PiHandDepositFill className="text-xl mb-1 w-7 h-7 gap-3" />
+            <span className="text-lg font-medium">Deposit</span>
+          </button>
+        </Link>
+        <Link href="/withdraw">
+          <button className="font-bold text-center text-orange-700 bg-teal-900 rounded-3xl border border-solid bg-[linear-gradient(rgb(255,230,0),rgb(255,184,0))] border-orange-200 border-opacity-50  leading-[50px] w-full shadow-[rgb(255,242,166)_0px_3.64267px_0px_1px_inset,rgb(182,65,0)_0px_3.64267px_0px_0px] flex  justify-center items-center h-[60px] gap-3">
+            <PiHandWithdrawFill className="text-xl mb-1 w-7 h-7" />
+            <span className="text-lg font-medium">Withdraw</span>
+          </button>
+        </Link>
+        <Link href="/my-cards">
+          <button className="font-bold text-center  text-orange-700 bg-teal-900 rounded-3xl border border-solid bg-[linear-gradient(rgb(255,230,0),rgb(255,184,0))] border-orange-200 border-opacity-50  leading-[50px] w-full shadow-[rgb(255,242,166)_0px_3.64267px_0px_1px_inset,rgb(182,65,0)_0px_3.64267px_0px_0px] flex  justify-center items-center gap-3 h-[60px] ">
+            <FaCreditCard className="text-xl mb-1 w-7 h-7" />
+            <span className="text-lg font-medium">My Card</span>
+          </button>
+        </Link>
       </div>
       {/* Menu Section */}
       <div className="flex-1 px-4 py-3 pb-8">
         <h3 className="text-lg font-medium mb-3 text-white">Member Menu</h3>
         <div className="grid grid-cols-4 gap-y-6 gap-x-2">
           {/* Row 1 */}
-          <div className="flex flex-col items-center cursor-pointer">
+          <Link
+            href="/rewardCenter"
+            className="flex flex-col items-center cursor-pointer"
+          >
             <div className="w-12 h-12 rounded-full bg-teal-900/75 border-x-teal-600 flex items-center justify-center  shadow-sm">
               <FaGift className="text-xl text-white" />
             </div>
             <span className="text-xs text-center text-white">Reward</span>
-          </div>
-          <div className="flex flex-col items-center cursor-pointer">
+          </Link>
+
+          <Link
+            href="/betting-record"
+            className="flex flex-col items-center cursor-pointer"
+          >
             <div className="w-12 h-12  rounded-full bg-teal-900/75 border-x-teal-600 flex items-center justify-center  shadow-sm">
               <LuHistory className="text-xl text-white" />
             </div>
             <span className="text-xs text-center text-white">
               Betting Record
             </span>
-          </div>
-          <div className="flex flex-col items-center cursor-pointer">
+          </Link>
+          <Link
+            href="/profit-loss"
+            className="flex flex-col items-center cursor-pointer"
+          >
             <div className="w-12 h-12  rounded-full bg-teal-900/75 border-x-teal-600 flex items-center justify-center  shadow-sm">
               <FaChartLine className="text-xl text-white" />
             </div>
             <span className="text-xs text-center text-white">Profit/Loss</span>
-          </div>
+          </Link>
           {/* Row 2 */}
-          <div className="flex flex-col items-center cursor-pointer">
+          <Link
+            href="/deposit-record"
+            className="flex flex-col items-center cursor-pointer"
+          >
             <div className="w-12 h-12  rounded-full bg-teal-900/75 border-x-teal-600 flex items-center justify-center  shadow-sm">
               <FaFileInvoiceDollar className="text-xl text-white" />
             </div>
             <span className="text-xs text-center text-white">
               Deposit Record
             </span>
-          </div>
-          <div className="flex flex-col items-center cursor-pointer">
+          </Link>
+
+          <Link
+            href={"withdraw-record"}
+            className="flex flex-col items-center cursor-pointer"
+          >
             <div className="w-12 h-12  rounded-full bg-teal-900/75 border-x-teal-600 flex items-center justify-center mb-1 shadow-sm">
               <LuNotebookText className="text-xl text-white" />
             </div>
             <span className="text-xs text-center text-white">
               Withdraw Record
             </span>
-          </div>
-          <div className="flex flex-col items-center cursor-pointer">
+          </Link>
+          <Link href="#" className="flex flex-col items-center cursor-pointer">
             <div className="w-12 h-12  rounded-full bg-teal-900/75 border-x-teal-600 flex items-center justify-center  shadow-sm">
               <FaCircleUser className="text-xl text-white" />
             </div>
             <span className="text-xs text-center text-white">My Account</span>
-          </div>
+          </Link>
           {/* Row 3 */}
-          <div className="flex flex-col items-center cursor-pointer">
+          <Link href="#" className="flex flex-col items-center cursor-pointer">
             <div className="w-12 h-12  rounded-full bg-teal-900/75 border-x-teal-600 flex items-center justify-center  shadow-sm">
               <MdSecurity className="text-xl text-white" />
             </div>
             <span className="text-xs text-center text-white">
               Security Center
             </span>
-          </div>
-          <div className="flex flex-col items-center cursor-pointer">
+          </Link>
+          <Link
+            href="/invite-friends"
+            className="flex flex-col items-center cursor-pointer"
+          >
             <div className="w-12 h-12  rounded-full bg-teal-900/75 border-x-teal-600 flex items-center justify-center  shadow-sm">
               <TiUserAdd className="text-xl text-white" />
             </div>
             <span className="text-xs text-center text-white">
               Invite Friend
             </span>
-          </div>
-          <div className="flex flex-col items-center cursor-pointer">
+          </Link>
+          <Link href="#" className="flex flex-col items-center cursor-pointer">
             <div className="w-12 h-12 rounded-full bg-teal-900/75 border-x-teal-600 flex items-center justify-center  shadow-sm">
               <FiDownload className="text-xl text-white" />
             </div>
             <span className="text-xs text-center text-white">Download App</span>
-          </div>
+          </Link>
           {/* Row 4 */}
-          <div className="flex flex-col items-center cursor-pointer">
+          <Link href="#" className="flex flex-col items-center cursor-pointer">
             <div className="w-12 h-12  rounded-full bg-teal-900/75 border border-x-teal-600 flex items-center justify-center  shadow-sm">
               <MdOutlineSupportAgent className="text-xl text-white" />
             </div>
             <span className="text-xs text-center text-white">
               Customer Center
             </span>
-          </div>
+          </Link>
         </div>
       </div>
     </div>

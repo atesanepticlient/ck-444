@@ -242,4 +242,94 @@
 /* Style the back side */
 .flip-card-back {
   transform: rotateY(180deg);
-} 
+}
+
+.loader {
+  width: fit-content;
+  font-size: 40px;
+  line-height: 1.5;
+  font-family: system-ui, sans-serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #0000;
+  -webkit-text-stroke: 1px rgb(255, 230, 0);
+  background: radial-gradient(
+        1.13em at 50% 1.6em,
+        rgb(255, 230, 0) 99%,
+        #0000 101%
+      )
+      calc(50% - 1.6em) 0/3.2em 100% text,
+    radial-gradient(1.13em at 50% -0.8em, #0000 99%, rgb(255, 230, 0) 101%) 50%
+      0.8em/3.2em 100% repeat-x text;
+  animation: l9 2s linear infinite;
+}
+.loader:before {
+  content: "Ck444";
+}
+@keyframes l9 {
+  to {
+    background-position: calc(50% + 1.6em) 0, calc(50% + 3.2em) 0.8em;
+  }
+}
+
+.spiner {
+  border: 2px solid #fff;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.empty-card-bg {
+  background: url("../../public/empty-card.png") no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 250px;
+}
+
+.swiper-slide {
+  background-color: transparent !important;
+}
+
+.reward-header-bg {
+  background: url("../../public/reward.svg") no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.invitaion-bonus-bg {
+  background: url("../../public/bonus-cards/invitation-bonus.png") no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.signin-bonus-bg {
+  background: url("../../public/bonus-cards/signin-bonus.png") no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.announcement-bg {
+  background: url("../../public/announcement-header.svg") no-repeat;
+  background-size: cover;
+}
+
+.btn-next-bg {
+  background: url("../../public/button-next-bg.svg") no-repeat;
+  background-size: cover;
+}
+
+.btn-prev-bg {
+  background: url("../../public/button-prev-bg.svg") no-repeat;
+  background-size: cover;
+}

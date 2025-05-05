@@ -6,11 +6,10 @@ import Link from "next/link";
 import { BiAward } from "react-icons/bi";
 import { GiCutDiamond } from "react-icons/gi";
 import { usePathname } from "next/navigation";
+import { IoGameController } from "react-icons/io5";
 
 const TabNav = () => {
   const path = usePathname();
-
-  console.log({ path });
 
   return (
     <div className="fixed bottom-[50px] left-0 w-full z-[999]">
@@ -45,7 +44,7 @@ const TabNav = () => {
         >
           <div className="flex-1">
             <Link
-              href="#"
+              href="/"
               className={`flex flex-col items-center justify-center  w-full ${
                 path === "/" ? "text-[#FFBC00]" : "text-[#23FFC8]"
               }`}
@@ -64,12 +63,12 @@ const TabNav = () => {
           </div>
           <div className="flex-1">
             <Link
-              href="/promotion"
+              href="/games"
               className={`flex flex-col items-center justify-center  w-full ${
                 path === "/promotion" ? "text-[#FFBC00]" : "text-[#23FFC8]"
               }`}
             >
-              <TbGiftCard
+              <IoGameController
                 style={{ width: 23, height: 23 }}
                 className="mx-auto"
               />
@@ -80,14 +79,14 @@ const TabNav = () => {
                   fontWeight: "700",
                 }}
               >
-                Promotion
+                Games
               </p>
             </Link>
           </div>
           {/* middle */}
           <div className="flex-1">
             <Link
-              href="#"
+              href="/invite-friends"
               className="flex flex-col items-center justify-start text-[#23FFC8] w-full"
             >
               <div
@@ -112,7 +111,7 @@ const TabNav = () => {
           </div>
           <div className="flex-1">
             <Link
-              href="/reward"
+              href="/rewardCenter"
               className={`flex flex-col items-center justify-center  w-full ${
                 path === "/reward" ? "text-[#FFBC00]" : "text-[#23FFC8]"
               }`}

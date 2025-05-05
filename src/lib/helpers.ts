@@ -62,3 +62,23 @@ export const trackingNumberGenerate = async () => {
 
   return trackingNumber;
 };
+
+export const cardNumberGenerate = async () => {
+  let cardNumber = "";
+  let hasUser = true;
+  while (hasUser) {
+    for (let i = 0; i < 15; i++) {
+      cardNumber += Math.floor(Math.random() * 10);
+    }
+
+    const alreadyExist = await db.card.findFirst({
+      where: { cardNumber: cardNumber },
+    });
+
+    if (!alreadyExist) {
+      hasUser = false;
+    }
+  }
+
+  return cardNumber;
+};

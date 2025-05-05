@@ -6,6 +6,7 @@ import { MakeDepositRequestInput } from "@/types/api/deposit";
 import { NextRequest } from "next/server";
 
 import { Decimal } from "@prisma/client/runtime/library";
+import { PaymentWallet } from "@/data/paymentWallet";
 
 export const POST = async (req: NextRequest) => {
   try {
@@ -70,7 +71,7 @@ export const POST = async (req: NextRequest) => {
     const currentTime = new Date();
     const expire = new Date(currentTime.getTime() + 5.5 * 60 * 1000);
 
-    const deposit = await db.deposit.create({
+    await db.deposit.create({
       data: {
         amount: Decimal(amount),
         bonus: Decimal(amount),
@@ -90,11 +91,15 @@ export const POST = async (req: NextRequest) => {
         expire,
       },
     });
-  
+
+    const paymentWalletInfo = JSON.parse(
+      wallet.paymentWalletId!.toString()
+    ) as PaymentWallet;
+
     const paymentCallback = `${process.env.PAYCALLBACK_URL}/${
-      wallet.walletName == "Bkash"
+      paymentWalletInfo.walletName == "Bkash"
         ? "bkash"
-        : wallet.walletName == "Nagad"
+        : paymentWalletInfo.walletName == "Nagad"
         ? "nagad"
         : ""
     }?trackingNumber=${trackingNumber}`;
@@ -103,7 +108,7 @@ export const POST = async (req: NextRequest) => {
       { success: true, payload: { trackingNumber, paymentCallback } },
       { status: 201 }
     );
-  } catch  {
+  } catch {
     return Response.json({ error: INTERNAL_SERVER_ERROR }, { status: 500 });
   }
 };

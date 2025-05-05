@@ -24,7 +24,7 @@ const BkashCard = ({
   return (
     <section className="p-5 max-sm:p-2.5">
       <article
-        className="relative mx-auto my-0 transition-transform cursor-pointer duration-[0.8s] h-[280px] w-[440px] max-sm:h-[186px] max-sm:w-[300px]"
+        className="relative mx-auto my-0 transition-transform cursor-pointer duration-700 h-[280px] w-[440px] max-sm:h-[186px] max-sm:w-[300px]"
         onClick={toggleFlip}
         style={{
           transform: isFlipped ? "rotateY(180deg)" : "rotateY(0)",
@@ -72,7 +72,7 @@ const CardFront = ({
       </header>
 
       <p className="mb-4 text-2xl tracking-[3px] max-sm:text-lg font-mono">
-        •••• •••• •••• {cardNumber.slice(-4)}
+        •••• •••• •••• ${cardNumber.slice(-4)}
       </p>
 
       <footer className="flex justify-between items-end pb-3">

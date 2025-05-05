@@ -17,7 +17,7 @@ datasource db {
 
 
 model User{
-  id                String @id @default(cuid()) @unique
+  id                String @id @default(cuid()) 
   phone             String @unique
   password          String
   playerId          String @unique
@@ -25,12 +25,25 @@ model User{
   referId           String @unique
   wallet            Wallet?
   deposit           Deposit[]
-  createdAt           DateTime @default(now())
+  createdAt         DateTime @default(now())
   cardContainer     CardContainer?
+  withdraws         Withdraw[]
+  inviationBonus    InvitationBonus?
+  invitedById       String?
+  invitedBy         InvitationBonus? @relation("InvitedUsers", fields: [invitedById], references: [id])
+}
+
+model InvitationBonus {
+  id                      String @id @default(cuid()) 
+  totalRegisters          Int @default(0)
+  totalValidreferral      Int @default(0)
+  invitedUsers            User[]   @relation("InvitedUsers")
+  userId                  String @unique
+  user                    User @relation(fields: [userId], references: [id])
 }
 
 model Wallet {
-  id                      String @id @default(cuid()) @unique
+  id                      String @id @default(cuid()) 
   balance                 Decimal
   signinBonus             Boolean @default(false)
   referralBonus           Boolean @default(false)
@@ -41,15 +54,21 @@ model Wallet {
 }
 
 model Bonus {
-  id                      String @id @default(cuid()) @unique
+  id                      String @id @default(cuid()) 
   signinBonus             Int @default(5)
   referralBonus           Int @default(5)
 }
 
-model DepositWallet {
-  id                      String @id @default(cuid()) @unique
-  walletName              String
+
+model PaymentWallet {
+  id                      String @id @default(cuid())
   walletLogo              String
+  walletName              String
+}
+
+model DepositWallet {
+  id                      String @id @default(cuid()) 
+  paymentWalletId         String
   walletNumber            String
   instructions            String
   warning                 String?
@@ -67,7 +86,7 @@ enum DepositStatus {
 }
 
 model Deposit {
-  id                      String @id @default(cuid()) @unique
+  id                      String @id @default(cuid()) 
   amount                  Decimal
   bonus                   Decimal?
   bonusFor                String
@@ -83,14 +102,11 @@ model Deposit {
   createdAt               DateTime @default(now())
 }
 
-enum CardType {
-  BKASH
-  NAGAD
-}
+
 
 model CardContainer{
-  id                      String @id @default(cuid()) @unique
-  ownerNamer              String
+  id                      String @id @default(cuid()) 
+  ownerName               String
   password                String
   userId                  String @unique
   user                    User @relation(fields: [userId], references: [id])
@@ -99,11 +115,30 @@ model CardContainer{
 }
 
 model Card{
-  id                      String @id @default(cuid()) @unique
+  id                      String @id @default(cuid()) 
   cardNumber              String
   walletNumber            String
-  cardType                CardType
+  paymentWalletid         String 
   containerId             String 
+  isActive                Boolean @default(true)
   container               CardContainer @relation(fields: [containerId], references: [id])
   createdAt               DateTime @default(now())
+
+  withdraws               Withdraw[] 
+}
+
+enum WithdrawStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+model Withdraw {
+  id                      String @id @default(cuid()) 
+  amount                  Decimal
+  expire                  DateTime
+  createdAt               DateTime @default(now())
+  cardId                  String
+  card                    Card @relation(fields: [cardId], references: [id])
+  userId                  String
+  user                    User @relation(fields: [userId], references: [id])
 }

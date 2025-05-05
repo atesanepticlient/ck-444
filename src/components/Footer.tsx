@@ -29,13 +29,13 @@ const Footer = () => {
               Live Chat
             </div>
 
-            <div className="[background:linear-gradient(180deg,rgba(255,184,0,1)_25%,rgba(255,230,0,1)_40%,rgba(255,184,0,1)_54%,rgba(255,230,0,1)_69%,rgba(255,184,0,1)_83%)] [-webkit-background-clip:text] !bg-clip-text text-transparent [-webkit-text-fill-color:transparent] [text-fill-color:transparent]  absolute w-[119px] h-[26px] top-0 left-0 font-www-wwwck444-com-segoe-UI-bold-upper font-bold text-[length:var(--www-wwwck444-com-segoe-UI-bold-upper-font-size)] text-center tracking-[var(--www-wwwck444-com-segoe-UI-bold-upper-letter-spacing)] leading-[var(--www-wwwck444-com-segoe-UI-bold-upper-line-height)] whitespace-nowrap [font-style:var(--www-wwwck444-com-segoe-UI-bold-upper-font-style)] text-3xl ">
+            <div className="[background:linear-gradient(180deg,#ffb800_25%,rgba(255,230,0,1)_40%,rgba(255,184,0,1)_54%,rgba(255,230,0,1)_69%,rgba(255,184,0,1)_83%)] [-webkit-background-clip:text] !bg-clip-text text-transparent [-webkit-text-fill-color:transparent] [text-fill-color:transparent]  absolute w-[119px] h-[26px] top-0 left-0 font-www-wwwck444-com-segoe-UI-bold-upper font-bold text-[length:var(--www-wwwck444-com-segoe-UI-bold-upper-font-size)] text-center tracking-[var(--www-wwwck444-com-segoe-UI-bold-upper-letter-spacing)] leading-[var(--www-wwwck444-com-segoe-UI-bold-upper-line-height)] whitespace-nowrap [font-style:var(--www-wwwck444-com-segoe-UI-bold-upper-font-style)] text-3xl ">
               Live Chat
             </div>
           </div>
         </Link>
 
-        <div className="absolute w-[131px] h-[23px] top-[95px] left-[23px] font-www-wwwck444-com-inter-bold font-[number:var(--www-wwwck444-com-inter-bold-font-weight)] !text-yellow-500 text-[length:var(--www-wwwck444-com-inter-bold-font-size)] tracking-[var(--www-wwwck444-com-inter-bold-letter-spacing)] leading-[var(--www-wwwck444-com-inter-bold-line-height)] whitespace-nowrap [font-style:var(--www-wwwck444-com-inter-bold-font-style)]">
+        <div className="absolute w-[131px] h-[23px] top-[95px] left-[23px]  !text-yellow-300 text-[length:var(--www-wwwck444-com-inter-bold-font-size)] tracking-[var(--www-wwwck444-com-inter-bold-letter-spacing)] leading-[var(--www-wwwck444-com-inter-bold-line-height)] whitespace-nowrap [font-style:var(--www-wwwck444-com-inter-bold-font-style)] text-lg font-bold">
           Game center
         </div>
 

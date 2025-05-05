@@ -24,7 +24,7 @@ const NagadCard = ({
   return (
     <section className="p-5 max-sm:p-2.5">
       <article
-        className="relative mx-auto my-0 transition-transform cursor-pointer duration-[0.8s] h-[280px] w-[440px] max-sm:h-[186px] max-sm:w-[300px]"
+        className="relative mx-auto my-0 transition-transform cursor-pointer duration-700 h-[280px] w-[440px] max-sm:h-[186px] max-sm:w-[300px]"
         onClick={toggleFlip}
         style={{
           transform: isFlipped ? "rotateY(180deg)" : "rotateY(0)",
@@ -103,7 +103,7 @@ const CardBack = ({ nagadNumber }: { nagadNumber: string }) => {
         className="mt-8 w-full bg-zinc-800 h-[50px] pl-4"
         aria-label="Magnetic stripe"
       >
-        <p className="-mb-1 text-sm text-white">bKash Number</p>
+        <p className="-mb-1 text-sm text-white">Nagad Number</p>
         <p className="text-lg tracking-wider text-white font-mono">
           {nagadNumber}
         </p>

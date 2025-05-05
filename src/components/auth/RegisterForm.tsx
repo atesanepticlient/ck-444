@@ -25,7 +25,7 @@ import { toast } from "react-hot-toast";
 import SpinLoader from "../loader/SpinLoader";
 
 const RegisterForm = () => {
-  const referId = useSearchParams().get("referid") || "";
+  const referId = useSearchParams().get("r") || "";
   const [pending, startTransiction] = useTransition();
 
   const form = useForm<zod.infer<typeof registerSchema>>({

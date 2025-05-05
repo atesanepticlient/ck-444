@@ -9,20 +9,19 @@ import {
 } from "@/lib/features/depositApiSlice";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { FaArrowLeftLong } from "react-icons/fa6";
 import { MdOutlineSupportAgent, MdHistory } from "react-icons/md";
 import { CiWallet } from "react-icons/ci";
-import Image from "next/image";
-import { Prisma } from "@prisma/client";
 import { formatBDT } from "@/lib/utils";
 import { CiGift } from "react-icons/ci";
 import { PulseLoader } from "react-spinners";
-import DepositPageLoader from "@/components/loader/DepositPageLoader";
+import PageLoader from "@/components/loader/PageLoader";
+
 import Decimal from "decimal.js";
 import toast from "react-hot-toast";
 import { INTERNAL_SERVER_ERROR } from "@/error";
-import { redirect } from "next/navigation";
 import SiteHeader from "@/components/SiteHeader";
+import PaymentMethod from "@/components/PaymentMethod";
+import { ExtendedWallet } from "@/types/api/deposit";
 
 const App: React.FC = () => {
   const { data, isLoading } = useGetDepositPaymentDataQuery();
@@ -31,7 +30,7 @@ const App: React.FC = () => {
   const user = useGetCurrentUser();
 
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
-    useState<Prisma.DepositWalletGetPayload<object>>();
+    useState<ExtendedWallet>();
   const [depositAmount, setDepositAmount] = useState<string>("");
   const [walletNumber, setWalletNumber] = useState("");
   const [selectedBonus, setSelectedBonus] = useState<{
@@ -155,8 +154,6 @@ const App: React.FC = () => {
   }, [wallets]);
 
   useEffect(() => {
-    console.log({ user });
-    console.log({ bonus });
     if (bonus && user) {
       let isSignBonusActive = false;
       let isReferBonusActive = false;
@@ -215,7 +212,7 @@ const App: React.FC = () => {
               <MdHistory className="text-lg" />
             </Link>
           </SiteHeader>
-          <main className="flex-1 max-w-3xl mx-auto w-full px-4 py-6 space-y-6">
+          <main className=" w-full px-4 py-6 space-y-6">
             {/* Payment Methods */}
             <section className="bg-white rounded-lg shadow-sm p-4">
               <h2 className="text-lg font-medium text-gray-800 mb-4">
@@ -237,38 +234,13 @@ const App: React.FC = () => {
                   </div>
                 </div>
 
-                {wallets?.map((method) => (
-                  <div
-                    key={method.id}
-                    className={`flex-shrink-0 mx-1 cursor-pointer whitespace-nowrap`}
-                    onClick={() => setSelectedPaymentMethod(method)}
-                  >
-                    <div
-                      className={`w-24 h-24 rounded-lg border-2 flex flex-col items-center justify-center p-3 transition-all ${
-                        selectedPaymentMethod?.id === method.id
-                          ? "border-blue-500 bg-blue-50"
-                          : "border-gray-200 hover:border-gray-300"
-                      }`}
-                    >
-                      <Image
-                        src={method.walletLogo}
-                        width={40}
-                        height={30}
-                        unoptimized
-                        alt={method.walletName}
-                        className="w-[40px] h-auto"
-                      />
-                      <span
-                        className={`mt-2 text-sm font-medium ${
-                          selectedPaymentMethod?.id === method.id
-                            ? "text-blue-600"
-                            : "text-gray-700"
-                        }`}
-                      >
-                        {method.walletName}
-                      </span>
-                    </div>
-                  </div>
+                {wallets?.map((pw,i) => (
+                  <PaymentMethod
+                    key={i}
+                    method={pw}
+                    selectedPaymentMethod={selectedPaymentMethod!}
+                    onClick={() => setSelectedPaymentMethod(pw)}
+                  />
                 ))}
               </div>
             </section>
@@ -475,7 +447,7 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {(!data || isLoading || !user) && <DepositPageLoader />}
+      {(!data || isLoading || !user) && <PageLoader />}
     </>
   );
 };

@@ -37,7 +37,10 @@ export const register = async (data: zod.infer<typeof registerSchema>) => {
 
     if (referralId) {
       const referralUser = await findUserByReferId(referralId);
-      // TODO : update referral user
+      await db.invitationBonus.update({
+        where: { userId: referralUser!.id },
+        data: { totalRegisters: { increment: 1 } },
+      });
       isReferralBonusActive = !!referralUser;
     }
 
@@ -59,6 +62,9 @@ export const register = async (data: zod.infer<typeof registerSchema>) => {
             referralBonus: isReferralBonusActive,
           },
         },
+        inviationBonus: {
+          create: {},
+        },
       },
     });
 
@@ -69,8 +75,12 @@ export const register = async (data: zod.infer<typeof registerSchema>) => {
         redirect: false,
       });
     } catch (error) {
-      const credentialsError = error as CredentialsSignin;
-      return { error: credentialsError?.cause?.err?.message };
+      if (error instanceof Error) {
+        if (error.name !== "AccessDenied") {
+          const credentialsError = error as CredentialsSignin;
+          return { error: credentialsError.message };
+        }
+      }
     }
 
     return { success: LOGIN_SUCCESS };

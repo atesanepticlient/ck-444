@@ -6,6 +6,7 @@ import HotGames from "./HotGames";
 import SlotGames from "./SlotsGames";
 import LiveCasino from "./LiveCasino";
 import WithdrawDepositButton from "./WithdrawDepositButton";
+import Sports from "./Sports";
 
 const HomeApp = () => {
   return (
@@ -14,6 +15,7 @@ const HomeApp = () => {
       <HeroSlider />
       <WithdrawDepositButton />
       <AppMenuItems />
+      <Sports />
       <HotGames />
       <SlotGames />
       <LiveCasino />

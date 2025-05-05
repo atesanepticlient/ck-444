@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import NextAuth from "next-auth";
 import { db } from "./lib/db";
 
@@ -10,14 +11,14 @@ export const { signIn, signOut, auth, handlers } = NextAuth({
     strategy: "jwt",
   },
   pages: {
-      signIn: "/login",
+    signIn: "/login",
   },
 
   callbacks: {
     async jwt({ token }) {
       return token;
     },
-    async session({ token, session }) {
+    async session({ token, session }: { token : any; session : any}) {
       if (token.sub && session.user) {
         const user = await db.user.findUnique({
           where: { id: token.sub },

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import React, { useState } from "react";
 import { HiOutlineRefresh } from "react-icons/hi";
@@ -34,17 +35,23 @@ const UserBalance: React.FC = () => {
 
 interface UserAvatarProps {
   imageUrl: string;
+  className?: string;
 }
 
-export const UserAvatar: React.FC<UserAvatarProps> = ({ imageUrl }) => {
+export const UserAvatar: React.FC<UserAvatarProps> = ({
+  imageUrl,
+  className = "",
+}) => {
   return (
-    <div className="overflow-x-hidden overflow-y-hidden p-0.5 mr-2 border border-t border-r border-b border-l border-solid bg-[linear-gradient(rgb(255,230,0),rgb(255,184,0))] border-orange-200 border-opacity-50 h-[39px] rounded-[39.168px] shadow-[rgb(255,242,166)_0px_1.9584px_0px_1.7px_inset,rgb(182,65,0)_0px_1.9584px_0px_0px] w-[39px]">
+    <div
+      className={`overflow-x-hidden overflow-y-hidden p-0.5 mr-2 border border-t border-r border-b border-l border-solid bg-[linear-gradient(rgb(255,230,0),rgb(255,184,0))] border-orange-200 border-opacity-50  rounded-[39.168px] shadow-[rgb(255,242,166)_0px_1.9584px_0px_1.7px_inset,rgb(182,65,0)_0px_1.9584px_0px_0px] w-[39px] h-[39px] ${className}`}
+    >
       <div className="flex overflow-x-hidden overflow-y-hidden relative justify-center items-center rounded-full size-full">
         <div className="overflow-x-hidden overflow-y-hidden rounded-full size-full">
           <img
             alt="User avatar"
             src={imageUrl}
-            className="overflow-x-clip overflow-y-clip size-full"
+            className="overflow-x-clip overflow-y-clip size-full  object-cover"
           />
         </div>
       </div>

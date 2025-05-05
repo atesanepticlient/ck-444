@@ -26,8 +26,19 @@ const depositApiSlice = apiSlice.injectEndpoints({
         body,
       }),
     }),
+
+    hasCardContainer: builder.query<{ hasCardContainer: boolean }, void>({
+      query: () => ({
+        url: "api/card/has",
+        method: "GET",
+      }),
+      providesTags: ["card"],
+    }),
   }),
 });
 
-export const { useGetDepositPaymentDataQuery, useMakeDepositeMutation } =
-  depositApiSlice;
+export const {
+  useGetDepositPaymentDataQuery,
+  useMakeDepositeMutation,
+  useHasCardContainerQuery,
+} = depositApiSlice;
