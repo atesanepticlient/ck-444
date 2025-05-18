@@ -1,28 +1,29 @@
 import NextAuth from "next-auth";
-import { authRoutes, publicRoutes, providerApiPrefix } from "./routes";
+// import { authRoutes, publicRoutes, providerApiPrefix } from "./routes";
 import authConfig from "./auth.config";
 
 const { auth } = NextAuth({ ...authConfig });
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default auth(async (req) => {
-  const { nextUrl } = req;
-  const session = !!req.auth;
+  // const { nextUrl } = req;
+  // const session = !!req.auth;
 
-  const isAuthRoute = authRoutes.includes(nextUrl.pathname);
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
-  const isProvider = nextUrl.pathname.startsWith(providerApiPrefix);
+  // const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+  // const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
+  // const isProvider = nextUrl.pathname.startsWith(providerApiPrefix);
 
-  if (session && isAuthRoute && !isProvider) {
-    return Response.redirect(new URL("/", nextUrl));
-  }
+  // if (session && isAuthRoute && !isProvider) {
+  //   return Response.redirect(new URL("/", nextUrl));
+  // }
 
-  if (!session && !isPublicRoute && !isProvider && !isAuthRoute) {
-    const callbackUrl = nextUrl.pathname;
+  // if (!session && !isPublicRoute && !isProvider && !isAuthRoute) {
+  //   const callbackUrl = nextUrl.pathname;
 
-    const encodeCallbackUrl = encodeURIComponent(callbackUrl);
-    return Response.redirect(
-      new URL(`/login?redirect=${encodeCallbackUrl}`, nextUrl)
-    );
-  }
+  //   const encodeCallbackUrl = encodeURIComponent(callbackUrl);
+  //   return Response.redirect(
+  //     new URL(`/login?redirect=${encodeCallbackUrl}`, nextUrl)
+  //   );
+  // }
 });
 
 export const config = {

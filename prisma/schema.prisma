@@ -37,9 +37,31 @@ model InvitationBonus {
   id                      String @id @default(cuid()) 
   totalRegisters          Int @default(0)
   totalValidreferral      Int @default(0)
+  claimedRewards          ClaimedInvitationReward[]
   invitedUsers            User[]   @relation("InvitedUsers")
   userId                  String @unique
   user                    User @relation(fields: [userId], references: [id])
+}
+
+model InvitationRewareds {
+  id                      String @id @default(cuid()) 
+  rewardImg               String
+  targetReferral          Int
+  prize                   Decimal
+  claimedUsers            ClaimedInvitationReward[]
+
+}
+
+model ClaimedInvitationReward {
+  id                   String               @id @default(cuid())
+  invitationBonusId    String
+  rewardId             String
+  claimedAt            DateTime             @default(now())
+
+  invitationBonus      InvitationBonus      @relation(fields: [invitationBonusId], references: [id])
+  reward               InvitationRewareds   @relation(fields: [rewardId], references: [id])
+
+  @@unique([invitationBonusId, rewardId]) // optional: prevent duplicate claims
 }
 
 model Wallet {
@@ -142,3 +164,5 @@ model Withdraw {
   userId                  String
   user                    User @relation(fields: [userId], references: [id])
 }
+
+

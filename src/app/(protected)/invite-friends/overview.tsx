@@ -15,15 +15,22 @@ import reward_4 from "@/../public/icons/rewards/reward-4.png";
 import Image from "next/image";
 
 import { FaLink } from "react-icons/fa6";
+import { StaticticType } from "@/types/api/reward";
 
-const Overview = () => {
+interface OverviewProps {
+  statictic: StaticticType;
+}
+const Overview = ({ statictic }: OverviewProps) => {
+  const { registersCount, todayIncome, validReferral, yeasterdayIncome } =
+    statictic;
+
   return (
     <div className="space-y-3">
       <Statictic
-        registersCount={0}
-        todayIncome={0}
-        validReferral={0}
-        yeasterdayIncome={0}
+        registersCount={registersCount}
+        todayIncome={todayIncome}
+        validReferral={validReferral}
+        yeasterdayIncome={yeasterdayIncome}
       />
       <InviteLink invitationCode="ijeol4o" />
       <ReleasedReward />
@@ -33,18 +40,12 @@ const Overview = () => {
 
 export default Overview;
 
-interface StaticticProps {
-  todayIncome: number;
-  yeasterdayIncome: number;
-  registersCount: number;
-  validReferral: number;
-}
 const Statictic = ({
   registersCount,
   todayIncome,
   validReferral,
   yeasterdayIncome,
-}: StaticticProps) => {
+}: StaticticType) => {
   return (
     <div className="grid grid-cols-2 gap-2">
       <div className="bg-[linear-gradient(108deg,_#abdcff,_#0396ff)]  p-3 rounded-sm">

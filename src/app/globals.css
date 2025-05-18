@@ -181,7 +181,16 @@
   background-attachment: fixed;
   background-size: cover;
 }
-
+.signin-bonus-header-bg {
+  background-color: #ee5522;
+  background-image: url("../../public/signin-bonus-header-bg.svg");
+  background-size: cover;
+}
+.signin-bonus-modal-header-bg {
+  background-color: #2269ee;
+  background-image: url("../../public/icons/rewards/signin-modal-bg.png");
+  background-size: cover;
+}
 .wiggle-glow {
   animation: wiggle 1.2s ease-in-out infinite, glow 2s ease-in-out infinite;
   display: inline-block;
