@@ -73,7 +73,7 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
-    if (requestBody.key !== process.env.HALL_KEY) {
+    if (requestBody.key != process.env.HALL_KEY) {
       return new Response(
         JSON.stringify({ success: "fail", error: "hall_key_invalid" }),
         { status: 403 }

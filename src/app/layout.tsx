@@ -40,18 +40,20 @@ export default async function RootLayout({
         referrerPolicy="no-referrer"
       />
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-[600px] mx-auto`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased app`}
       >
-        <Suspense>
-          <SessionProvider session={session}>
-            <Toaster />
-            <ShadcnToastProvider />
-            <StoreProvider>
-              <GamesLoader />
-              {children}
-            </StoreProvider>
-          </SessionProvider>
-        </Suspense>
+        <div className="max-w-[600px] mx-auto">
+          <Suspense>
+            <SessionProvider session={session}>
+              <Toaster />
+              <ShadcnToastProvider />
+              <StoreProvider>
+                <GamesLoader />
+                {children}
+              </StoreProvider>
+            </SessionProvider>
+          </Suspense>
+        </div>
       </body>
     </html>
   );
