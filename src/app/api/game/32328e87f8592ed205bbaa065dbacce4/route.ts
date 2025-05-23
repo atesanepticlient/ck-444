@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest } from "next/server";
-
-import createHttpError from "http-errors";
 import { db } from "@/lib/db";
 import { Decimal } from "@prisma/client/runtime/library";
 
@@ -44,6 +42,7 @@ type WriteBetType = {
   date?: Date;
   WinLines?: string;
 };
+
 type RequestType = GetBalanceType & WriteBetType;
 
 export const POST = async (req: NextRequest) => {
@@ -60,16 +59,25 @@ export const POST = async (req: NextRequest) => {
       date: parseDate(rawBody.date),
     };
 
-    if (requestBody.cmd != "getBalance" && requestBody.cmd != "writeBet") {
-      throw createHttpError(403, "cmd_not_found");
+    if (requestBody.cmd !== "getBalance" && requestBody.cmd !== "writeBet") {
+      return new Response(
+        JSON.stringify({ success: "fail", error: "cmd_not_found" }),
+        { status: 403 }
+      );
     }
 
     if (requestBody.hall !== +process.env.HALL_ID!) {
-      throw createHttpError(403, "hall_id_not_found");
+      return new Response(
+        JSON.stringify({ success: "fail", error: "hall_id_not_found" }),
+        { status: 403 }
+      );
     }
 
     if (requestBody.key !== process.env.HALL_KEY) {
-      throw createHttpError(403, "hall_key_invalid");
+      return new Response(
+        JSON.stringify({ success: "fail", error: "hall_key_invalid" }),
+        { status: 403 }
+      );
     }
 
     const user = await db.user.findFirst({
@@ -78,12 +86,15 @@ export const POST = async (req: NextRequest) => {
     });
 
     if (!user) {
-      throw createHttpError(200, "user_not_found");
+      return new Response(
+        JSON.stringify({ success: "fail", error: "user_not_found" }),
+        { status: 200 }
+      );
     }
 
     let userBalance = user.wallet?.balance || new Decimal(0);
 
-    if (requestBody.cmd == "getBalance") {
+    if (requestBody.cmd === "getBalance") {
       return Response.json({
         success: "success",
         error: "",
@@ -93,14 +104,18 @@ export const POST = async (req: NextRequest) => {
       });
     }
 
-    if (requestBody.cmd == "writeBet") {
+    if (requestBody.cmd === "writeBet") {
       if (requestBody.bet && requestBody.bet > userBalance) {
-        throw createHttpError(403, "fail_balance");
+        return new Response(
+          JSON.stringify({ success: "fail", error: "fail_balance" }),
+          { status: 403 }
+        );
       }
 
       if (requestBody.bet) {
         userBalance = userBalance.sub(requestBody.bet);
-      } else if (requestBody.win) {
+      }
+      if (requestBody.win) {
         userBalance = userBalance.add(requestBody.win);
       }
 
@@ -118,10 +133,10 @@ export const POST = async (req: NextRequest) => {
       });
     }
   } catch (error: any) {
-    console.log("ERRROR ", error);
+    console.log("ERROR", error);
     return Response.json(
-      { success: "fail", error: error.message },
-      { status: 200 }
+      { success: "fail", error: error.message || "unexpected_error" },
+      { status: 500 }
     );
   }
 };
