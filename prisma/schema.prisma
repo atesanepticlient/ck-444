@@ -158,6 +158,7 @@ model Withdraw {
   id                      String @id @default(cuid()) 
   amount                  Decimal
   expire                  DateTime
+  status                  WithdrawStatus @default(PENDING)
   createdAt               DateTime @default(now())
   cardId                  String
   card                    Card @relation(fields: [cardId], references: [id])

@@ -10,7 +10,7 @@ export const authRoutes = ["/register", "/login", "/forget-password"];
  * can be access without login or with login
  * @type {string[]}
  */
-export const publicRoutes = ["/"];
+export const publicRoutes = ["/", "/slots", "/api/asiaapi", "/api/game/32328e87f8592ed205bbaa065dbacce4"];
 
 /**
  * The prefix for api authentication routes

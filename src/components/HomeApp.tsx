@@ -2,10 +2,10 @@ import React from "react";
 import AppNotice from "./AppNotice";
 import HeroSlider from "./HeroSlider";
 import AppMenuItems from "./AppMenuItems";
-import HotGames from "./HotGames";
 import SlotGames from "./SlotsGames";
-import LiveCasino from "./LiveCasino";
 import WithdrawDepositButton from "./WithdrawDepositButton";
+import LiveCasino from "./LiveCasino";
+import ESports from "./E-Sports";
 import Sports from "./Sports";
 
 const HomeApp = () => {
@@ -15,9 +15,10 @@ const HomeApp = () => {
       <HeroSlider />
       <WithdrawDepositButton />
       <AppMenuItems />
-      <Sports />
-      <HotGames />
+      {/* <HotGames /> */}
       <SlotGames />
+      <ESports />
+      <Sports />
       <LiveCasino />
     </div>
   );

@@ -7,7 +7,7 @@ import sports_2 from "@/../public/sports/sports-2.png";
 import sports_3 from "@/../public/sports/sports-3.png";
 import sports_4 from "@/../public/sports/sports-4.png";
 
-const sportsData = [
+export const sportsData = [
   {
     image: sports_1,
     redirect: "#",
@@ -68,7 +68,13 @@ const Sports = () => {
 
 export default Sports;
 
-const SportsCard = ({ image, redirect }: { image: any; redirect: string }) => {
+export const SportsCard = ({
+  image,
+  redirect,
+}: {
+  image: any;
+  redirect: string;
+}) => {
   return (
     <Link href={redirect}>
       <Image src={image} alt="sports" />

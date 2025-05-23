@@ -23,36 +23,37 @@ const menuData = [
     redirect: "#",
   },
   {
-    title: "Favorites",
-    icon: fav,
-    redirect: "#",
-  },
-  {
     title: "Slots",
     icon: slot,
-    redirect: "#",
+    redirect: "/slots",
   },
-
   {
     title: "Sports",
     icon: sport,
-    redirect: "#",
+    redirect: "/sports",
   },
   {
     title: "Live",
     icon: live,
+    redirect: "/live-casino",
+  },
+  {
+    title: "E-Sports",
+    icon: esports,
+    redirect: "/e-sports",
+  },
+  {
+    title: "Favorites",
+    icon: fav,
     redirect: "#",
   },
+
   {
     title: "Lottery",
     icon: lottery,
     redirect: "#",
   },
-  {
-    title: "E-Sports",
-    icon: esports,
-    redirect: "#",
-  },
+
   {
     title: "PVP",
     icon: pvp,

@@ -8,43 +8,51 @@ import live from "@/../public/icons/nav-live.svg";
 import lottery from "@/../public/icons/nav-lottery.svg";
 import esports from "@/../public/icons/nav-esport.svg";
 import fav from "@/../public/icons/nav-fav.svg";
-import pvp from "@/../public/icons/nav-pvp.svg";
 import Image from "next/image";
 
 const menuData = [
   {
     title: "Hot Games",
     icon: hotGame,
-  },
-  {
-    title: "Favorites",
-    icon: fav,
-  },
-  {
-    title: "Slots",
-    icon: slot,
+    link: "#",
   },
 
   {
-    title: "Sports",
-    icon: sport,
+    title: "Slots",
+    icon: slot,
+    link: "/slot",
   },
   {
     title: "Live",
     icon: live,
-  },
-  {
-    title: "Lottery",
-    icon: lottery,
+    link: "/live-casino",
   },
   {
     title: "E-Sports",
     icon: esports,
+    link: "/e-sports",
   },
   {
-    title: "PVP",
-    icon: pvp,
+    title: "Sports",
+    icon: sport,
+    link: "/sports",
   },
+  {
+    title: "Favorites",
+    icon: fav,
+    link: "#",
+  },
+
+  {
+    title: "Lottery",
+    icon: lottery,
+    link: "#",
+  },
+
+  // {
+  //   title: "PVP",
+  //   icon: pvp,
+  // },
 ];
 
 const AppMenuItems = () => {
@@ -52,7 +60,7 @@ const AppMenuItems = () => {
     <div className="max-w-full w-full overflow-auto scrollbar-none">
       <div className="flex gap-2 items-center flex-nowrap flex-shrink-0 my-4 ">
         {menuData.map((menu, i) => (
-          <Link href="#" key={i}>
+          <Link href={menu.link} key={i}>
             <div
               style={{
                 height: 41.59,

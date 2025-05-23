@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
 import { Toaster } from "react-hot-toast";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import StoreProvider from "./StoreProvider";
 import { Suspense } from "react";
 import ShadcnToastProvider from "./shadcn-toast-provider";
+import GamesLoader from "./GamesLoader";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -32,6 +32,13 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-..."
+        crossOrigin="anonymous"
+        referrerPolicy="no-referrer"
+      />
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-[600px] mx-auto`}
       >
@@ -39,7 +46,10 @@ export default async function RootLayout({
           <SessionProvider session={session}>
             <Toaster />
             <ShadcnToastProvider />
-            <StoreProvider>{children}</StoreProvider>
+            <StoreProvider>
+              <GamesLoader />
+              {children}
+            </StoreProvider>
           </SessionProvider>
         </Suspense>
       </body>

@@ -1,142 +1,12 @@
 "use client";
 import React, { useRef } from "react";
 
-import aviator from "@/../public/games/aviator.png";
-import boxingKing from "@/../public/games/JL-boxing-king.png";
-import fortuneGems from "@/../public/games/JL-fortune-gems.png";
-import moneyComing from "@/../public/games/JL-money-coming.png";
-import crazyTime from "@/../public/games/crazy-time.png";
-import superAce from "@/../public/games/super-ace.png";
-
-import jl from "@/../public/games/JL.png";
-import spb from "@/../public/games/SPB.png";
-import evo from "@/../public/games/evo.png";
 import { GameCardWithProvider } from "./GameCards";
 
 import GameSelectionHeader from "./GameSelectionHeader";
-
-const hotGamesData = [
-  {
-    gameName: "Aviator",
-    gameImage: aviator,
-    providerImage: spb,
-    redirect: "#",
-  },
-  {
-    gameName: "Boxing King",
-    gameImage: boxingKing,
-    providerImage: jl,
-    redirect: "#",
-  },
-  {
-    gameName: "Fortune Gems",
-    gameImage: fortuneGems,
-    providerImage: jl,
-    redirect: "#",
-  },
-  {
-    gameName: "Money Coming",
-    gameImage: moneyComing,
-    providerImage: jl,
-    redirect: "#",
-  },
-  {
-    gameName: "Crazy Time",
-    gameImage: crazyTime,
-    providerImage: evo,
-    redirect: "#",
-  },
-  {
-    gameName: "Super Ace",
-    gameImage: superAce,
-    providerImage: jl,
-    redirect: "#",
-  },
-  {
-    gameName: "Aviator",
-    gameImage: aviator,
-    providerImage: spb,
-    redirect: "#",
-  },
-  {
-    gameName: "Boxing King",
-    gameImage: boxingKing,
-    providerImage: jl,
-    redirect: "#",
-  },
-  {
-    gameName: "Fortune Gems",
-    gameImage: fortuneGems,
-    providerImage: jl,
-    redirect: "#",
-  },
-  {
-    gameName: "Money Coming",
-    gameImage: moneyComing,
-    providerImage: jl,
-    redirect: "#",
-  },
-  {
-    gameName: "Crazy Time",
-    gameImage: crazyTime,
-    providerImage: evo,
-    redirect: "#",
-  },
-  {
-    gameName: "Super Ace",
-    gameImage: superAce,
-    providerImage: jl,
-    redirect: "#",
-  },
-  {
-    gameName: "Aviator",
-    gameImage: aviator,
-    providerImage: spb,
-    redirect: "#",
-  },
-  {
-    gameName: "Boxing King",
-    gameImage: boxingKing,
-    providerImage: jl,
-    redirect: "#",
-  },
-  {
-    gameName: "Fortune Gems",
-    gameImage: fortuneGems,
-    providerImage: jl,
-    redirect: "#",
-  },
-  {
-    gameName: "Money Coming",
-    gameImage: moneyComing,
-    providerImage: jl,
-    redirect: "#",
-  },
-  {
-    gameName: "Crazy Time",
-    gameImage: crazyTime,
-    providerImage: evo,
-    redirect: "#",
-  },
-  {
-    gameName: "Super Ace",
-    gameImage: superAce,
-    providerImage: jl,
-    redirect: "#",
-  },
-  {
-    gameName: "Aviator",
-    gameImage: aviator,
-    providerImage: spb,
-    redirect: "#",
-  },
-  {
-    gameName: "Boxing King",
-    gameImage: boxingKing,
-    providerImage: jl,
-    redirect: "#",
-  },
-];
+import { useGames } from "@/lib/store.zustond";
+import { Categories } from "@/types/gamelist";
+import GameLoader from "./loader/GameLoader";
 
 const SlotGames = () => {
   const gamesContainer = useRef<HTMLDivElement | null>(null);
@@ -147,6 +17,10 @@ const SlotGames = () => {
   const handleLeftButtonClick = () => {
     gamesContainer.current!.scrollLeft += 130;
   };
+
+  const { getGames } = useGames((state) => state);
+  const gamesList = getGames(Categories.Slots, undefined, 20);
+  console.log("Slots game home ", gamesList);
   return (
     <div
       className="my-4"
@@ -165,15 +39,12 @@ const SlotGames = () => {
         ref={gamesContainer}
       >
         <div className="hot-games-list">
-          {hotGamesData.map((g, i) => (
-            <GameCardWithProvider
-              gameImage={g.gameImage}
-              gameName={g.gameName}
-              providerImage={g.providerImage}
-              redirect={g.redirect}
-              key={i}
-            />
-          ))}
+          {gamesList &&
+            gamesList.map((game, i) => (
+              <GameCardWithProvider key={i} game={game} />
+            ))}
+
+          <GameLoader lenght={20} loading={!!!gamesList} />
         </div>
       </div>
     </div>
