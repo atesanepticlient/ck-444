@@ -23,7 +23,6 @@ export const GET = async () => {
     };
 
     const gamesList = await axios.request(config);
-    console.log("Called ", gamesList.data.content);
     return Response.json({ success: true, gamesList: gamesList.data.content });
   } catch (error) {
     console.log("ERROR API ", error);

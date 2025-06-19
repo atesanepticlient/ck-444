@@ -35,15 +35,28 @@ export const register = async (data: zod.infer<typeof registerSchema>) => {
 
     let isReferralBonusActive = false;
 
-    if (referralId) {
-      const referralUser = await findUserByReferId(referralId);
-      await db.invitationBonus.update({
-        where: { userId: referralUser!.id },
-        data: { totalRegisters: { increment: 1 } },
-      });
-      isReferralBonusActive = !!referralUser;
-    }
+    let invitedBy = {};
+    const referralUser = await findUserByReferId(referralId || "");
+    if (referralId && referralUser) {
+      if (referralUser) {
+        await db.invitationBonus.update({
+          where: { userId: referralUser!.id },
+          data: { totalRegisters: { increment: 1 } },
+        });
 
+        isReferralBonusActive = !!referralUser;
+        invitedBy = {
+          create: {
+            user: {
+              connect: {
+                id: referralUser.id,
+              },
+            },
+          },
+        };
+      }
+    }
+    console.log({ invitedBy });
     const playerId = await playerIdGenerate();
     const referId = await referIdGenerate();
     const hasedPassword = await bcrypt.hash(password, 10);
@@ -55,6 +68,10 @@ export const register = async (data: zod.infer<typeof registerSchema>) => {
         playerId: playerId!,
         referId,
         isBanned: false,
+        invitedBy: {
+          ...invitedBy,
+        },
+        bettingRecord: { create: {} },
         wallet: {
           create: {
             balance: 0,
@@ -68,6 +85,20 @@ export const register = async (data: zod.infer<typeof registerSchema>) => {
       },
     });
 
+    if (referralId && referralUser) {
+      await db.invitation.update({
+        where: {
+          userId: referralUser.id,
+        },
+        data: {
+          referredUsers: {
+            connect: {
+              id: newUser.id,
+            },
+          },
+        },
+      });
+    }
     try {
       await signIn("credentials", {
         phone: newUser.phone,
@@ -78,7 +109,7 @@ export const register = async (data: zod.infer<typeof registerSchema>) => {
       if (error instanceof Error) {
         if (error.name !== "AccessDenied") {
           const credentialsError = error as CredentialsSignin;
-          return { error: credentialsError.message };
+          return { error: credentialsError?.cause?.err?.message };
         }
       }
     }

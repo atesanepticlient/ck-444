@@ -7,6 +7,7 @@ import { useFetchWithdrawPageDataQuery } from "@/lib/features/withdrawSlice";
 import WithdrawInfo from "./withdraw-info";
 import WithdrawForm from "./withdraw-form";
 import { useCard } from "@/lib/store.zustond";
+import EmpryCard from "@/components/EmpryCard";
 
 const Withdraw = () => {
   const { data: cardsData, isLoading: cardsLoading } = useFetchCardsQuery({
@@ -27,8 +28,9 @@ const Withdraw = () => {
             availableBalance={withdrwData.availableBalance}
             mainBalance={withdrwData.mainBalance}
             remainingWithdrawal={withdrwData.remainingWithdrawal}
+            turnOver={withdrwData.turnOver}
           />
-          {selectedCard && (
+          {selectedCard && withdrwData.availableBalance > 0 && (
             <WithdrawForm
               cardId={selectedCard.id}
               maxWithdraw={withdrwData.maxWithdraw}
@@ -37,11 +39,12 @@ const Withdraw = () => {
           )}
         </>
       )}
-
-      {!cardsData ||
-        !withdrwData ||
-        cardsLoading ||
-        (withdrawLoading && <span>Loading...</span>)}
+      {cards && cards.length == 0 && <EmpryCard plusRedirect="/card" />}
+      {(!cardsData || !withdrwData || cardsLoading || withdrawLoading) && (
+        <div className="w-full h-screen flex justify-center items-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
+      )}
     </>
   );
 };

@@ -54,7 +54,7 @@ const AppNotice = () => {
                 display: "flex",
                 flexDirection: "column",
                 color: "var(--color-orange-64, #FFAB49)",
-                fontSize: 10,
+                fontSize: 13,
                 fontFamily: "Segoe UI",
                 fontWeight: "400",
 

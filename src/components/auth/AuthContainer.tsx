@@ -22,7 +22,7 @@ const AuthContaner = ({
   title,
 }: AuthContainerProps) => {
   return (
-    <div className="bg-[url(https://c.animaapp.com/m9drzmnaxdV67z/img/background.png)] bg-cover bg-[50%_50%] w-full h-screen ">
+    <div className="bg-[url(https://c.animaapp.com/m9drzmnaxdV67z/img/background.png)] bg-[#003e3e] bg-cover bg-[50%_50%] w-h-full h-screen ">
       <div className="flex justify-center py-5 pt-12">
         <Image src={logo} alt="ck444" className="w-[100px] h-auto" />
       </div>
@@ -41,7 +41,7 @@ const AuthContaner = ({
         </p>
       </div>
 
-      <div className="w-[80%] mx-auto mt-8">{children}</div>
+      <div className="w-[80%] mx-auto mt-8 max-w-[400px]">{children}</div>
     </div>
   );
 };

@@ -6,6 +6,7 @@ export interface WithdrawPageData {
   remainingWithdrawal: number;
   minWithdraw: number;
   maxWithdraw: number;
+  turnOver: number;
 }
 
 export interface MakeWithdrawInput {

@@ -8,8 +8,9 @@ import money from "@/../public/icons/rewards/money.png";
 
 interface SigninBonusModalProps {
   children: React.ReactNode;
+  prize: number;
 }
-const SigninBonusModal = ({ children }: SigninBonusModalProps) => {
+const SigninBonusModal = ({ children, prize }: SigninBonusModalProps) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -49,7 +50,7 @@ const SigninBonusModal = ({ children }: SigninBonusModalProps) => {
                         Bonus
                       </span>
                     </div>
-                    <span>৳ 1</span>
+                    <span>৳ {prize}</span>
                   </li>
                 </ul>
               </div>

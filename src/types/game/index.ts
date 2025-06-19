@@ -39,3 +39,26 @@ export enum Title {
   RedTiger = "red_tiger",
   SportBetting = "sport_betting",
 }
+
+export type GameContent = {
+  content: {
+    game: {
+      url: string;
+      iframe: "1" | "0";
+      sessionId: string;
+      width: string;
+      vertical: "1" | "0";
+      withoutFrame: "1" | "0";
+      rewriterule: "1" | "0";
+      localhost: "1" | "0";
+      exitButton_mobile: "1" | "0";
+      exitButton: "1" | "0";
+      disableReload: "1" | "0";
+      wager: "1" | "0";
+      bonus: "1" | "0";
+    };
+    gameRes: {
+      sessionId: string;
+    };
+  };
+};

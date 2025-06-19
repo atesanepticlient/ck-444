@@ -15,24 +15,17 @@ export const GET = async () => {
       },
     });
 
-    const mainBalance =
-      (
-        await db.wallet.findFirst({
-          where: { userId: user!.id },
-        })
-      )?.balance || 0;
-    const availableBalance =
-      (
-        await db.wallet.findFirst({
-          where: { userId: user!.id },
-        })
-      )?.balance || 0;
+    const wallet = await db.wallet.findFirst({
+      where: { userId: user!.id },
+    });
+    const availableBalance = +wallet!.balance - +wallet!.turnOver;
 
     const minWithdraw = 10000;
     const maxWithdraw = 25000;
 
     return Response.json({
-      mainBalance,
+      mainBalance: wallet!.balance,
+      turnOver: wallet!.turnOver,
       availableBalance,
       remainingWithdrawal: 10 - totalWithdrawOfLast24h,
       minWithdraw,

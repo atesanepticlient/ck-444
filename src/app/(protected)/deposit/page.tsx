@@ -25,9 +25,10 @@ import { ExtendedWallet } from "@/types/api/deposit";
 
 const App: React.FC = () => {
   const { data, isLoading } = useGetDepositPaymentDataQuery();
+  console.log("DEPOSIT data ", data);
   const wallets = data?.wallets;
   const bonus = data?.bonus;
-  const user = useGetCurrentUser();
+  const user: any = useGetCurrentUser();
 
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
     useState<ExtendedWallet>();
@@ -200,13 +201,13 @@ const App: React.FC = () => {
 
           <SiteHeader title="Deposit">
             <Link
-              href="#"
+              href="/support"
               className="text-gray-700 hover:text-gray-900 cursor-pointer"
             >
               <MdOutlineSupportAgent className="text-lg" />
             </Link>
             <Link
-              href="#"
+              href="/history"
               className="text-gray-700 hover:text-gray-900 cursor-pointer"
             >
               <MdHistory className="text-lg" />
@@ -234,7 +235,7 @@ const App: React.FC = () => {
                   </div>
                 </div>
 
-                {wallets?.map((pw,i) => (
+                {wallets?.map((pw, i) => (
                   <PaymentMethod
                     key={i}
                     method={pw}

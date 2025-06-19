@@ -5,7 +5,7 @@ import { GameCardWithProvider } from "./GameCards";
 
 import GameSelectionHeader from "./GameSelectionHeader";
 import { useGames } from "@/lib/store.zustond";
-import { Categories } from "@/types/gamelist";
+import { Categories } from "@/types/game";
 import GameLoader from "./loader/GameLoader";
 
 const SlotGames = () => {
@@ -20,7 +20,6 @@ const SlotGames = () => {
 
   const { getGames } = useGames((state) => state);
   const gamesList = getGames(Categories.Slots, undefined, 20);
-  console.log("Slots game home ", gamesList);
   return (
     <div
       className="my-4"

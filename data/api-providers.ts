@@ -19,7 +19,7 @@ import mg_black from "../public/games/provider/MG-BLACK.png";
 import jili_white from "../public/games/provider/JL.png";
 import jili_black from "../public/games/provider/JL-BLACK.png";
 
-import { Title } from "@/types/gamelist";
+import { Title } from "@/types/game";
 
 export const providers = [
   {

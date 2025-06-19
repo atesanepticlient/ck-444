@@ -16,19 +16,24 @@ import Image from "next/image";
 const HeroSlider = () => {
   return (
     <div className="my-4">
-      <Swiper spaceBetween={10} pagination={true} modules={[Pagination]} className="mySwiper">
+      <Swiper
+        spaceBetween={10}
+        pagination={true}
+        modules={[Pagination]}
+        className="mySwiper"
+      >
         <SwiperSlide>
           <Image
             src={slider}
             alt="slider"
-            className="w-full aspect-auto rounded-2xl "
+            className="w-full aspect-auto md:aspect-[9/3] object-cover rounded-2xl "
           />
         </SwiperSlide>
         <SwiperSlide>
           <Image
             src={slider}
             alt="slider"
-            className="w-full aspect-auto rounded-2xl "
+            className="w-full aspect-auto md:aspect-[9/3] object-cover rounded-2xl "
           />
         </SwiperSlide>
       </Swiper>

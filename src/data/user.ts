@@ -19,6 +19,6 @@ export const findUserByReferId = async (referId: string) => {
 
 export const findCurrentUser = async () => {
   const session = await auth();
-  console.log("session ", session)
+  console.log("session ", session);
   return session?.user;
 };

@@ -31,11 +31,48 @@ export const GET = async () => {
       return newReward;
     });
 
+    const invitationBonus = await db.invitationBonus.findUnique({
+      where: {
+        userId: user.id,
+      },
+      include: {
+        claimedRewards: {
+          include: {
+            reward: true,
+          },
+        },
+      },
+    });
+
+    const totalIncome = invitationBonus?.claimedRewards.reduce(
+      (acc, claimedReward) => {
+        return acc + +claimedReward.reward.prize;
+      },
+      0
+    );
+
+    const totalIncomeToday = invitationBonus?.claimedRewards.reduce(
+      (acc, claimedReward) => {
+        const createdAt = new Date(claimedReward.createdAt);
+        const now = new Date();
+
+        const isWithin24Hours =
+          now.getTime() - createdAt.getTime() <= 24 * 60 * 60 * 1000;
+
+        if (isWithin24Hours) {
+          return acc + +claimedReward.reward.prize;
+        }
+
+        return acc;
+      },
+      0
+    );
+
     const statictic = {
       registersCount: userInvitationBonus!.totalRegisters,
-      todayIncome: 0,
+      todayIncome: totalIncomeToday,
       validReferral: userInvitationBonus!.totalValidreferral,
-      yeasterdayIncome: 0,
+      totalIncome,
     };
 
     return Response.json({ rewards: userRewards, statictic }, { status: 200 });

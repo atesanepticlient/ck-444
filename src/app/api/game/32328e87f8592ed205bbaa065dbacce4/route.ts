@@ -2,6 +2,8 @@
 import { NextRequest } from "next/server";
 import { db } from "@/lib/db";
 import { Decimal } from "@prisma/client/runtime/library";
+import { Prisma } from "@prisma/client";
+import { reduceTurnOver } from "@/lib/turnover";
 
 function parseDecimal(value: any): Decimal | undefined {
   if (value === undefined || value === null || value === "") return undefined;
@@ -111,17 +113,27 @@ export const POST = async (req: NextRequest) => {
           { status: 403 }
         );
       }
-
+      const betRecord: Prisma.BettingRecordUpdateInput = {};
       if (requestBody.bet) {
         userBalance = userBalance.sub(requestBody.bet);
+        await reduceTurnOver(+requestBody.bet, user!.id);
+        betRecord.totalBet = {
+          increment: requestBody.bet,
+        };
       }
       if (requestBody.win) {
         userBalance = userBalance.add(requestBody.win);
+        betRecord.totalWin = {
+          increment: requestBody.win,
+        };
       }
 
-      await db.wallet.update({
+      await db.user.update({
         where: { id: user.wallet!.id },
-        data: { balance: userBalance },
+        data: {
+          wallet: { update: { balance: userBalance } },
+          bettingRecord: { update: { ...betRecord } },
+        },
       });
 
       return Response.json({
@@ -133,7 +145,6 @@ export const POST = async (req: NextRequest) => {
       });
     }
   } catch (error: any) {
-    console.log("ERROR", error);
     return Response.json(
       { success: "fail", error: error.message || "unexpected_error" },
       { status: 500 }

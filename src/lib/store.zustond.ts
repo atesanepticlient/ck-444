@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ExtendedCard } from "@/types/api/card";
-import { Categories, GamesList, NetEnt } from "@/types/gamelist";
+import { Categories, GamesList, NetEnt } from "@/types/game";
 import { create } from "zustand";
 
 interface WithdrawCardType {

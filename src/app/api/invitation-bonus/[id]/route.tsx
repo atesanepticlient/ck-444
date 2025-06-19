@@ -1,3 +1,4 @@
+import { createNotification } from "@/action/notifications";
 import { findCurrentUser } from "@/data/user";
 import { INTERNAL_SERVER_ERROR } from "@/error";
 import { db } from "@/lib/db";
@@ -34,7 +35,10 @@ export const PUT = async (
     });
 
     if (userInvitationBonus?.totalValidreferral !== reward.targetReferral) {
-      return Response.json({ error: "Please refer more users to get it" }, {status : 400});
+      return Response.json(
+        { error: "Please refer more users to get it" },
+        { status: 400 }
+      );
     }
 
     await db.$transaction([
@@ -57,6 +61,13 @@ export const PUT = async (
         },
       }),
     ]);
+
+    await createNotification({
+      title: `Bonus Added`,
+      description: `${reward.prize} BDT added to your account`,
+      userId: user!.id!,
+      icon: "MONEY",
+    });
 
     return Response.json({ success: true }, { status: 201 });
   } catch (error) {

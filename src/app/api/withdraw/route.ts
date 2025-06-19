@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { findCurrentUser } from "@/data/user";
 import { INTERNAL_SERVER_ERROR } from "@/error";
 import { db } from "@/lib/db";
@@ -7,7 +8,7 @@ import { NextRequest } from "next/server";
 
 export const POST = async (req: NextRequest) => {
   try {
-    const user = await findCurrentUser();
+    const user: any = await findCurrentUser();
     const { amount, password, cardId } =
       (await req.json()) as MakeWithdrawInput;
 
@@ -30,13 +31,8 @@ export const POST = async (req: NextRequest) => {
         { status: 400 }
       );
     }
-
-    const availableBalance =
-      (
-        await db.wallet.findFirst({
-          where: { userId: user!.id },
-        })
-      )?.balance || 0;
+    const wallet = await db.wallet.findFirst({ where: { userId: user!.id } });
+    const availableBalance = +wallet!.balance - +wallet!.turnOver;
 
     if (amount > +availableBalance) {
       return Response.json({ error: "Insufficient balance" }, { status: 404 });

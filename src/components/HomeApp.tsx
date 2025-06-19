@@ -5,7 +5,6 @@ import AppMenuItems from "./AppMenuItems";
 import SlotGames from "./SlotsGames";
 import WithdrawDepositButton from "./WithdrawDepositButton";
 import LiveCasino from "./LiveCasino";
-import ESports from "./E-Sports";
 import Sports from "./Sports";
 
 const HomeApp = () => {
@@ -17,7 +16,7 @@ const HomeApp = () => {
       <AppMenuItems />
       {/* <HotGames /> */}
       <SlotGames />
-      <ESports />
+      {/* <ESports /> */}
       <Sports />
       <LiveCasino />
     </div>

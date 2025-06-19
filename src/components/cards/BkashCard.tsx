@@ -72,7 +72,7 @@ const CardFront = ({
       </header>
 
       <p className="mb-4 text-2xl tracking-[3px] max-sm:text-lg font-mono">
-        •••• •••• •••• ${cardNumber.slice(-4)}
+        •••• •••• •••• {cardNumber.slice(-4)}
       </p>
 
       <footer className="flex justify-between items-end pb-3">

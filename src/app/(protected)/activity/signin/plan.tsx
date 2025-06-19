@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 
 import gift_box from "@/../public/icons/rewards/gift-box.png";
@@ -6,9 +7,9 @@ import { FaQuestionCircle } from "react-icons/fa";
 import SigninBonusModal from "./signinbonus-modal";
 
 interface SigninBonusPlanProps {
-  minDeposit: number;
+  nextClaimAvailable: any;
 }
-const SigninBonusPlan = ({ minDeposit }: SigninBonusPlanProps) => {
+const SigninBonusPlan = ({ nextClaimAvailable }: SigninBonusPlanProps) => {
   return (
     <div className="my-4 mt-16 bg-white">
       <div className="border-b border-b-blue-600">
@@ -27,7 +28,7 @@ const SigninBonusPlan = ({ minDeposit }: SigninBonusPlanProps) => {
               <span className=" text-sm font-medium ">
                 Not Checked in today
               </span>
-              <SigninBonusModal>
+              <SigninBonusModal prize={nextClaimAvailable.prize}>
                 <FaQuestionCircle className="w-4 h-4" />
               </SigninBonusModal>
             </div>
@@ -42,7 +43,7 @@ const SigninBonusPlan = ({ minDeposit }: SigninBonusPlanProps) => {
             Amount :
           </span>
           <span className="text-base text-[#8E0019] font-semibold block">
-            ৳ {minDeposit}
+            ৳ {nextClaimAvailable.deposit}
           </span>
         </div>
       </div>

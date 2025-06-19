@@ -5,7 +5,7 @@ import { GameCardWithProvider } from "./GameCards";
 
 import GameSelectionHeader from "./GameSelectionHeader";
 import { useGames } from "@/lib/store.zustond";
-import { Categories } from "@/types/gamelist";
+import { Categories } from "@/types/game";
 import GameLoader from "./loader/GameLoader";
 
 const LiveCasino = () => {

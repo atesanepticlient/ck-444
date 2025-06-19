@@ -2,13 +2,29 @@
 "use client";
 import React, { useState } from "react";
 import { HiOutlineRefresh } from "react-icons/hi";
-import { RiAccountCircle2Fill } from "react-icons/ri";
+import {} from "react-icons/ri";
 import { TbFileStar } from "react-icons/tb";
 import { FaRegFileAlt } from "react-icons/fa";
-import { RiMessage2Fill, RiCustomerService2Line } from "react-icons/ri";
+import { RiCustomerService2Line } from "react-icons/ri";
 import { PiHandWithdrawFill, PiHandDepositFill } from "react-icons/pi";
 import { IoLogOut } from "react-icons/io5";
-const UserBalance: React.FC = () => {
+import { RiAccountPinCircleFill } from "react-icons/ri";
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { redirect } from "next/navigation";
+import { logout } from "@/action/logout";
+import { getCurrencySymbol } from "@/lib/utils";
+const UserBalance = ({
+  balance,
+  currency,
+}: {
+  balance: number;
+  currency: string;
+}) => {
   return (
     <section className="flex relative items-center h-full ">
       <div className="flex items-center h-full">
@@ -21,7 +37,10 @@ const UserBalance: React.FC = () => {
                 aria-haspopup="true"
               >
                 <div className="flex items-center w-full ">
-                  <BalanceDisplay amount="0.00" currencySymbol="৳" />
+                  <BalanceDisplay
+                    amount={balance}
+                    currencySymbol={getCurrencySymbol(currency)!}
+                  />
                   <RefreshButton />
                 </div>
               </div>
@@ -43,24 +62,31 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
   className = "",
 }) => {
   return (
-    <div
-      className={`overflow-x-hidden overflow-y-hidden p-0.5 mr-2 border border-t border-r border-b border-l border-solid bg-[linear-gradient(rgb(255,230,0),rgb(255,184,0))] border-orange-200 border-opacity-50  rounded-[39.168px] shadow-[rgb(255,242,166)_0px_1.9584px_0px_1.7px_inset,rgb(182,65,0)_0px_1.9584px_0px_0px] w-[39px] h-[39px] ${className}`}
-    >
-      <div className="flex overflow-x-hidden overflow-y-hidden relative justify-center items-center rounded-full size-full">
-        <div className="overflow-x-hidden overflow-y-hidden rounded-full size-full">
-          <img
-            alt="User avatar"
-            src={imageUrl}
-            className="overflow-x-clip overflow-y-clip size-full  object-cover"
-          />
+    <Popover>
+      <PopoverTrigger>
+        <div
+          className={`overflow-x-hidden overflow-y-hidden p-0.5 mr-2 border border-t border-r border-b border-l border-solid bg-[linear-gradient(rgb(255,230,0),rgb(255,184,0))] border-orange-200 border-opacity-50  rounded-[39.168px] shadow-[rgb(255,242,166)_0px_1.9584px_0px_1.7px_inset,rgb(182,65,0)_0px_1.9584px_0px_0px] w-[39px] h-[39px] ${className}`}
+        >
+          <div className="flex overflow-x-hidden overflow-y-hidden relative justify-center items-center rounded-full size-full">
+            <div className="overflow-x-hidden overflow-y-hidden rounded-full size-full">
+              <img
+                alt="User avatar"
+                src={imageUrl}
+                className="overflow-x-clip overflow-y-clip size-full  object-cover"
+              />
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      </PopoverTrigger>
+      <PopoverContent className="z-[1000] bg-transparent border-none">
+        <DropdownMenu />
+      </PopoverContent>
+    </Popover>
   );
 };
 
 interface BalanceDisplayProps {
-  amount: string;
+  amount: number;
   currencySymbol: string;
 }
 
@@ -76,23 +102,29 @@ const BalanceDisplay: React.FC<BalanceDisplayProps> = ({
 
   return (
     <>
-      <button
-        onClick={toggleDropdown}
-        aria-expanded={isDropdownOpen}
-        className="flex items-center w-full"
-      >
-        <div className="flex items-center w-full">
-          <div className="flex overflow-x-hidden overflow-y-hidden items-center text-sm font-bold text-teal-400 whitespace-nowrap border-teal-400 decoration-teal-400 max-w-[104px] outline-teal-400 text-ellipsis">
-            <span className="mr-1.5 text-sm font-bold text-teal-400 whitespace-nowrap border-teal-400 decoration-teal-400 outline-teal-400">
-              {currencySymbol}
-            </span>
-            <span className="overflow-x-hidden overflow-y-hidden text-sm font-bold text-teal-400 whitespace-nowrap border-teal-400 decoration-teal-400 outline-teal-400 text-ellipsis">
-              {amount}
-            </span>
-          </div>
-        </div>
-      </button>
-      {isDropdownOpen && <DropdownMenu />}
+      <Popover>
+        <PopoverTrigger>
+          <button
+            onClick={toggleDropdown}
+            aria-expanded={isDropdownOpen}
+            className="flex items-center w-full"
+          >
+            <div className="flex items-center w-full">
+              <div className="flex overflow-x-hidden overflow-y-hidden items-center text-sm font-bold text-teal-400 whitespace-nowrap border-teal-400 decoration-teal-400 max-w-[104px] outline-teal-400 text-ellipsis">
+                <span className="mr-1.5 text-sm font-bold text-teal-400 whitespace-nowrap border-teal-400 decoration-teal-400 outline-teal-400">
+                  {currencySymbol}
+                </span>
+                <span className="overflow-x-hidden overflow-y-hidden text-sm font-bold text-teal-400 whitespace-nowrap border-teal-400 decoration-teal-400 outline-teal-400 text-ellipsis">
+                  {amount}
+                </span>
+              </div>
+            </div>
+          </button>
+        </PopoverTrigger>
+        <PopoverContent className="z-[1000] bg-transparent border-none">
+          <DropdownMenu />
+        </PopoverContent>
+      </Popover>
     </>
   );
 };
@@ -108,39 +140,52 @@ const RefreshButton: React.FC = () => {
 };
 
 const DropdownMenu: React.FC = () => {
+  const handleLogout = () => {
+    logout().then((res) => {
+      if (res.success) {
+        location.reload();
+      } else if (res.error) {
+        console.log(res.error);
+      }
+    });
+  };
+
   const menuItems = [
     {
-      icon: <RiAccountCircle2Fill className="w-6 h-6 text-white" />,
-      label: "Account record",
-      redirect: "#",
+      icon: <RiAccountPinCircleFill className="w-6 h-6 text-white" />,
+      label: "Profile",
+      onclick: () => redirect("/member"),
     },
     {
       icon: <TbFileStar className="w-6 h-6 text-white" />,
       label: "Betting Record",
+      onclick: () => redirect("/betting-record"),
     },
     {
       icon: <FaRegFileAlt className="w-6 h-6 text-white" />,
       label: "Profit And Loss",
+      onclick: () => redirect("/profitandloss"),
     },
-    {
-      icon: <RiMessage2Fill className="w-6 h-6 text-white" />,
-      label: "Message",
-    },
+
     {
       icon: <PiHandDepositFill className="w-6 h-6 text-white" />,
       label: "Deposit",
+      onclick: () => redirect("/deposit"),
     },
     {
       icon: <PiHandWithdrawFill className="w-6 h-6 text-white" />,
       label: "Withdrawal",
+      onclick: () => redirect("/withdraw"),
     },
     {
       icon: <RiCustomerService2Line className="w-6 h-6 text-white" />,
       label: "Customer Service",
+      onclick: () => redirect("/support"),
     },
     {
       icon: <IoLogOut className="w-5 h-5 text-white" />,
       label: "Logout",
+      onclick: () => handleLogout(),
     },
   ];
 
@@ -149,7 +194,12 @@ const DropdownMenu: React.FC = () => {
       <div className="overflow-y-auto overflow-x-hidden absolute p-1.5 rounded-xl border border-t border-r border-b border-l border-cyan-600 border-solid bg-[rgb(0,38,50)] duration-[0.2s] ease-[ease-out] max-h-[489.6px] min-w-[217px] origin-[100%_0%] right-[-6.912px] shadow-[rgba(0,0,0,0.25)_0px_4.608px_4.608px_0px,rgb(0,38,49)_0px_2.304px_0px_0px] top-[calc(100%_+_5.76px)] z-[101]">
         <nav>
           {menuItems.map((item, index) => (
-            <MenuItem key={index} icon={item.icon} label={item.label} />
+            <MenuItem
+              key={index}
+              icon={item.icon}
+              label={item.label}
+              onClick={item.onclick}
+            />
           ))}
         </nav>
       </div>
@@ -160,11 +210,16 @@ const DropdownMenu: React.FC = () => {
 interface MenuItemProps {
   icon: React.ReactNode;
   label: string;
+  link?: string;
+  onClick: () => void;
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({ icon, label }) => {
+const MenuItem: React.FC<MenuItemProps> = ({ icon, label, onClick }) => {
   return (
-    <button className="flex items-center px-4 py-2 text-sm font-medium text-emerald-50 border-emerald-50 decoration-emerald-50 outline-emerald-50 w-full text-left">
+    <button
+      onClick={onClick}
+      className="flex items-center px-4 py-2 text-sm font-medium text-emerald-50 border-emerald-50 decoration-emerald-50 outline-emerald-50 w-full text-left"
+    >
       <div className="overflow-x-hidden overflow-y-hidden shrink-0 mr-2 w-7 h-7 flex justify-center items-center text-sm font-medium text-emerald-50 bg-cover border-emerald-50 decoration-emerald-50 fill-emerald-50 outline-emerald-50">
         {icon}
       </div>

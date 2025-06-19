@@ -9,13 +9,13 @@ const WithdrawPage = () => {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <SiteHeader title="Withdraw">
         <Link
-          href="#"
+          href="/support"
           className="text-gray-700 hover:text-gray-900 cursor-pointer"
         >
           <MdOutlineSupportAgent className="text-lg" />
         </Link>
         <Link
-          href="#"
+          href="/history"
           className="text-gray-700 hover:text-gray-900 cursor-pointer"
         >
           <MdHistory className="text-lg" />

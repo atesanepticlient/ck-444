@@ -26,8 +26,6 @@ const Rewards = ({ rewards }: RewardsProps) => {
       return;
     }
 
-    toast.success(`Successfull🎉 ${reward.prize} will be added`);
-
     clamRewardApi({ id: reward.id })
       .unwrap()
       .then()

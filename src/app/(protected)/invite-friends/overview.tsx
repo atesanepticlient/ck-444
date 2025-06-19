@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { formatBDT } from "@/lib/utils";
@@ -16,23 +17,24 @@ import Image from "next/image";
 
 import { FaLink } from "react-icons/fa6";
 import { StaticticType } from "@/types/api/reward";
+import useCurrentUser from "@/hook/useCurrentUser";
 
 interface OverviewProps {
   statictic: StaticticType;
 }
 const Overview = ({ statictic }: OverviewProps) => {
-  const { registersCount, todayIncome, validReferral, yeasterdayIncome } =
-    statictic;
+  const user: any = useCurrentUser();
 
+  const { registersCount, todayIncome, validReferral, totalIncome } = statictic;
   return (
     <div className="space-y-3">
       <Statictic
         registersCount={registersCount}
         todayIncome={todayIncome}
         validReferral={validReferral}
-        yeasterdayIncome={yeasterdayIncome}
+        totalIncome={totalIncome}
       />
-      <InviteLink invitationCode="ijeol4o" />
+      <InviteLink invitationCode={user.referId} />
       <ReleasedReward />
     </div>
   );
@@ -44,7 +46,7 @@ const Statictic = ({
   registersCount,
   todayIncome,
   validReferral,
-  yeasterdayIncome,
+  totalIncome,
 }: StaticticType) => {
   return (
     <div className="grid grid-cols-2 gap-2">
@@ -59,10 +61,10 @@ const Statictic = ({
 
       <div className="bg-[linear-gradient(108deg,_#ce9ffc,_#7367f0)] p-3 rounded-sm ">
         <span className="text-[#ebf7ff] font-semibold text-sm text-center block">
-          Today&rsquo;s Income
+          Total Income
         </span>
         <span className="text-2xl font-bold text-white text-shadow-sm block text-center">
-          {formatBDT(yeasterdayIncome)}
+          {formatBDT(totalIncome)}
         </span>
       </div>
 

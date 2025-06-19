@@ -42,7 +42,7 @@
   --wwwwwwck-44-4comdaintree: rgba(0, 38, 50, 1);
   --wwwwwwck-44-4comfire: rgba(182, 65, 0, 1);
   --wwwwwwck-44-4comwhite: rgba(255, 255, 255, 1);
-  --wwwwwwck444comblue-stone: rgba(0, 97, 101, 1);
+  --wwwwwwck444comblue-stone: #006165;
   --wwwwwwck444combright-turquoise: rgba(35, 255, 200, 1);
   --wwwwwwck444comfrosted-mint: rgba(224, 255, 247, 1);
   --wwwwwwck444comselective-yellow: rgba(255, 184, 0, 1);
@@ -54,6 +54,7 @@
   background-size: cover;
   width: 100%;
   height: auto;
+  background-color: #003e3e;
 }
 
 .scrollbar-none::-webkit-scrollbar {
@@ -273,7 +274,7 @@
   animation: l9 2s linear infinite;
 }
 .loader:before {
-  content: "Ck444";
+  content: "Mbuzz88";
 }
 @keyframes l9 {
   to {
@@ -340,5 +341,425 @@
 
 .btn-prev-bg {
   background: url("../../public/button-prev-bg.svg") no-repeat;
+  background-size: cover;
+}
+.game-main .play {
+  @apply bg-transparent;
+}
+.game-main:hover .play {
+  @apply bg-black/50 flex transition-all;
+}
+.game-main .play .button {
+  @apply translate-y-5 opacity-0;
+}
+
+.game-main:hover .play .button {
+  @apply visible translate-y-0 opacity-100 transition-all;
+}
+
+/* game opening loader */
+.loader-container {
+  --color-primary: #fff;
+  --color-neutral: #ffffff00;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.area:nth-of-type(1):hover ~ .loader-game {
+  transform: rotateX(-20deg) rotateY(20deg);
+}
+
+.area:nth-of-type(2):hover ~ .loader-game {
+  transform: rotateX(-20deg) rotateY(10deg);
+}
+
+.area:nth-of-type(3):hover ~ .loader-game {
+  transform: rotateX(-20deg) rotateY(5deg);
+}
+
+.area:nth-of-type(4):hover ~ .loader-game {
+  transform: rotateX(-20deg) rotateY(-5deg);
+}
+
+.area:nth-of-type(5):hover ~ .loader-game {
+  transform: rotateX(-20deg) rotateY(-10deg);
+}
+
+.area:nth-of-type(6):hover ~ .loader-game {
+  transform: rotateX(-20deg) rotateY(-20deg);
+}
+
+.area:nth-of-type(7):hover ~ .loader-game {
+  transform: rotateX(-10deg) rotateY(20deg);
+}
+
+.area:nth-of-type(8):hover ~ .loader-game {
+  transform: rotateX(-10deg) rotateY(10deg);
+}
+
+.area:nth-of-type(9):hover ~ .loader-game {
+  transform: rotateX(-10deg) rotateY(5deg);
+}
+
+.area:nth-of-type(10):hover ~ .loader-game {
+  transform: rotateX(-10deg) rotateY(-5deg);
+}
+
+.area:nth-of-type(11):hover ~ .loader-game {
+  transform: rotateX(-10deg) rotateY(-10deg);
+}
+
+.area:nth-of-type(12):hover ~ .loader-game {
+  transform: rotateX(-10deg) rotateY(-20deg);
+}
+
+.area:nth-of-type(13):hover ~ .loader-game {
+  transform: rotateX(-5deg) rotateY(20deg);
+}
+
+.area:nth-of-type(14):hover ~ .loader-game {
+  transform: rotateX(-5deg) rotateY(10deg);
+}
+
+.area:nth-of-type(15):hover ~ .loader-game {
+  transform: rotateX(-5deg) rotateY(5deg);
+}
+
+.area:nth-of-type(16):hover ~ .loader-game {
+  transform: rotateX(-5deg) rotateY(-5deg);
+}
+
+.area:nth-of-type(17):hover ~ .loader-game {
+  transform: rotateX(-5deg) rotateY(-10deg);
+}
+
+.area:nth-of-type(18):hover ~ .loader-game {
+  transform: rotateX(-5deg) rotateY(-20deg);
+}
+
+.area:nth-of-type(19):hover ~ .loader-game {
+  transform: rotateX(5deg) rotateY(20deg);
+}
+
+.area:nth-of-type(20):hover ~ .loader-game {
+  transform: rotateX(5deg) rotateY(10deg);
+}
+
+.area:nth-of-type(21):hover ~ .loader-game {
+  transform: rotateX(5deg) rotateY(5deg);
+}
+
+.area:nth-of-type(22):hover ~ .loader-game {
+  transform: rotateX(5deg) rotateY(-5deg);
+}
+
+.area:nth-of-type(23):hover ~ .loader-game {
+  transform: rotateX(5deg) rotateY(-10deg);
+}
+
+.area:nth-of-type(24):hover ~ .loader-game {
+  transform: rotateX(5deg) rotateY(-20deg);
+}
+
+.area:nth-of-type(25):hover ~ .loader-game {
+  transform: rotateX(10deg) rotateY(20deg);
+}
+
+.area:nth-of-type(26):hover ~ .loader-game {
+  transform: rotateX(10deg) rotateY(10deg);
+}
+
+.area:nth-of-type(27):hover ~ .loader-game {
+  transform: rotateX(10deg) rotateY(5deg);
+}
+
+.area:nth-of-type(28):hover ~ .loader-game {
+  transform: rotateX(10deg) rotateY(-5deg);
+}
+
+.area:nth-of-type(29):hover ~ .loader-game {
+  transform: rotateX(10deg) rotateY(-10deg);
+}
+
+.area:nth-of-type(30):hover ~ .loader-game {
+  transform: rotateX(10deg) rotateY(-20deg);
+}
+
+.area:nth-of-type(31):hover ~ .loader-game {
+  transform: rotateX(20deg) rotateY(20deg);
+}
+
+.area:nth-of-type(32):hover ~ .loader-game {
+  transform: rotateX(20deg) rotateY(10deg);
+}
+
+.area:nth-of-type(33):hover ~ .loader-game {
+  transform: rotateX(20deg) rotateY(5deg);
+}
+
+.area:nth-of-type(34):hover ~ .loader-game {
+  transform: rotateX(20deg) rotateY(-5deg);
+}
+
+.area:nth-of-type(35):hover ~ .loader-game {
+  transform: rotateX(20deg) rotateY(-10deg);
+}
+
+.area:nth-of-type(36):hover ~ .loader-game {
+  transform: rotateX(20deg) rotateY(-20deg);
+}
+
+.loader-game {
+  display: flex;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-style: preserve-3d;
+  transition: all 0.15s linear;
+  translate: -50% -50%;
+}
+
+.loader-game span {
+  position: relative;
+  height: 30px;
+  background-color: var(--color-neutral);
+  border-top: 0.2rem solid var(--color-primary);
+  border-bottom: 0.2rem solid var(--color-primary);
+}
+
+.loader-game span::before {
+  content: "";
+  position: absolute;
+  top: 0.2rem;
+  width: 100%;
+  height: calc(100% - 0.4rem);
+  background-color: var(--color-primary);
+  clip-path: inset(0 100% 0 0);
+  animation: progress calc(var(--i) * 10ms) linear calc(var(--d) * 10ms)
+    forwards;
+}
+
+.loader-game > span:nth-of-type(1) {
+  width: 100px;
+  border-left: 0.2rem solid var(--color-primary);
+  border-radius: 10px 0 0 10px;
+}
+
+.loader-game > span:nth-of-type(1)::before {
+  left: 0.2rem;
+  width: calc(100% - 0.2rem + 1px);
+  border-radius: 5px 0 0 5px;
+}
+
+.loader-game > span:nth-of-type(2) {
+  width: 10px;
+}
+
+.loader-game > span:nth-of-type(2)::before {
+  left: -1px;
+  width: calc(100% + 2px);
+}
+
+.loader-game > span:nth-of-type(3) {
+  width: 50px;
+  transform: translateZ(40px);
+}
+
+.loader-game > span:nth-of-type(3)::before {
+  left: -1px;
+  width: calc(100% + 2px);
+}
+
+.loader-game > span:nth-of-type(4) {
+  width: 40px;
+  border-right: 0.2rem solid var(--color-primary);
+  border-radius: 0 10px 10px 0;
+}
+
+.loader-game > span:nth-of-type(4)::before {
+  right: 0.2rem;
+  width: calc(100% - 0.2rem + 1px);
+  border-radius: 0 5px 5px 0;
+}
+
+.text {
+  position: absolute;
+  top: -60%;
+  left: 10px;
+  color: var(--color-primary);
+  font-weight: 900;
+  transform: translateZ(-20px);
+}
+
+.groove {
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.groove > span {
+  display: inline-block;
+}
+
+.groove > :first-child,
+.groove > :last-child {
+  position: absolute;
+}
+
+.groove:nth-of-type(1) > :nth-child(1) {
+  width: 50px;
+  transform: rotateY(90deg);
+  transform-origin: left;
+}
+
+.groove:nth-of-type(1) > :nth-child(2) {
+  width: 30px;
+  transform: translateZ(-50px);
+}
+
+.groove:nth-of-type(1) > :nth-child(3) {
+  width: 50px;
+  transform: rotateY(-90deg) translateX(-50px);
+  transform-origin: left;
+}
+
+.groove:nth-of-type(2) > :nth-child(1) {
+  width: 100px;
+  transform: rotateY(90deg);
+  transform-origin: left;
+}
+
+.groove:nth-of-type(2) > :nth-child(2) {
+  width: 15px;
+  transform: translateZ(-100px);
+}
+
+.groove:nth-of-type(2) > :nth-child(3) {
+  width: 140px;
+  transform: rotateY(-90deg) translateX(-100px);
+  transform-origin: left;
+}
+
+.groove:nth-of-type(3) > :nth-child(1) {
+  width: 60px;
+  transform: rotateY(90deg) translateX(-40px);
+  transform-origin: left;
+}
+
+.groove:nth-of-type(3) > :nth-child(2) {
+  width: 30px;
+  transform: translateZ(-20px);
+}
+
+.groove:nth-of-type(3) > :nth-child(3) {
+  width: 20px;
+  transform: rotateY(-90deg) translateX(-20px);
+  transform-origin: left;
+}
+
+.reload-btn {
+  position: absolute;
+  top: calc(50% + 5rem);
+  left: 50%;
+  padding: 0.5rem;
+  border: 5px solid var(--color-primary);
+  border-radius: 10px;
+  background: linear-gradient(var(--color-primary), var(--color-primary)) 0 0 /
+    100% 0 no-repeat;
+  color: var(--color-primary);
+  font-weight: 900;
+  transition: all 0.1s ease-in-out;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+.reload-btn:hover {
+  background-size: 100% 100%;
+  color: var(--color-neutral);
+}
+
+.reload-btn:active {
+  font-size: 0.7em;
+}
+
+.reload-btn:active ~ .loader span::before {
+  display: none;
+}
+
+@keyframes progress {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes pulse-once {
+  0% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+  }
+}
+
+.animate-pulse-once {
+  animation: pulse-once 1.5s ease-in-out;
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes progress {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+.animate-in {
+  animation: slideInFromRight 0.3s ease-out forwards;
+}
+
+.animate-out {
+  animation: slideOutToRight 0.3s ease-in forwards;
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.animate-progress {
+  animation: progress 5s linear forwards;
+}
+
+.signin-bonus-bg-effect {
+  background: url("../../public/icons/rewards/bg-effect.png") no-repeat;
+  background-position: center;
   background-size: cover;
 }

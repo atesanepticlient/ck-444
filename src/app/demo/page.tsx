@@ -2,26 +2,26 @@
 import React from "react";
 
 const page = () => {
-  const handleClick = () => {
-    fetch("http://asiaapi.net/API", {
+  const handleDeposit = async () => {
+    const response = await fetch("/api/notifications", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        hall: "941370",
-        key: "ea847187a6ac1bb273648692c83df371",
-        cmd: "getGamesList",
-        img: "game_img_2",
+        userId: "cmc017py00000un84afcgykrw",
+        title: "Deposit Received",
+        description: "Your deposit of $100 is being processed",
+        icon: "MONEY",
       }),
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(" gamesList = ", data));
+    });
+
+    if (!response.ok) {
+      console.error("Failed to send notification");
+    }
   };
 
   return (
     <div>
-      <button onClick={() => handleClick()}>Button Click</button>
+      <button onClick={() => handleDeposit()}>Button Click</button>
     </div>
   );
 };

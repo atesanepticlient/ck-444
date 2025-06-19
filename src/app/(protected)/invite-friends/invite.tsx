@@ -9,12 +9,16 @@ import { useFindInvitationRewardDataQuery } from "@/lib/features/rewardApiSlice"
 
 const Invite = () => {
   const { data, isLoading } = useFindInvitationRewardDataQuery();
-  console.log({data})
+  console.log({ data });
   const rewards = data?.rewards;
   const statictic = data?.statictic;
   return (
     <div>
-      {(!data || isLoading) && <span>Loading....</span>}
+      {(!data || isLoading) && (
+        <div className="w-full h-screen flex justify-center items-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
+      )}
 
       {rewards && statictic && !isLoading && (
         <Tabs defaultValue="overview" className="w-full">

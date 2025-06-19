@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { UserAvatar } from "@/components/HeaderBalance";
@@ -7,15 +9,24 @@ import { FiRefreshCw } from "react-icons/fi";
 import { IoLogOut } from "react-icons/io5";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
+import useCurrentUser from "@/hook/useCurrentUser";
+import { useFetchWalletQuery } from "@/lib/features/walletApiSlice";
+import { getCurrencySymbol } from "@/lib/utils";
 
 const RewardHeader = () => {
   const [copied, setCopied] = useState(false);
-  const [balance, setBalance] = useState(1250.75);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [lastUpdateTime, setLastUpdateTime] = useState(new Date());
+
+  const { data, refetch, error } = useFetchWalletQuery();
+
+  const user : any = useCurrentUser();
+
+  const balance = Number(data?.payload?.balance) || 0;
+
   const handleCopyPlayerId = () => {
-    navigator.clipboard.writeText("BT78945612");
+    navigator.clipboard.writeText(user?.playerId || "");
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -28,12 +39,7 @@ const RewardHeader = () => {
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    setBalance((prevBalance) => {
-      const newBalance = +(prevBalance + (Math.random() * 0.5 - 0.25)).toFixed(
-        2
-      );
-      return newBalance;
-    });
+    refetch();
 
     setLastUpdateTime(new Date());
     setShowToast(true);
@@ -83,16 +89,27 @@ const RewardHeader = () => {
       <div className=" flex items-center justify-between mb-4">
         <div className=" flex items-center">
           <div className="absolute -bottom-[25%] -translate-y-1/2 left-14">
-            <UserAvatar
-              className="!w-[120px] !h-[120px] rounded-full"
-              imageUrl="https://images.51939393.com//TCG_PROD_IMAGES/B2C/01_PROFILE/PROFILE/0.png"
-            />
+            <div
+              className={`overflow-x-hidden overflow-y-hidden p-0.5 mr-2 border border-t border-r border-b border-l border-solid bg-[linear-gradient(rgb(255,230,0),rgb(255,184,0))] border-orange-200 border-opacity-50   shadow-[hsl(51.23595505617977, 100%, 82.54901960784314%)_0px_1.9584px_0px_1.7px_inset,rgb(182,65,0)_0px_1.9584px_0px_0px]  w-[120px] h-[120px] md:w-[150px] md:h-[150px] rounded-full `}
+            >
+              <div className="flex overflow-x-hidden overflow-y-hidden relative justify-center items-center rounded-full size-full">
+                <div className="overflow-x-hidden overflow-y-hidden rounded-full size-full">
+                  <img
+                    alt="User avatar"
+                    src={
+                      "https://images.51939393.com//TCG_PROD_IMAGES/B2C/01_PROFILE/PROFILE/0.png"
+                    }
+                    className="overflow-x-clip overflow-y-clip size-full  object-cover"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
           <div className="ml-3 absolute left-[40%] -bottom-4 -translate-y-1/2">
-            <h2 className="font-bold text-xl text-white">James Wilson</h2>
+            <h2 className="font-bold text-xl text-white">{user?.name}</h2>
             <div className="flex items-center mt-1">
               <span className="text-sm text-gray-200">
-                Player ID: BT78945612
+                Player ID: {user?.playerId}
               </span>
               <button
                 onClick={handleCopyPlayerId}
@@ -113,7 +130,8 @@ const RewardHeader = () => {
                         : "balancePulse 0.5s ease-out",
                     }}
                   >
-                    ${balance.toFixed(2)}
+                    {getCurrencySymbol(data?.payload.currency || "BDT")}
+                    {balance.toFixed(2)}
                   </span>
                   <style>
                     {`

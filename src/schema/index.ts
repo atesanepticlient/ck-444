@@ -57,3 +57,23 @@ export const withdrawSchema = zod.object({
   amount: zod.string().min(1, "Enter amount"),
   password: zod.string().min(1, "Password is required"),
 });
+
+export const accountUpdateSchema = zod.object({
+  phone: zod
+    .string()
+    .min(1, "Phone number is required")
+    .regex(/^(?:\+8801|8801|01)[3-9]\d{8}$/, "Invalid Phone Number"),
+  name: zod.optional(zod.string()),
+  facebook: zod.optional(zod.string()),
+});
+
+export type AccountUpdateSchema = zod.infer<typeof accountUpdateSchema>;
+
+export const passwordChangeSchema = zod.object({
+  currentPassword: zod.string().min(1, "Current password is required"),
+  newPassword: zod
+    .string()
+    .min(6, "Password must be at least 6 characters long"),
+});
+
+export type PasswordChangeSchema = zod.infer<typeof passwordChangeSchema>;

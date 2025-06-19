@@ -19,8 +19,10 @@ datasource db {
 model User{
   id                String @id @default(cuid()) 
   phone             String @unique
+  name              String @default("Pro User")
   password          String
   playerId          String @unique
+  facebook          String? @default("")
   isBanned          Boolean
   referId           String @unique
   wallet            Wallet?
@@ -30,7 +32,28 @@ model User{
   withdraws         Withdraw[]
   inviationBonus    InvitationBonus?
   invitedById       String?
-  invitedBy         InvitationBonus? @relation("InvitedUsers", fields: [invitedById], references: [id])
+  notifications     Notification[]
+  Invitation        Invitation?
+  invitedBy         Invitation? @relation("ReferredUsers", fields: [invitedById], references: [id])
+  signinBonus       ClaimedSigninReward[]
+
+  bettingRecord     BettingRecord?
+}
+
+model BettingRecord {
+  id                String @id @default(cuid()) 
+  totalBet          Decimal @default(0)
+  totalWin          Decimal @default(0)
+
+  userId            String @unique
+  user              User @relation(fields: [userId], references: [id])
+}
+
+model Invitation {
+  id                String @id @default(cuid()) 
+  userId              String @unique
+  user                User     @relation(fields: [userId], references: [id])
+  referredUsers       User[] @relation("ReferredUsers")
 }
 
 model InvitationBonus {
@@ -38,7 +61,6 @@ model InvitationBonus {
   totalRegisters          Int @default(0)
   totalValidreferral      Int @default(0)
   claimedRewards          ClaimedInvitationReward[]
-  invitedUsers            User[]   @relation("InvitedUsers")
   userId                  String @unique
   user                    User @relation(fields: [userId], references: [id])
 }
@@ -49,7 +71,28 @@ model InvitationRewareds {
   targetReferral          Int
   prize                   Decimal
   claimedUsers            ClaimedInvitationReward[]
+  
+}
 
+model SigninBonusRewards {
+  id                      String @id @default(cuid()) 
+  day                     String
+  prize                   Int
+  deposit                 Decimal
+  claimedUsers            ClaimedSigninReward[]
+
+}
+
+model ClaimedSigninReward {
+  id                      String @id @default(cuid()) 
+  rewardId                String
+  reward                  SigninBonusRewards @relation(fields: [rewardId], references: [id])
+  userId                  String @unique
+  user                    User @relation(fields: [userId], references: [id])
+  createdAt               DateTime @default(now())
+  depositId               String @unique
+  deposit                 Deposit? @relation(fields: [depositId],references: [id])
+  isClamed                Boolean @default(false)
 }
 
 model ClaimedInvitationReward {
@@ -57,12 +100,15 @@ model ClaimedInvitationReward {
   invitationBonusId    String
   rewardId             String
   claimedAt            DateTime             @default(now())
-
+  createdAt         DateTime @default(now())
   invitationBonus      InvitationBonus      @relation(fields: [invitationBonusId], references: [id])
   reward               InvitationRewareds   @relation(fields: [rewardId], references: [id])
 
   @@unique([invitationBonusId, rewardId]) // optional: prevent duplicate claims
 }
+
+
+
 
 model Wallet {
   id                      String @id @default(cuid()) 
@@ -70,6 +116,7 @@ model Wallet {
   signinBonus             Boolean @default(false)
   referralBonus           Boolean @default(false)
   currency                String @default("BDT")
+  turnOver                Decimal @default(0)
   userId                  String @unique
   user                    User @relation(fields: [userId], references: [id])
  
@@ -81,11 +128,18 @@ model Bonus {
   referralBonus           Int @default(5)
 }
 
-
+enum PaymentWalletType {
+  EWALLET
+  BANK
+  CARD
+  CRYPTO
+}
 model PaymentWallet {
   id                      String @id @default(cuid())
   walletLogo              String
   walletName              String
+  walletType              PaymentWalletType @default(EWALLET)
+
 }
 
 model DepositWallet {
@@ -98,7 +152,7 @@ model DepositWallet {
   minDeposit              Decimal
   maximumDeposit          Decimal
   isActive                Boolean @default(true)
-  deposits                Deposit[]
+  deposits                Deposit[] @relation("WalletDeposits")
 }
 
 enum DepositStatus {
@@ -118,10 +172,11 @@ model Deposit {
   trackingNumber          String @unique
   expire                  DateTime
   status                  DepositStatus @default(PENDING)
-  wallet                  DepositWallet @relation(fields: [walletId], references: [id])
+  wallet                  DepositWallet  @relation("WalletDeposits", fields: [walletId], references: [id], onDelete: Cascade)
   userId                  String
   user                    User @relation(fields: [userId],references: [id])
   createdAt               DateTime @default(now())
+  ClaimedSigninReward     ClaimedSigninReward?
 }
 
 
@@ -145,7 +200,6 @@ model Card{
   isActive                Boolean @default(true)
   container               CardContainer @relation(fields: [containerId], references: [id])
   createdAt               DateTime @default(now())
-
   withdraws               Withdraw[] 
 }
 
@@ -158,7 +212,7 @@ model Withdraw {
   id                      String @id @default(cuid()) 
   amount                  Decimal
   expire                  DateTime
-  status                  WithdrawStatus @default(PENDING)
+  status                  WithdrawStatus @default(PENDING)  
   createdAt               DateTime @default(now())
   cardId                  String
   card                    Card @relation(fields: [cardId], references: [id])
@@ -166,4 +220,62 @@ model Withdraw {
   user                    User @relation(fields: [userId], references: [id])
 }
 
+enum ManagementRole {
+  ADMIN 
+  SUBADMIN
+}
+model Admin {
+  id                      String @id @default(cuid()) 
+  name                    String
+  role                    ManagementRole @default(ADMIN)
+  email                   String @unique
+  password                String
+   
 
+}
+
+model EmailVerificationToken {
+  id                      String @id @default(cuid()) 
+  expire                  DateTime
+  token                   String
+  createdAt               DateTime @default(now())
+}
+
+
+model SiteSetting{
+  id                          String @id @default(cuid()) 
+  firstDepositBonus           Decimal? @default(0)      
+  referBonuseMainUser         Decimal? @default(0)
+  referBonuseRefererUser      Decimal? @default(0)
+  maxWithdraw                 Decimal? @default(0)
+  minWithdraw                 Decimal? @default(0)
+  dpTurnover                  Decimal? @default(0)
+
+}
+
+
+
+enum NotificationIcon {
+ MONEY
+BELL
+  TROPHY
+  WARNING
+  INFO
+  DEPOSIT
+  WITHDRAW
+  BONUS
+
+}
+model Notification {
+  id          String           @id @default(cuid())
+  title       String
+  description String?
+  icon        NotificationIcon @default(INFO)
+  userId      String
+  user        User             @relation(fields: [userId], references: [id])
+  isRead      Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+  metadata    Json?
+
+  @@index([userId])
+}

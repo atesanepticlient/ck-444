@@ -1,4 +1,4 @@
-import { GamesList } from "@/types/gamelist";
+import { GameContent, GamesList } from "@/types/game";
 import { apiSlice } from "./apiSlice";
 
 const depositApiSlice = apiSlice.injectEndpoints({
@@ -12,7 +12,15 @@ const depositApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+
+    openGame: builder.mutation<GameContent, { gameId: string; demo: string }>({
+      query: (body) => ({
+        url: `api/open-game`,
+        method: "POST",
+        body: body,
+      }),
+    }),
   }),
 });
 
-export const { useFetchGamesListQuery } = depositApiSlice;
+export const { useFetchGamesListQuery, useOpenGameMutation } = depositApiSlice;

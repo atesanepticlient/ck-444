@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { RiMenuFoldLine } from "react-icons/ri";
 
@@ -9,14 +10,13 @@ import HeaderBalance from "./HeaderBalance";
 import AppSideCanva from "./AppSideCanva";
 
 const Header = async () => {
-  const user = await findCurrentUser();
-
+  const user: any = await findCurrentUser();
   return (
     <header
       className="flex items-center justify-between px-3 py-2"
       style={{
         width: "100%",
-        height: 46.8,
+        height: 70,
 
         zIndex: 1000,
         position: "sticky",
@@ -57,7 +57,12 @@ const Header = async () => {
         />
       </div>
 
-      {user && <HeaderBalance />}
+      {user && (
+        <HeaderBalance
+          balance={+user!.wallet!.balance}
+          currency={user!.wallet!.currency}
+        />
+      )}
       {!user && (
         <div className="flex items-center  gap-2">
           <Link

@@ -6,7 +6,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { providers } from "../../../data/api-providers";
 import Image from "next/image";
-import { Title } from "@/types/gamelist";
+import { Title } from "@/types/game";
 
 const FilterProivder = ({
   onSelect,

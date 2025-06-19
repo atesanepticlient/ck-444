@@ -5,7 +5,7 @@ import { GameCardWithProvider } from "./GameCards";
 
 import GameSelectionHeader from "./GameSelectionHeader";
 // import { useGames } from "@/lib/store.zustond";
-import { Categories, Title } from "@/types/gamelist";
+import { Categories, Title } from "@/types/game";
 
 export const sports = [
   {

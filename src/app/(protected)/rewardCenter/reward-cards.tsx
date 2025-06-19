@@ -9,7 +9,7 @@ const RewardCards = () => {
   return (
     <div className="grid grid-cols-2 gap-3">
       <Link
-        href="#"
+        href="/activity/signin"
         className="signin-bonus-bg flex justify-center items-center w-full h-[160px] rounded-xl"
       >
         <div className="flex flex-col gap-2">
@@ -29,7 +29,7 @@ const RewardCards = () => {
       </Link>
 
       <Link
-        href="#"
+        href="/invite-friends"
         className="invitaion-bonus-bg flex justify-center items-center w-full h-[160px] rounded-xl"
       >
         <div className="flex flex-col gap-2">

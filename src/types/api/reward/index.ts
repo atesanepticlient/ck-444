@@ -5,7 +5,7 @@ export type ExtendedWithUserRewards = Prisma.InvitationRewaredsGetPayload<{
 }> & { completedReferral: number; isClamed: boolean };
 export interface StaticticType {
   todayIncome: number;
-  yeasterdayIncome: number;
+  totalIncome: number;
   registersCount: number;
   validReferral: number;
 }
