@@ -128,7 +128,7 @@ export const POST = async (req: NextRequest) => {
       }
 
       await db.user.update({
-        where: { id: user.wallet!.id },
+        where: { id: user!.id },
         data: {
           wallet: { update: { balance: userBalance } },
           bettingRecord: { update: { ...betRecord } },
@@ -144,6 +144,7 @@ export const POST = async (req: NextRequest) => {
       });
     }
   } catch (error: any) {
+    console.log({ error });
     return Response.json(
       { success: "fail", error: error.message || "unexpected_error" },
       { status: 500 }
