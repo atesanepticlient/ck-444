@@ -86,7 +86,6 @@ export const POST = async (req: NextRequest) => {
       where: { playerId: requestBody.login },
       include: { wallet: true },
     });
-
     if (!user) {
       return new Response(
         JSON.stringify({ success: "fail", error: "user_not_found" }),
@@ -98,10 +97,10 @@ export const POST = async (req: NextRequest) => {
 
     if (requestBody.cmd === "getBalance") {
       return Response.json({
-        success: "success",
+        status: "success",
         error: "",
-        login: user.playerId,
-        balance: user.wallet?.balance || 0.0,
+        login: `${user.playerId}`,
+        balance: `${user.wallet?.balance.toFixed(2) || 0.0}`,
         currency: user.wallet?.currency || "BDT",
       });
     }
@@ -137,10 +136,10 @@ export const POST = async (req: NextRequest) => {
       });
 
       return Response.json({
-        success: "success",
+        status: "success",
         error: "",
-        login: user.playerId,
-        balance: userBalance,
+        login: `${user.playerId}`,
+        balance: `${userBalance.toFixed(2)}`,
         currency: user.wallet?.currency || "BDT",
       });
     }

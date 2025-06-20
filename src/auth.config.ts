@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 
 export default {
+  trustHost: true,
   providers: [
     Credentials({
       name: "credentials",

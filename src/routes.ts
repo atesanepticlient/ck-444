@@ -15,7 +15,7 @@ export const publicRoutes = [
   "/slots",
   "/api/asiaapi",
   "/api/open-game",
-  "/api/games/32328e87f8592ed205bbaa065dbacce4",
+  "/api/game/32328e87f8592ed205bbaa065dbacce4",
   "/live-casino",
   "/sports",
   "/promotion",
