@@ -10,7 +10,7 @@ const WithdrawDepositButton = async () => {
   return (
     <div className="flex gap-3 items-center justify-between py-4">
       <Link
-        href="/"
+        href="/deposit"
         className="flex flex-1 justify-center items-center font-bold text-center text-[#ffab49] rounded-xl border border-teal-800 border-solid bg-[#002632] decoration-orange-400 h-[46px] outline-orange-400 shadow-[rgb(0,38,49)_0px_2.304px_0px_0px]"
         aria-label="Deposit"
       >
@@ -20,7 +20,7 @@ const WithdrawDepositButton = async () => {
         </span>
       </Link>
       <Link
-        href={"/"}
+        href={"/withdraw"}
         className="flex flex-1 justify-center items-center font-bold text-center text-[#ffab49] rounded-xl border border-teal-800 border-solid bg-[#002632] decoration-orange-400 h-[46px] outline-orange-400 shadow-[rgb(0,38,49)_0px_2.304px_0px_0px]"
         aria-label="Deposit"
       >

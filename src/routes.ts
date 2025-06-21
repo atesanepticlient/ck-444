@@ -19,6 +19,7 @@ export const publicRoutes = [
   "/live-casino",
   "/sports",
   "/promotion",
+  "/hot",
 ];
 
 /**

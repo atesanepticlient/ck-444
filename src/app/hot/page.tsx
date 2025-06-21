@@ -4,27 +4,26 @@ import React, { useState } from "react";
 
 import { GameCardWithProvider } from "@/components/GameCards";
 import { useGames } from "@/lib/store.zustond";
-import { Categories } from "@/types/game";
 import PrimaryInput from "@/components/form/input";
 import GameLoader from "@/components/loader/GameLoader";
 import SideNavLayout from "@/components/SideNavLayout";
 
-const LiveCasionPage = () => {
+const HotGamesPage = () => {
   const [search, setSearch] = useState("");
-  const { getGames } = useGames((state) => state);
-  const gamesList = getGames(Categories.LiveDealers, search);
+  const { getCustomeCategoriesGames } = useGames((state) => state);
+  const gamesList = getCustomeCategoriesGames("hot", search);
   return (
     <SideNavLayout>
       <div>
-        <AppHeader title="Live Casino" />
+        <AppHeader title="Hot Games" />
         <main className="py-5 px-2 bg-[#003e3e] min-h-screen">
           <div className="flex items-center">
             <PrimaryInput
-              value={search}
-              type="search"
-              onChange={(e) => setSearch(e.target.value)}
               placeholder="Search Games"
               className="mb-2"
+              type="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
           </div>
           <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3 lg:gap-4">
@@ -36,9 +35,9 @@ const LiveCasionPage = () => {
             <GameLoader lenght={20} loading={!!!gamesList} />
           </div>
           {gamesList && gamesList.length == 0 && (
-            <span className="block text-center text-lg font-semibold text-[#23FFC8]">
+            <p className="block text-center w-full uppercase text-lg font-semibold text-[#23FFC8]">
               Not Found
-            </span>
+            </p>
           )}
         </main>
       </div>
@@ -46,4 +45,4 @@ const LiveCasionPage = () => {
   );
 };
 
-export default LiveCasionPage;
+export default HotGamesPage;

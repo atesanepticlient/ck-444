@@ -18,6 +18,7 @@ export const GET = async () => {
     const wallet = await db.wallet.findFirst({
       where: { userId: user!.id },
     });
+    console.log({ wallet });
     const availableBalance = +wallet!.balance - +wallet!.turnOver;
 
     const minWithdraw = 10000;

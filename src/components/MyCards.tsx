@@ -34,7 +34,7 @@ import MyCardsSkleton from "./skelton/MyCardsSkleton";
 const MyCards = () => {
   const { data, isLoading } = useFetchCardsQuery({ all: true });
   const cards = data?.cards;
-
+  console.log({ cards });
   return (
     <div>
       {data && !isLoading && (

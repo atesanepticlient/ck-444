@@ -76,6 +76,10 @@ export const POST = async (req: NextRequest) => {
     const paymentWallet = await db.paymentWallet.findUnique({
       where: { id: card.paymentWalletid },
     });
+    console.log({ card });
+    console.log({ paymentWallet });
+    console.log("card.paymentWalletid ", card.paymentWalletid);
+
     card.paymentWallet = paymentWallet;
     return Response.json(
       { message: "New card created", card: card },

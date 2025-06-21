@@ -5,8 +5,6 @@ import hotGame from "@/../public/icons/nav-hotgames.svg";
 import slot from "@/../public/icons/nav-slot.svg";
 import sport from "@/../public/icons/nav-sport.svg";
 import live from "@/../public/icons/nav-live.svg";
-import lottery from "@/../public/icons/nav-lottery.svg";
-import esports from "@/../public/icons/nav-esport.svg";
 import fav from "@/../public/icons/nav-fav.svg";
 import Image from "next/image";
 
@@ -14,24 +12,20 @@ const menuData = [
   {
     title: "Hot Games",
     icon: hotGame,
-    link: "#",
+    link: "/hot",
   },
 
   {
     title: "Slots",
     icon: slot,
-    link: "/slot",
+    link: "/slots",
   },
   {
     title: "Live",
     icon: live,
     link: "/live-casino",
   },
-  {
-    title: "E-Sports",
-    icon: esports,
-    link: "/e-sports",
-  },
+
   {
     title: "Sports",
     icon: sport,
@@ -40,19 +34,8 @@ const menuData = [
   {
     title: "Favorites",
     icon: fav,
-    link: "#",
+    link: "/favorites",
   },
-
-  {
-    title: "Lottery",
-    icon: lottery,
-    link: "#",
-  },
-
-  // {
-  //   title: "PVP",
-  //   icon: pvp,
-  // },
 ];
 
 const AppMenuItems = () => {

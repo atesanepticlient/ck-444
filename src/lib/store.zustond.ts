@@ -25,6 +25,11 @@ interface GameType {
     provider?: any
   ) => NetEnt[] | null;
 
+  getCustomeCategoriesGames: (
+    category: string,
+    search?: string
+  ) => NetEnt[] | null;
+
   setGames: (gamge: GamesList) => void;
   setLoading: (isLoading: boolean) => void;
   setError: (error: string) => void;
@@ -67,7 +72,41 @@ export const useGames = create<GameType>((set, get) => ({
 
     return flitedGames;
   },
+  getCustomeCategoriesGames: (category, search) => {
+    const games = get().games!;
+    if (!games) return null;
 
+    const allGamesArrays = Object.values(games).flat();
+    let flitedGames: any;
+    if (category == "hot") {
+      const gamesId = [
+        "8892",
+        "8891",
+        "8890",
+        "15808",
+        "15814",
+        "15815",
+        "15813",
+        "15810",
+        "15809",
+        "15065",
+        "15056",
+        "15812",
+        "7053",
+        "10269",
+        "9896",
+      ];
+      flitedGames = allGamesArrays.filter((game) => gamesId.includes(game.id));
+    }
+
+    if (search) {
+      const searchLower = search.toLowerCase();
+      flitedGames = flitedGames.filter((game: any) =>
+        game.name.toLowerCase().includes(searchLower)
+      );
+    }
+    return flitedGames;
+  },
   setGames: (games) => set((state) => ({ ...state, games })),
   setLoading: (isLoading) => set((state) => ({ ...state, isLoading })),
   setError: (error) => set((state) => ({ ...state, error })),

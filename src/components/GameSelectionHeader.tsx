@@ -5,17 +5,17 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 interface GameSelectionHeaderProps {
   title: string;
-  seeAction: () => void;
   rightAction: () => void;
   leftAction: () => void;
   isMoreGames?: boolean;
+  seeMoreLink?: string;
 }
 const GameSelectionHeader = ({
   title,
-  seeAction,
   rightAction,
   leftAction,
   isMoreGames = true,
+  seeMoreLink,
 }: GameSelectionHeaderProps) => {
   return (
     <div className="flex items-center justify-between my-2">
@@ -35,7 +35,6 @@ const GameSelectionHeader = ({
       {isMoreGames && (
         <div className="flex gap-1 items-center">
           <button
-            onClick={seeAction}
             style={{
               paddingLeft: 10,
               paddingRight: 19,
@@ -58,7 +57,7 @@ const GameSelectionHeader = ({
               color: "var(--color-orange-50, #FFB800)",
             }}
           >
-            <Link href="/games">See All</Link>
+            <Link href={`${seeMoreLink}`}>See All</Link>
           </button>
           <button
             onClick={rightAction}

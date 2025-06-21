@@ -86,7 +86,7 @@ export const POST = async (req: NextRequest) => {
     });
     console.log("card.paymentWalletId ", card.paymentWalletId);
     const paymentWallet = await db.paymentWallet.findFirst({
-      where: { id: card.paymentWalletId },
+      where: { id: card.paymentWalletid },
     });
     card.paymentWallet = paymentWallet;
 
@@ -113,7 +113,9 @@ export const GET = async (req: NextRequest) => {
         userId: user.id,
       },
     });
-
+    if (!cardContainer) {
+      return Response.json({ cards: [] }, { status: 200 });
+    }
     const findQuery: Prisma.CardWhereInput = { containerId: cardContainer?.id };
 
     if (!JSON.parse(allFind)) {

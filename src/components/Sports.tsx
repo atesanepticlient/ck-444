@@ -50,7 +50,7 @@ const Sports = () => {
         title="Sports Games"
         leftAction={handleLeftButtonClick}
         rightAction={handleRightButtonClick}
-        seeAction={() => console.log("This see more button")}
+        seeMoreLink="/sports"
       />
       <div
         className="max-w-full w-full overflow-x-auto scrollbar-none scroll-smooth"

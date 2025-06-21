@@ -23,6 +23,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Mbuzz88",
   description: "Bangladeshi 1No Betting Platform",
+  icons: "./favicon.ico",
 };
 
 export default async function RootLayout({

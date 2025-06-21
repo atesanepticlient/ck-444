@@ -155,6 +155,8 @@ const CardPage = () => {
 
   const isFormSubmiting = cardCreateLoading || cardNewCreateLoading;
 
+
+
   return (
     <div className="">
       <SiteHeader title="Create New Card"></SiteHeader>
@@ -185,7 +187,7 @@ const CardPage = () => {
                           alt={wallet.walletName}
                           className="w-16 h-16 object-contain "
                         />
-                        <span className="text-sm font-medium">
+                        <span className="text-sm font-medium capitalize">
                           {wallet.walletName}
                         </span>
                       </button>
