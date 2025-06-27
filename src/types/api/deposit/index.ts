@@ -5,6 +5,7 @@ export interface MakeDepositRequestInput {
   amount: Decimal;
   bonus: Decimal;
   walletId: string;
+  walletNumber: string;
   bonusFor: string;
   senderNumber: string;
 }

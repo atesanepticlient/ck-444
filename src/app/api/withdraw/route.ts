@@ -15,8 +15,13 @@ export const POST = async (req: NextRequest) => {
     if (!amount || !password || !cardId)
       return Response.json({ error: "Invalid Input Type" }, { status: 400 });
 
-    const minWithdraw = 10000;
-    const maxWithdraw = 25000;
+    const site = await db.siteSetting.findFirst({
+      where: {},
+      select: { maxWithdraw: true, minWithdraw: true },
+    });
+
+    const minWithdraw = Number(site?.minWithdraw) || 0;
+    const maxWithdraw = Number(site?.maxWithdraw) || 0;
 
     if (amount < minWithdraw) {
       return Response.json(

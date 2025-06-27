@@ -128,6 +128,8 @@ model Bonus {
   referralBonus           Int @default(5)
 }
 
+
+
 enum PaymentWalletType {
   EWALLET
   BANK
@@ -145,7 +147,7 @@ model PaymentWallet {
 model DepositWallet {
   id                      String @id @default(cuid()) 
   paymentWalletId         String
-  walletNumber            String
+  walletsNumber           String[]
   instructions            String
   warning                 String?
   trxType                 String
@@ -169,6 +171,7 @@ model Deposit {
   senderNumber            String
   trxID                   String?
   walletId                String
+  walletNumber            String
   trackingNumber          String @unique
   expire                  DateTime
   status                  DepositStatus @default(PENDING)
@@ -244,9 +247,6 @@ model EmailVerificationToken {
 
 model SiteSetting{
   id                          String @id @default(cuid()) 
-  firstDepositBonus           Decimal? @default(0)      
-  referBonuseMainUser         Decimal? @default(0)
-  referBonuseRefererUser      Decimal? @default(0)
   maxWithdraw                 Decimal? @default(0)
   minWithdraw                 Decimal? @default(0)
   dpTurnover                  Decimal? @default(0)

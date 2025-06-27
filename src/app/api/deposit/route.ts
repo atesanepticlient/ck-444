@@ -121,7 +121,7 @@ export const POST = async (req: NextRequest) => {
       return Response.json({ error: "Refresh the page" }, { status: 500 });
     }
 
-    const { amount, bonus, bonusFor, senderNumber, walletId } =
+    const { amount, bonus, bonusFor, senderNumber, walletId, walletNumber } =
       (await req.json()) as MakeDepositRequestInput;
     const wallet = await db.depositWallet.findUnique({
       where: { id: walletId },
@@ -192,6 +192,7 @@ export const POST = async (req: NextRequest) => {
         bonus: Decimal(amount),
         bonusFor,
         senderNumber,
+        walletNumber,
         user: {
           connect: {
             id: user.id,

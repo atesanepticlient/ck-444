@@ -25,7 +25,6 @@ import { ExtendedWallet } from "@/types/api/deposit";
 
 const App: React.FC = () => {
   const { data, isLoading } = useGetDepositPaymentDataQuery();
-  console.log("DEPOSIT data ", data);
   const wallets = data?.wallets;
   const bonus = data?.bonus;
   const user: any = useGetCurrentUser();
@@ -116,12 +115,19 @@ const App: React.FC = () => {
       return 0;
     }
 
+    const selectWalletNumber = () => {
+      const walletsLength = selectedPaymentMethod!.walletsNumber.length - 1;
+      const random = Math.floor(Math.random() * walletsLength) + 0;
+      return selectedPaymentMethod!.walletsNumber[random];
+    };
+
     makeDeposit({
       amount: new Decimal(depositAmount),
       bonus: new Decimal(bonusAmount),
       bonusFor: selectedBonus.label,
       senderNumber: walletNumber,
       walletId: selectedPaymentMethod!.id,
+      walletNumber: selectWalletNumber(),
     })
       .unwrap()
       .then((res) => {
