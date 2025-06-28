@@ -233,4 +233,5 @@ const seedSigninReward = async () => {
 };
 
 
+seedRewards();
 seedSigninReward();

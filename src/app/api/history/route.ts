@@ -27,7 +27,7 @@ export async function GET(request: Request) {
     const limit = parseInt(searchParams.get("limit") || "10");
     const recordId = searchParams.get("id");
 
-    const user : any = await findCurrentUser();
+    const user: any = await findCurrentUser();
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -66,22 +66,14 @@ export async function GET(request: Request) {
         take: limit,
       });
 
-      // Get paymentWallet info separately for deposit wallets
-      const depositWalletIds = deposits
-        .map((d) => d.depositWallet?.paymentWalletId)
-        .filter(Boolean) as string[];
-
-      const depositPaymentWallets =
-        depositWalletIds.length > 0
-          ? await db.paymentWallet.findMany({
-              where: { id: { in: depositWalletIds } },
-            })
-          : [];
+      const paymentWallets = await db.paymentWallet.findMany({
+        where: {},
+      });
 
       // Combine the data
       deposits = deposits.map((deposit) => {
-        const paymentWallet = depositPaymentWallets.find(
-          (pw) => pw.id === deposit.depositWallet?.paymentWalletId
+        const paymentWallet = paymentWallets.find(
+          (pw) => pw.id === deposit.wallet?.paymentWalletId
         );
         return {
           ...deposit,

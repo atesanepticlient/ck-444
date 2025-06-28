@@ -3,13 +3,12 @@
 import React, { useState } from "react";
 import { HiOutlineRefresh } from "react-icons/hi";
 import {} from "react-icons/ri";
-import { TbFileStar } from "react-icons/tb";
 import { FaRegFileAlt } from "react-icons/fa";
 import { RiCustomerService2Line } from "react-icons/ri";
 import { PiHandWithdrawFill, PiHandDepositFill } from "react-icons/pi";
 import { IoLogOut } from "react-icons/io5";
 import { RiAccountPinCircleFill } from "react-icons/ri";
-
+import { MdHistory } from "react-icons/md";
 import {
   Popover,
   PopoverContent,
@@ -157,9 +156,9 @@ const DropdownMenu: React.FC = () => {
       onclick: () => redirect("/member"),
     },
     {
-      icon: <TbFileStar className="w-6 h-6 text-white" />,
-      label: "Betting Record",
-      onclick: () => redirect("/betting-record"),
+      icon: <MdHistory className="w-6 h-6 text-white" />,
+      label: "History",
+      onclick: () => redirect("/History"),
     },
     {
       icon: <FaRegFileAlt className="w-6 h-6 text-white" />,

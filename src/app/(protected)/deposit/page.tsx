@@ -27,6 +27,7 @@ const App: React.FC = () => {
   const { data, isLoading } = useGetDepositPaymentDataQuery();
   const wallets = data?.wallets;
   const bonus = data?.bonus;
+  console.log({ bonus });
   const user: any = useGetCurrentUser();
 
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
@@ -172,7 +173,7 @@ const App: React.FC = () => {
       }
 
       setBonusOptions((state) => {
-        const newState = [...state];
+        let newState = [...state];
         if (isSignBonusActive) {
           const index = newState.findIndex((s) => s.id == "signinBonus");
           newState[index].disable = false;
@@ -181,7 +182,15 @@ const App: React.FC = () => {
           const index = newState.findIndex((s) => s.id == "referralBonus");
           newState[index].disable = false;
         }
-        console.log("NEW STATE ", newState);
+        newState = newState.map((state) => {
+          if (state.id == "signinBonus") {
+            return { ...state, value: bonus.signinBonus };
+          } else if (state.id == "referralBonus") {
+            return { ...state, value: bonus.referralBonus };
+          } else {
+            return state;
+          }
+        });
         return newState;
       });
     }

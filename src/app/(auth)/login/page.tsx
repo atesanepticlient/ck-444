@@ -7,9 +7,9 @@ const Login = () => {
     <div>
       <AuthContainer
         title="Login"
-        formRedirectLinkPlaceholder="Login"
+        formRedirectLinkPlaceholder="Register"
         formRedirectText="No account yet? "
-        formRediretLink="/Register"
+        formRediretLink="/register"
       >
         <LoginForm />
       </AuthContainer>

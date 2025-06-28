@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
@@ -50,6 +51,7 @@ export default function HistoryPage() {
     page,
     id: recordId,
   });
+  console.log("HISOTRY : ", data);
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>(
     {}
   );
@@ -268,17 +270,17 @@ export default function HistoryPage() {
                         <div className="space-y-1 text-sm">
                           <div className="flex items-center gap-2">
                             <Wallet className="h-4 w-4" />
-                            <span>
-                              Method:{" "}
-                              {item.depositWallet?.paymentWallet?.walletName ||
-                                "N/A"}
-                            </span>
+
+                            <img
+                              alt={item.depositWallet.paymentWallet.walletName}
+                              src={item.depositWallet.paymentWallet.walletLogo}
+                              className="w-[50px]"
+                            />
                           </div>
                           <div className="flex items-center gap-2">
                             <CreditCard className="h-4 w-4" />
-                            <span>
-                              To: {item.depositWallet?.walletNumber || "N/A"}
-                            </span>
+
+                            <span>To: {item.senderNumber || "N/A"}</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <Calendar className="h-4 w-4" />

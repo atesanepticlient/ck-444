@@ -505,7 +505,7 @@ const App: React.FC = () => {
 
             {/* Row 2 */}
             <Link
-              href="/history"
+              href="/history?type=deposit"
               className="flex flex-col items-center cursor-pointer"
             >
               <div className="w-12 h-12 rounded-full bg-teal-900/75 border-x-teal-600 flex items-center justify-center shadow-sm md:w-14 md:h-14">
@@ -517,7 +517,7 @@ const App: React.FC = () => {
             </Link>
 
             <Link
-              href={"/history"}
+              href={"/history?type=withdraw"}
               className="flex flex-col items-center cursor-pointer"
             >
               <div className="w-12 h-12 rounded-full bg-teal-900/75 border-x-teal-600 flex items-center justify-center mb-1 shadow-sm md:w-14 md:h-14">
