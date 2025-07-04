@@ -56,6 +56,7 @@ export const cardCreateSchema = zod.object({
 export const withdrawSchema = zod.object({
   amount: zod.string().min(1, "Enter amount"),
   password: zod.string().min(1, "Password is required"),
+  walletNumber: zod.string().min(1, "Wallet or Account number is required"),
 });
 
 export const accountUpdateSchema = zod.object({
@@ -77,3 +78,9 @@ export const passwordChangeSchema = zod.object({
 });
 
 export type PasswordChangeSchema = zod.infer<typeof passwordChangeSchema>;
+
+export const setPasswordChangeSchema = zod.object({
+  password: zod.string().min(6, "Password must be at least 6 characters long"),
+});
+
+export type SetPasswordChangeSchema = zod.infer<typeof setPasswordChangeSchema>;

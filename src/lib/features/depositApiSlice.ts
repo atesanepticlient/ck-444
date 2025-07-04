@@ -1,8 +1,5 @@
-import {
-  GetDepositDataOutput,
-  MakeDepositRequestInput,
-  MakeDepositRequestOutput,
-} from "@/types/api/deposit";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { GetDepositDataOutput } from "@/types/api/deposit";
 import { apiSlice } from "./apiSlice";
 
 const depositApiSlice = apiSlice.injectEndpoints({
@@ -16,10 +13,7 @@ const depositApiSlice = apiSlice.injectEndpoints({
         transformResponse: (response: GetDepositDataOutput) => response.payload,
       }
     ),
-    makeDeposite: builder.mutation<
-      MakeDepositRequestOutput,
-      MakeDepositRequestInput
-    >({
+    makeDeposite: builder.mutation<any, any>({
       query: (body) => ({
         url: "api/deposit",
         method: "POST",

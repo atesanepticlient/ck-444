@@ -16,22 +16,19 @@ import { CiGift } from "react-icons/ci";
 import { PulseLoader } from "react-spinners";
 import PageLoader from "@/components/loader/PageLoader";
 
-import Decimal from "decimal.js";
 import toast from "react-hot-toast";
 import { INTERNAL_SERVER_ERROR } from "@/error";
 import SiteHeader from "@/components/SiteHeader";
 import PaymentMethod from "@/components/PaymentMethod";
-import { ExtendedWallet } from "@/types/api/deposit";
 
 const App: React.FC = () => {
   const { data, isLoading } = useGetDepositPaymentDataQuery();
   const wallets = data?.wallets;
   const bonus = data?.bonus;
-  console.log({ bonus });
+
   const user: any = useGetCurrentUser();
 
-  const [selectedPaymentMethod, setSelectedPaymentMethod] =
-    useState<ExtendedWallet>();
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<any>();
   const [depositAmount, setDepositAmount] = useState<string>("");
   const [walletNumber, setWalletNumber] = useState("");
   const [selectedBonus, setSelectedBonus] = useState<{
@@ -44,9 +41,7 @@ const App: React.FC = () => {
   const [selectedAmountButton, setSelectedAmountButton] = useState<
     number | null
   >();
-  const quickAmounts = [
-    100, 200, 300, 500, 800, 1000, 1500, 2000, 5000, 10000, 25000,
-  ];
+  const quickAmounts = [400, 500, 800, 1000, 1500, 2000, 5000, 10000, 25000];
 
   const [error, setError] = useState("");
   const [pending, setTrasition] = useState(false);
@@ -110,32 +105,33 @@ const App: React.FC = () => {
       return 0;
     }
 
+    if (+depositAmount < +selectedPaymentMethod.min_deposit) {
+      setError(`Minimum Deposit ${selectedPaymentMethod.min_deposit}`);
+      setTrasition(false);
+      return 0;
+    }
+    if (+depositAmount > +selectedPaymentMethod.max_deposit) {
+      setError(`Maximum Deposit ${selectedPaymentMethod.max_deposit}`);
+      setTrasition(false);
+      return 0;
+    }
     if (!walletNumber) {
       setError("Please Enter wallet number");
       setTrasition(false);
       return 0;
     }
 
-    const selectWalletNumber = () => {
-      const walletsLength = selectedPaymentMethod!.walletsNumber.length - 1;
-      const random = Math.floor(Math.random() * walletsLength) + 0;
-      return selectedPaymentMethod!.walletsNumber[random];
-    };
-
     makeDeposit({
-      amount: new Decimal(depositAmount),
-      bonus: new Decimal(bonusAmount),
-      bonusFor: selectedBonus.label,
-      senderNumber: walletNumber,
-      walletId: selectedPaymentMethod!.id,
-      walletNumber: selectWalletNumber(),
+      amount: +depositAmount + +bonusAmount,
+      account_number: walletNumber,
+      ps: selectedPaymentMethod!.name,
     })
       .unwrap()
       .then((res) => {
         if (res.success) {
           console.log({ res });
           setTrasition(false);
-          window.location.href = res.payload.paymentCallback;
+          window.location.href = res.payload.data.paymentpage_url;
         }
       })
       .catch((error: any) => {
@@ -207,6 +203,10 @@ const App: React.FC = () => {
       setSelectedAmountButton(+depositAmount);
     }
   }, [depositAmount]);
+
+  useEffect(() => {
+    console.log({ selectedPaymentMethod });
+  }, [selectedPaymentMethod]);
 
   return (
     <>
@@ -324,7 +324,7 @@ const App: React.FC = () => {
                   Min:
                   {formatBDT(
                     selectedPaymentMethod
-                      ? +selectedPaymentMethod.minDeposit
+                      ? +selectedPaymentMethod.min_deposit
                       : 0
                   )}
                 </span>
@@ -332,7 +332,7 @@ const App: React.FC = () => {
                   Max:{" "}
                   {formatBDT(
                     selectedPaymentMethod
-                      ? +selectedPaymentMethod!.maximumDeposit
+                      ? +selectedPaymentMethod!.max_deposit
                       : 0
                   )}
                 </span>

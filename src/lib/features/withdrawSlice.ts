@@ -1,13 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { apiSlice } from "./apiSlice";
-import {
-  MakeWithdrawInput,
-  MakeWithdrawOutput,
-  WithdrawPageData,
-} from "@/types/api/withdraw";
+import { WithdrawPageData } from "@/types/api/withdraw";
 
 const depositApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    makeWithdraw: builder.mutation<MakeWithdrawOutput, MakeWithdrawInput>({
+    makeWithdraw: builder.mutation<any, any>({
       query: (body) => ({
         url: "api/withdraw",
         method: "POST",
@@ -22,8 +20,17 @@ const depositApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ["withdraw"],
     }),
+    fetchWithdrawWallet: builder.query<any, void>({
+      query: () => ({
+        url: "api/withdraw/wallet",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useMakeWithdrawMutation, useFetchWithdrawPageDataQuery } =
-  depositApiSlice;
+export const {
+  useMakeWithdrawMutation,
+  useFetchWithdrawPageDataQuery,
+  useFetchWithdrawWalletQuery,
+} = depositApiSlice;

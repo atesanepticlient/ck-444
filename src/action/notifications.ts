@@ -82,7 +82,7 @@ export async function getUserNotifications(
   try {
     const skip = (page - 1) * limit;
 
-    const [notifications , totalCount] : any = await Promise.all([
+    const [notifications, totalCount]: any = await Promise.all([
       db.notification.findMany({
         where: { userId },
         skip,

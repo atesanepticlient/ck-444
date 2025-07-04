@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // /* eslint-disable @typescript-eslint/no-explicit-any */
 // import { INTERNAL_SERVER_ERROR } from "@/error";
 // import { db } from "@/lib/db";
@@ -27,30 +28,43 @@
 //   }
 // };
 
+import { paymentSystemsLogos } from "@/data/paymentWallet";
 import { INTERNAL_SERVER_ERROR } from "@/error";
 import { db } from "@/lib/db";
 
 export const GET = async () => {
   try {
-    const depostiWallets = await db.depositWallet.findMany({
-      where: { isActive: true },
-    });
+    const paymentSystemsData = await fetch(
+      `${process.env.APAY_DOMAIN}/Remotes/payment-systems-info?project_id=${process.env.APAY_PROJECT_ID}`,
+      {
+        headers: {
+          apikey: `${process.env.APAY_API_KEY}`,
+          Accept: "*/*",
+        },
+      }
+    );
 
-    const paymentWallets = await db.paymentWallet.findMany({ where: {} });
-
-    const wallets = depostiWallets.map((w) => {
-      const paymentWallet = paymentWallets.find(
-        (pw) => pw.id == w.paymentWalletId
-      );
-      return { ...w, paymentWallet };
-    });
-
-    console.log("wallets from server = ", wallets);
+    let paymentSystemsPayload = await paymentSystemsData.json();
+    if (!paymentSystemsPayload.success) {
+      throw Error;
+    }
+    paymentSystemsPayload = paymentSystemsPayload.payment_systems.map(
+      (paymentSystem: any) => {
+        const logo = paymentSystemsLogos.find(
+          (logo) => logo.name == paymentSystem.name
+        );
+        return {
+          ...paymentSystem,
+          image: logo?.image,
+          label: logo?.label,
+        };
+      }
+    );
 
     const bonus = await db.bonus.findFirst({ where: {} });
 
     return Response.json(
-      { payload: { wallets: wallets, bonus }, success: true },
+      { payload: { wallets: paymentSystemsPayload, bonus }, success: true },
       { status: 200 }
     );
   } catch {

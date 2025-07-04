@@ -24,15 +24,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Calendar,
-  Clock,
-  Wallet,
-  CreditCard,
-  Check,
-  X,
-  Loader,
-} from "lucide-react";
+import { Calendar, Wallet, CreditCard, Check, X, Loader } from "lucide-react";
 import SiteHeader from "@/components/SiteHeader";
 
 export default function HistoryPage() {
@@ -43,13 +35,11 @@ export default function HistoryPage() {
   const type = searchParams.get("type") || "all";
   const status = searchParams.get("status") || "all";
   const page = parseInt(searchParams.get("page") || "1");
-  const recordId = searchParams.get("id");
 
   const { data, isLoading, isFetching } = useGetHistoryQuery({
     type,
     status,
     page,
-    id: recordId,
   });
   console.log("HISOTRY : ", data);
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>(
@@ -142,9 +132,8 @@ export default function HistoryPage() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Status</SelectItem>
-            <SelectItem value="pending">Pending</SelectItem>
-            <SelectItem value="approved">Approved</SelectItem>
-            <SelectItem value="rejected">Rejected</SelectItem>
+            <SelectItem value="Pending">Pending</SelectItem>
+            <SelectItem value="Success">Approved</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -164,11 +153,7 @@ export default function HistoryPage() {
           {data?.data?.map((item: any) => (
             <div
               key={item.id}
-              className={`border rounded-lg overflow-hidden transition-all duration-300 ${
-                data.highlightedId === item.id
-                  ? "ring-2 ring-primary animate-pulse-once"
-                  : ""
-              }`}
+              className={`border rounded-lg overflow-hidden transition-all duration-300 `}
             >
               <div
                 className="p-4 cursor-pointer flex justify-between items-center"
@@ -177,7 +162,7 @@ export default function HistoryPage() {
                 <div className="flex items-center gap-4">
                   {item.amount ? (
                     <>
-                      {"card" in item ? (
+                      {item.type == "withdraw" ? (
                         <CreditCard className="h-6 w-6 text-red-500" />
                       ) : (
                         <Wallet className="h-6 w-6 text-green-500" />
@@ -210,7 +195,7 @@ export default function HistoryPage() {
 
               {expandedItems[item.id] && (
                 <div className="border-t p-4 bg-muted/50">
-                  {"card" in item ? (
+                  {item.type == "withdraw" ? (
                     // Withdraw details
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
@@ -218,28 +203,23 @@ export default function HistoryPage() {
                         <div className="space-y-1 text-sm">
                           <div className="flex items-center gap-2">
                             <CreditCard className="h-4 w-4" />
-                            <span>
-                              Card: **** **** ****{" "}
-                              {item.card.cardNumber.slice(-4)}
-                            </span>
+                            <span>Order Id : {item.order_id}</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <Wallet className="h-4 w-4" />
-                            <span>
-                              Wallet:{" "}
-                              {item.card.paymentWallet?.walletName || "N/A"}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              <Wallet className="h-4 w-4" />
+
+                              <img
+                                alt={item.label}
+                                src={item.image}
+                                className="w-[50px]"
+                              />
+                            </div>
                           </div>
                           <div className="flex items-center gap-2">
                             <Calendar className="h-4 w-4" />
                             <span>Requested: {formatDate(item.createdAt)}</span>
                           </div>
-                          {item.expire && (
-                            <div className="flex items-center gap-2">
-                              <Clock className="h-4 w-4" />
-                              <span>Expires: {formatDate(item.expire)}</span>
-                            </div>
-                          )}
                         </div>
                       </div>
                       <div>
@@ -249,13 +229,13 @@ export default function HistoryPage() {
                             <span className="font-medium">Status:</span>{" "}
                             {item.status}
                           </div>
-                          {item.status === "REJECTED" && (
-                            <div className="text-destructive">
-                              Note: Your withdrawal request was rejected
+                          {item.status === "Pending" && (
+                            <div>
+                              Note: Your withdrawal request under review
                             </div>
                           )}
-                          {item.status === "APPROVED" && (
-                            <div className="text-success">
+                          {item.status === "Success" && (
+                            <div className="text-emerald-600">
                               Note: Funds have been transferred to your card
                             </div>
                           )}
@@ -272,15 +252,15 @@ export default function HistoryPage() {
                             <Wallet className="h-4 w-4" />
 
                             <img
-                              alt={item.depositWallet.paymentWallet.walletName}
-                              src={item.depositWallet.paymentWallet.walletLogo}
+                              alt={item.label}
+                              src={item.image}
                               className="w-[50px]"
                             />
                           </div>
                           <div className="flex items-center gap-2">
                             <CreditCard className="h-4 w-4" />
 
-                            <span>To: {item.senderNumber || "N/A"}</span>
+                            <span>Order Id: {item.order_id}</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <Calendar className="h-4 w-4" />
@@ -295,19 +275,15 @@ export default function HistoryPage() {
                             <span className="font-medium">Status:</span>{" "}
                             {item.status}
                           </div>
-                          {item.status === "PENDING" && (
+                          {item.status === "Pending" && (
                             <div className="text-warning">
                               Note: Please complete the payment to process your
                               deposit
                             </div>
                           )}
-                          {item.status === "REJECTED" && (
-                            <div className="text-destructive">
-                              Note: Your deposit was not verified
-                            </div>
-                          )}
-                          {item.status === "APPROVED" && (
-                            <div className="text-success">
+
+                          {item.status === "Success" && (
+                            <div className="text-emerald-600">
                               Note: Funds have been added to your wallet
                             </div>
                           )}
