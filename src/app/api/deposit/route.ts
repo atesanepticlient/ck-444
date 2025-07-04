@@ -262,7 +262,7 @@ export const POST = async (req: NextRequest) => {
           payment_system: ps,
           custom_transaction_id: trx_id,
           custom_user_id: user.playerId,
-          // webhook_id: process.env.APAY_WEBHOOK_ID,
+          webhook_id: process.env.APAY_WEBHOOK_ID,
           data,
         }),
       }
