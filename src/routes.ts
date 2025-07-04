@@ -20,6 +20,8 @@ export const publicRoutes = [
   "/sports",
   "/promotion",
   "/hot",
+  "/api/apay/deposit",
+  "/api/apay/withdraw",
 ];
 
 /**
