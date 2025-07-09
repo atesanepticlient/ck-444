@@ -158,7 +158,7 @@ const DropdownMenu: React.FC = () => {
     {
       icon: <MdHistory className="w-6 h-6 text-white" />,
       label: "History",
-      onclick: () => redirect("/History"),
+      onclick: () => redirect("/history"),
     },
     {
       icon: <FaRegFileAlt className="w-6 h-6 text-white" />,

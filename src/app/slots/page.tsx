@@ -193,8 +193,8 @@ const SlotPage = () => {
               value={search}
             />
             <Link
-              href="/favorits"
-              title="favorits"
+              href="/favorites"
+              title="favorites"
               className="bg-wwwwwwck-44-4comdaintree -mt-2 rounded-[10.4px] overflow-hidden border border-solid border-[#006165] shadow-[0px_2.08px_0px_#002631] p-3"
             >
               <MdFavorite className="w-5 h-5 text-[#23ffc8]" />

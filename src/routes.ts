@@ -16,6 +16,7 @@ export const publicRoutes = [
   "/card-x",
   "/pocker",
   "/roulette",
+  "/favorites",
   "/table",
   "/fish",
   "/live-sports",

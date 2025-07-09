@@ -481,17 +481,6 @@ const App: React.FC = () => {
             </Link>
 
             <Link
-              href="/betting-record"
-              className="flex flex-col items-center cursor-pointer"
-            >
-              <div className="w-12 h-12 rounded-full bg-teal-900/75 border-x-teal-600 flex items-center justify-center shadow-sm md:w-14 md:h-14">
-                <LuHistory className="text-xl text-white md:text-2xl" />
-              </div>
-              <span className="text-xs text-center text-white mt-1 md:text-sm">
-                Betting Record
-              </span>
-            </Link>
-            <Link
               href="/profitandloss"
               className="flex flex-col items-center cursor-pointer"
             >

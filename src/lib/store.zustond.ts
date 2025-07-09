@@ -30,6 +30,8 @@ interface GameType {
     search?: string
   ) => NetEnt[] | null;
 
+  getFavoriesGames: (gamesId: string[]) => NetEnt[] | null;
+
   setGames: (gamge: GamesList) => void;
   setLoading: (isLoading: boolean) => void;
   setError: (error: string) => void;
@@ -105,6 +107,17 @@ export const useGames = create<GameType>((set, get) => ({
         game.name.toLowerCase().includes(searchLower)
       );
     }
+    return flitedGames;
+  },
+  getFavoriesGames: (gamesId) => {
+    const games = get().games!;
+    if (!games) return null;
+    const allGamesArrays = Object.values(games).flat();
+
+    const flitedGames = allGamesArrays.filter((game) =>
+      gamesId.includes(game.id)
+    );
+
     return flitedGames;
   },
   setGames: (games) => set((state) => ({ ...state, games })),
