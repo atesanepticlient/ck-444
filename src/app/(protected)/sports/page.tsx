@@ -14,7 +14,7 @@ const Sports = () => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    openGame({ gameId: "3001", demo: "0" })
+    openGame({ gameId: "3000", demo: "0" })
       .unwrap()
       .then((res) => {
         if (res) {
