@@ -68,9 +68,13 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
-    if (requestBody.hall !== +process.env.HALL_ID!) {
+    if (
+      ![+process.env.HALL_ID!, +process.env.HALL_ID_TBS!].includes(
+        requestBody.hall
+      )
+    ) {
       return new Response(
-        JSON.stringify({ success: "fail", error: "hall_id_not_found" }),
+        JSON.stringify({ status: "fail", error: "hall_id_not_found" }),
         { status: 403 }
       );
     }
