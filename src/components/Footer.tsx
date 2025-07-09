@@ -2,12 +2,11 @@
 import Link from "next/link";
 import React from "react";
 
-import logo_sq from "@/../public/logo-sq.jpg"
+import logo_sq from "@/../public/logo-sq.jpg";
 import Image from "next/image";
 
 const Footer = () => {
   return (
-    
     <div className="w-full bg-[#003a3a] pt-4 pb-[100px] px-4">
       <div className="relative w-full md:w-[70%] mx-auto">
         {/* Buttons Row */}
@@ -72,7 +71,11 @@ const Footer = () => {
         <div className="flex gap-4 mb-6">
           {/* <div className="w-[72px] h-[72px] flex-shrink-0 bg-[url(https://res.cloudinary.com/dxs9u7pqc/image/upload/v1750485945/logo-sq_fe0b6y.jpg)] bg-cover bg-[50%_50%]" /> */}
 
-          <Image src={logo_sq} alt="Mbuzz88" className="w-[72px] h-[72px] rounded-full object-cover" />
+          <Image
+            src={logo_sq}
+            alt="Mbuzz88"
+            className="w-[72px] h-[72px] rounded-full object-cover"
+          />
           <p className="text-white text-xs font-[number:var(--www-wwwMbuzz88-com-segoe-UI-regular-font-weight)] text-[length:var(--www-wwwMbuzz88-com-segoe-UI-regular-font-size)] tracking-[var(--www-wwwMbuzz88-com-segoe-UI-regular-letter-spacing)] leading-[var(--www-wwwMbuzz88-com-segoe-UI-regular-line-height)] [font-style:var(--www-wwwMbuzz88-com-segoe-UI-regular-font-style)]">
             mbuzz88.com website is operated by company, under license number
             GLH-OCCHKTW07080120 issued to it and regulated by Gaming Services

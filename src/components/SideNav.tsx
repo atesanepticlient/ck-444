@@ -7,11 +7,11 @@ import slot from "@/../public/icons/nav-slot.svg";
 import sport from "@/../public/icons/nav-sport.svg";
 import live from "@/../public/icons/nav-live.svg";
 import lottery from "@/../public/icons/nav-lottery.svg";
-import esports from "@/../public/icons/nav-esport.svg";
 import fav from "@/../public/icons/nav-fav.svg";
 import pvp from "@/../public/icons/nav-pvp.svg";
 import gift from "@/../public/icons/nav-gift.svg";
 import reward from "@/../public/icons/nav-reward.svg";
+import fish from "@/../public/icons/nav-fish.svg";
 const menuData = [
   {
     title: "Hot Games",
@@ -33,11 +33,7 @@ const menuData = [
     icon: live,
     redirect: "/live-casino",
   },
-  {
-    title: "E-Sports",
-    icon: esports,
-    redirect: "/e-sports",
-  },
+
   {
     title: "Favorites",
     icon: fav,
@@ -47,13 +43,13 @@ const menuData = [
   {
     title: "Lottery",
     icon: lottery,
-    redirect: "#",
+    redirect: "/lottery",
   },
 
   {
     title: "PVP",
     icon: pvp,
-    redirect: "#",
+    redirect: "/pocker",
   },
   {
     title: "Promotion",
@@ -64,6 +60,11 @@ const menuData = [
     title: "Reward",
     icon: reward,
     redirect: "/rewardCenter",
+  },
+  {
+    title: "Fish",
+    icon: fish,
+    redirect: "/fish",
   },
 ];
 

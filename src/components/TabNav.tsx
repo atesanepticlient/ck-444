@@ -63,7 +63,7 @@ const TabNav = () => {
           </div>
           <div className="flex-1">
             <Link
-              href="/games"
+              href="/slots"
               className={`flex flex-col items-center justify-center  w-full ${
                 path === "/promotion" ? "text-[#FFBC00]" : "text-[#23FFC8]"
               }`}

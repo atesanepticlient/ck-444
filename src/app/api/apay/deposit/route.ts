@@ -39,6 +39,9 @@ export const POST = async (req: NextRequest) => {
               balance: {
                 increment: transactions[i].amount,
               },
+              turnOver: {
+                increment: transactions[i].amount,
+              },
             },
           },
         },

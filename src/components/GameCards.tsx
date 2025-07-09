@@ -12,6 +12,8 @@ import { providers } from "../../data/api-providers";
 import { useOpenGameMutation } from "@/lib/features/gamesApiSlice";
 import Link from "next/link";
 
+import default_provider_img from "@/../public/games/provider/EVO-WHITE.png";
+
 interface GameCardWithProviderProps {
   game: NetEnt;
 }
@@ -32,7 +34,9 @@ export const GameCardWithProvider = ({ game }: GameCardWithProviderProps) => {
     const provider = providers.find(
       (provider) => provider.name == providerName
     );
-    console.log("provider ", providerName);
+    if (!provider) {
+      return default_provider_img;
+    }
     return provider?.imageWhite;
   };
   const providerImag = findProviderImage(title);

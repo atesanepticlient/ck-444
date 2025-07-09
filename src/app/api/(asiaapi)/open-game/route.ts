@@ -2,26 +2,28 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { findCurrentUser } from "@/data/user";
 import { INTERNAL_SERVER_ERROR } from "@/error";
+import { db } from "@/lib/db";
 import axios from "axios";
 import { NextRequest } from "next/server";
 
-export const POST = async (req: NextRequest) => {
-  try {
-    const user : any = await findCurrentUser();
+const openGame = async (playerId: string, gameId: string) => {
+  const hallData = [
+    {
+      hallId: process.env.HALL_ID,
+      host: process.env.HALL_HOST,
+    },
+    {
+      hallId: process.env.HALL_ID_TBS,
+      host: process.env.HALL_HOST_TBS,
+    },
+  ];
 
-    if (!user)
-      return Response.json({ error: "Refresh the page" }, { status: 401 });
-
-    const { gameId, demo } = await req.json();
-
-    if (!gameId) {
-      return Response.json({ error: "Game Id is required" }, { status: 400 });
-    }
-
+  let content;
+  for (let i = 0; i < hallData.length; i++) {
     const data = JSON.stringify({
-      hall: process.env.HALL_ID,
+      hall: hallData[i].hallId,
       key: process.env.HALL_KEY,
-      login: user.playerId,
+      login: playerId,
       gameId: gameId,
       cmd: "openGame",
       demo: "0",
@@ -30,11 +32,10 @@ export const POST = async (req: NextRequest) => {
       exitUrl: "https://www.mbuzz88.com/",
       language: "en",
     });
-
     const config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "http://asiaapi.net/API/openGame/",
+      url: `${hallData[i].host}/openGame/`,
       headers: {
         Cookie: "PHPSESSID=tc6on5bce3tcgpiu8c9o8mqtb9",
         "Content-Type": "application/json",
@@ -42,14 +43,41 @@ export const POST = async (req: NextRequest) => {
       data: data,
     };
     const response = await axios.request(config);
+    console.log("response data ", response.data);
+    if (response.data.status == "success") {
+      content = response.data.content;
+      break;
+    }
+  }
 
-    if (response.data.status == "fail") {
-      return Response.json({ error: "Try Again" }, { status: 500 });
+  if (!content) {
+    throw new Error("Try Again");
+  }
+
+  return content;
+};
+
+export const POST = async (req: NextRequest) => {
+  try {
+    const user: any = await findCurrentUser();
+
+    if (!user)
+      return Response.json({ error: "Refresh the page" }, { status: 401 });
+
+    const playerId = user.playerId;
+
+    const { gameId, demo } = await req.json();
+
+    if (!gameId) {
+      return Response.json({ error: "Game Id is required" }, { status: 400 });
     }
 
-    const content = response.data.content;
-    console.log("Content from route ", content);
-    return Response.json({ content: content }, { status: 200 });
+    try {
+      const content = await openGame(playerId, gameId);
+      return Response.json({ content: content }, { status: 200 });
+    } catch (error: any) {
+      return Response.json({ error: error.message }, { status: 500 });
+    }
   } catch (error) {
     console.log("OPEN GAME ERROR ", error);
     return Response.json({ error: INTERNAL_SERVER_ERROR }, { status: 500 });

@@ -10,19 +10,19 @@ import sports_4 from "@/../public/sports/sports-4.png";
 export const sportsData = [
   {
     image: sports_1,
-    redirect: "#",
+    redirect: "/sports",
   },
   {
     image: sports_2,
-    redirect: "#",
+    redirect: "/sports",
   },
   {
     image: sports_3,
-    redirect: "#",
+    redirect: "/sports",
   },
   {
     image: sports_4,
-    redirect: "#",
+    redirect: "/sports",
   },
 ];
 
@@ -50,7 +50,7 @@ const Sports = () => {
         title="Sports Games"
         leftAction={handleLeftButtonClick}
         rightAction={handleRightButtonClick}
-        seeMoreLink="/sports"
+        seeMoreLink="/live-sports"
       />
       <div
         className="max-w-full w-full overflow-x-auto scrollbar-none scroll-smooth"
