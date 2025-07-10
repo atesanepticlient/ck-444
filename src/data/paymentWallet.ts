@@ -24,7 +24,25 @@ export const paymentSystemsLogos = [
       "https://res.cloudinary.com/dxs9u7pqc/image/upload/v1751090573/hkip9uxtopspwgnuergo.png",
   },
   {
+    name: "bkash_b",
+    label: "Bkash",
+    image:
+      "https://res.cloudinary.com/dxs9u7pqc/image/upload/v1751090573/hkip9uxtopspwgnuergo.png",
+  },
+  {
+    name: "bkash_p2p",
+    label: "Bkash",
+    image:
+      "https://res.cloudinary.com/dxs9u7pqc/image/upload/v1751090573/hkip9uxtopspwgnuergo.png",
+  },
+  {
     name: "nagad_b",
+    label: "Nagad",
+    image:
+      "https://res.cloudinary.com/dxs9u7pqc/image/upload/v1750324929/rlqqxeoqlk3gb3k2nyyr.png",
+  },
+  {
+    name: "nagad_a",
     label: "Nagad",
     image:
       "https://res.cloudinary.com/dxs9u7pqc/image/upload/v1750324929/rlqqxeoqlk3gb3k2nyyr.png",
