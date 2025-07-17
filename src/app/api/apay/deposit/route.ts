@@ -21,7 +21,8 @@ export const POST = async (req: NextRequest) => {
     if (signature !== newGeneratedSignature) {
       return Response.json({ status: "Rejected" }, { status: 502 });
     }
-
+    console.log("Apay Deposit web hook called : ");
+    console.log({ transactions });
     for (let i = 0; i < transactions.length; i++) {
       if (transactions[i].status !== "Success") {
         continue;
