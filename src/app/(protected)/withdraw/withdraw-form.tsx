@@ -47,8 +47,9 @@ const WithdrawForm = ({ wallets }: WithdrawFormProps) => {
       ps: selectedPaymentMethod.name,
     })
       .unwrap()
-      .then((res) => {
+      .then(() => {
         // setWithdraw(res.withdraw);
+        
       })
       .catch((error) => {
         if (error.data.message) {
