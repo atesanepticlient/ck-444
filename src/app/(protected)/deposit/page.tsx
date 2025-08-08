@@ -41,7 +41,9 @@ const App: React.FC = () => {
   const [selectedAmountButton, setSelectedAmountButton] = useState<
     number | null
   >();
-  const quickAmounts = [400, 500, 800, 1000, 1500, 2000, 5000, 10000, 25000];
+  const quickAmounts = [
+    100, 400, 500, 800, 1000, 1500, 2000, 5000, 10000, 25000,
+  ];
 
   const [error, setError] = useState("");
   const [pending, setTrasition] = useState(false);
@@ -105,13 +107,13 @@ const App: React.FC = () => {
       return 0;
     }
 
-    if (+depositAmount < +selectedPaymentMethod.min_deposit) {
-      setError(`Minimum Deposit ${selectedPaymentMethod.min_deposit}`);
+    if (+depositAmount < 100) {
+      setError(`Minimum Deposit 100BDT`);
       setTrasition(false);
       return 0;
     }
-    if (+depositAmount > +selectedPaymentMethod.max_deposit) {
-      setError(`Maximum Deposit ${selectedPaymentMethod.max_deposit}`);
+    if (+depositAmount > 10000) {
+      setError(`Maximum Deposit 10000BDT`);
       setTrasition(false);
       return 0;
     }

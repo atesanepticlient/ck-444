@@ -3,7 +3,7 @@ import { findCurrentUser } from "@/data/user";
 import { INTERNAL_SERVER_ERROR } from "@/error";
 import { db } from "@/lib/db";
 import { makePayoutTransaction } from "@/lib/payment";
-import {getCurrentTimestamp } from "@/lib/utils";
+import { getCurrentTimestamp } from "@/lib/utils";
 import bcrypt from "bcryptjs";
 
 import { NextRequest } from "next/server";
@@ -127,6 +127,20 @@ import { NextRequest } from "next/server";
 export const POST = async (req: NextRequest) => {
   try {
     const { account_number, amount, ps, password } = await req.json();
+
+    if (+amount < 300) {
+      return Response.json(
+        { message: "Minimum withdrawal 300BDT" },
+        { status: 400 }
+      );
+    }
+    if (+amount > 10000) {
+      return Response.json(
+        { message: "Minimum withdrawal 10000BDT" },
+        { status: 400 }
+      );
+    }
+
     const user: any = await findCurrentUser();
     if (!user)
       return Response.json(
