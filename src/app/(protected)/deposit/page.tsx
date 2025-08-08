@@ -131,7 +131,7 @@ const App: React.FC = () => {
         if (res.success) {
           console.log({ res });
           setTrasition(false);
-          window.location.href = res.payload.data.paymentpage_url;
+          window.location.href = res.payload.payUrl;
         }
       })
       .catch((error: any) => {

@@ -3,23 +3,14 @@ import CryptoJS from "crypto-js";
 import axios from "axios";
 
 // === CONFIG ===
-const AES_KEY = "81D81499D3E513E9"; // Your AES key
-const SIGN_KEY = "503ED7EC4F57AFB6"; // Your signature key
-const MCH_NO = "M0307"; // Your merchant number
+const AES_KEY = process.env.AES_KEY!; // Your AES key
+const SIGN_KEY = process.env.SIGN_KEY!; // Your signature key
+const MCH_NO = process.env.MCH_NO!; // Your merchant number
 
 // === BUSINESS PAYLOAD (customize as needed) ===
-const businessPayload = {
-  versionNo: 1,
-  mchNo: MCH_NO,
-  price: 100, // in BDT
-  orderDate: "20250804150000", // format yyyyMMddHHmmss
-  tradeNo: "TX1234567890XYZ019",
-  payType: "01",
-  channelPayType: "EWALLET_BKASH",
-};
 
 // === Encrypt payload ===
-function aesEncrypt(data, key) {
+function aesEncrypt(data: any, key: string) {
   const keyUtf8 = CryptoJS.enc.Utf8.parse(key);
   const iv = CryptoJS.enc.Utf8.parse("0102030405060708");
   const encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), keyUtf8, {
@@ -30,14 +21,14 @@ function aesEncrypt(data, key) {
   return encrypted.toString(); // Base64
 }
 
-function decryptPayload(encryptedPayload, aesKey) {
+export function decryptPayload(encryptedPayload: string) {
   if (!encryptedPayload) {
     console.error("❌ encryptedPayload is undefined or empty.");
     return null;
   }
 
   try {
-    const keyUtf8 = CryptoJS.enc.Utf8.parse(aesKey);
+    const keyUtf8 = CryptoJS.enc.Utf8.parse(AES_KEY);
     const iv = CryptoJS.enc.Utf8.parse("0102030405060708");
 
     // Parse Base64
@@ -62,14 +53,23 @@ function decryptPayload(encryptedPayload, aesKey) {
     }
 
     return JSON.parse(decryptedText);
-  } catch (err) {
+  } catch (err: any) {
     console.error("❌ Decryption failed:", err.message);
     return null;
   }
 }
 
+export function verifySign(payload: any, sign: string) {
+  const md5 = crypto
+    .createHash("md5")
+    .update(payload + SIGN_KEY)
+    .digest("hex")
+    .toUpperCase();
+  return md5 === sign;
+}
+
 // === Sign the encrypted payload ===
-function generateSign(encryptedPayload, signKey) {
+function generateSign(encryptedPayload: string, signKey: string) {
   return crypto
     .createHash("md5")
     .update(encryptedPayload + signKey)
@@ -78,7 +78,7 @@ function generateSign(encryptedPayload, signKey) {
 }
 
 // === Main function ===
-async function makePayinTransaction() {
+export async function makePayinTransaction(businessPayload: any) {
   try {
     const encryptedPayload = aesEncrypt(businessPayload, AES_KEY);
     const sign = generateSign(encryptedPayload, SIGN_KEY);
@@ -95,20 +95,17 @@ async function makePayinTransaction() {
       { headers: { "Content-Type": "application/json" } }
     );
 
-    return response.data;
-  } catch (error) {
-    if (error.response) {
-      console.error(
-        "❌ Error Response:\n",
-        JSON.stringify(error.response.data, null, 2)
-      );
-    } else {
-      console.error("❌ Request Error:", error.message);
+    if (response.data.state == "Failed") {
+      throw Error;
     }
+    const payload = decryptPayload(response.data.payload);
+    return payload;
+  } catch  {
+    throw new Error("Deposit Failed! Try again");
   }
 }
 
-async function queryPayinTransaction(tradeNo) {
+export async function queryPayinTransaction(tradeNo: string) {
   const businessPayload = {
     versionNo: 1,
     mchNo: MCH_NO,
@@ -131,57 +128,15 @@ async function queryPayinTransaction(tradeNo) {
       { headers: { "Content-Type": "application/json" } }
     );
 
-    console.log(
-      "🔍 Query Transaction Response:\n",
-      JSON.stringify(response.data, null, 2)
-    );
-  } catch (error) {
-    if (error.response) {
-      console.error(
-        "❌ Query API Error:\n",
-        JSON.stringify(error.response.data, null, 2)
-      );
-    } else {
-      console.error("❌ Network Error:", error.message);
-    }
+    const payload = decryptPayload(response.data.payload);
+    return payload;
+  } catch  {
+    throw new Error("Fetching Failed!");
   }
 }
 
-export function verifySign(payload, sign) {
-  const md5 = crypto
-    .createHash("md5")
-    .update(payload + SIGN_KEY)
-    .digest("hex")
-    .toUpperCase();
-  return md5 === sign;
-}
-
-// Call deposit and get data about deposit
-(async () => {
-  const payinRes = await makePayinTransaction();
-  const payload = decryptPayload(payinRes.payload, AES_KEY);
-  console.log({ payload });
-  // setTimeout(() => {
-  //     queryPayinTransaction(payload.tradeNo);
-  //   }, 2000);
-})();
-
-async function makePayoutTransaction() {
-  const tradeNo = "PO" + Date.now(); // dynamic trade ID
-
-  const businessPayload = {
-    versionNo: 1,
-    mchNo: MCH_NO,
-    price: 200, // BDT
-    orderDate: "20250804153000",
-    tradeNo: tradeNo,
-    notifyUrl: "https://yourdomain.com/payout-notify",
-    mode: "S1", // S1 = Settlement, S0 = Realtime
-    accBankCode: "EWALLET_BKASH", // Bank or wallet code
-    accName: "Test User", // Receiver name
-    accCardNo: "01735156550", // Receiver wallet no.
-    purpose: "Testing",
-  };
+export async function makePayoutTransaction(businessPayload: any) {
+ 
 
   const encryptedPayload = aesEncrypt(businessPayload, AES_KEY);
   const sign = generateSign(encryptedPayload, SIGN_KEY);
@@ -199,37 +154,52 @@ async function makePayoutTransaction() {
       { headers: { "Content-Type": "application/json" } }
     );
 
-    console.log(
-      "💸 Payout Transaction Response:\n",
-      JSON.stringify(response.data, null, 2)
+    if (response.data.state === "Successful" && response.data.payload) {
+      const decrypted = decryptPayload(response.data.payload);
+      return decrypted;
+    } else {
+      return Error;
+    }
+  } catch  {
+    throw new Error("Withdrawal Failed! Try again");
+  }
+}
+export async function queryPayoutTransaction(tradeNo: string) {
+  const businessPayload = {
+    versionNo: 1,
+    mchNo: MCH_NO,
+    tradeNo: tradeNo,
+  };
+
+  const encryptedPayload = aesEncrypt(businessPayload, AES_KEY);
+  const sign = generateSign(encryptedPayload, SIGN_KEY);
+
+  const requestData = {
+    mchNo: MCH_NO,
+    payload: encryptedPayload,
+    sign: sign,
+  };
+
+  try {
+    const response = await axios.post(
+      "https://phpay.ipayment.vip/dgateway/ws/trans/nocard/transferQuery",
+      requestData,
+      { headers: { "Content-Type": "application/json" } }
     );
 
-    // Optional: decrypt the payload if successful
     if (response.data.state === "Successful" && response.data.payload) {
-      const decrypted = decryptPayload(response.data.payload, AES_KEY);
-      console.log(
-        "🔓 Decrypted Payout Payload:\n",
-        JSON.stringify(decrypted, null, 2)
-      );
-    }
-  } catch (error) {
-    if (error.response) {
-      console.error(
-        "❌ Payout API Error:\n",
-        JSON.stringify(error.response.data, null, 2)
-      );
+      const decrypted = decryptPayload(response.data.payload);
+      return decrypted;
     } else {
-      console.error("❌ Network Error:", error.message);
+      throw Error;
     }
+  } catch  {
+    throw new Error("Fatching Failed!");
   }
 }
 
-//(async ()=>{
-//  makePayoutTransaction()
-//})()
-
 // === Method 5: Institution Account Balance Inquiry ===
-async function inquireAccountBalance() {
+export async function inquireAccountBalance() {
   const businessPayload = {
     versionNo: 1,
     mchNo: MCH_NO,
@@ -257,13 +227,13 @@ async function inquireAccountBalance() {
     );
 
     if (response.data.state === "Successful" && response.data.payload) {
-      const decrypted = decryptPayload(response.data.payload, AES_KEY);
+      const decrypted = decryptPayload(response.data.payload);
       console.log(
         "🔓 Decrypted Account Info:\n",
         JSON.stringify(decrypted, null, 2)
       );
     }
-  } catch (error) {
+  } catch (error : any) {
     if (error.response) {
       console.error(
         "❌ Account Inquiry API Error:\n",

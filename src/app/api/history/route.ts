@@ -4,7 +4,8 @@ import { findCurrentUser } from "@/data/user";
 import { INTERNAL_SERVER_ERROR } from "@/error";
 
 import pmap from "p-map";
-import { paymentSystemsLogos } from "@/data/paymentWallet";
+import { paymentSystems } from "@/data/paymentWallet";
+import { queryPayinTransaction, queryPayoutTransaction } from "@/lib/payment";
 
 // type HistoryType = "all" | "deposit" | "withdraw";
 // type StatusFilter = "all" | "pending" | "approved" | "rejected";
@@ -228,26 +229,15 @@ export const GET = async (request: Request) => {
       deposits = await pmap(
         dbDeposits,
         async (dbDeposit) => {
-          const response = await fetch(
-            `${process.env.APAY_DOMAIN}/Remotes/deposit-info?project_id=${process.env.APAY_PROJECT_ID}&order_id=${dbDeposit.orderId}`,
-            {
-              method: "GET",
-              headers: {
-                Accept: "*/*",
-                apikey: `${process.env.APAY_API_KEY}`,
-              },
-            }
-          );
-          const apiData = await response.json();
+          const response = await queryPayinTransaction(dbDeposit.orderId);
+
           // Merge database fields with API response
           return {
-            ...apiData,
+            ...response,
             // Preserve these fields from the database
             id: dbDeposit.id,
             userId: dbDeposit.userId,
             createdAt: dbDeposit.createdAt,
-            // Add status from database if not in API response
-            status: apiData.status,
           };
         },
         { concurrency: 5 }
@@ -265,26 +255,14 @@ export const GET = async (request: Request) => {
       withdraws = await pmap(
         dbWithdraws,
         async (dbWithdraw) => {
-          const response = await fetch(
-            `${process.env.APAY_DOMAIN}/Remotes/withdrawal-info?project_id=${process.env.APAY_PROJECT_ID}&order_id=${dbWithdraw.orderId}`,
-            {
-              method: "GET",
-              headers: {
-                Accept: "*/*",
-                apikey: `${process.env.APAY_API_KEY}`,
-              },
-            }
-          );
-          const apiData = await response.json();
+          const response = queryPayoutTransaction(dbWithdraw.orderId);
           // Merge database fields with API response
           return {
-            ...apiData,
+            ...response,
             // Preserve these fields from the database
             id: dbWithdraw.id,
             userId: dbWithdraw.userId,
             createdAt: dbWithdraw.createdAt,
-            // Add status from database if not in API response
-            status: apiData.status,
           };
         },
         { concurrency: 5 }
@@ -293,8 +271,8 @@ export const GET = async (request: Request) => {
 
     // Add payment system info
     const processPaymentSystem = (item: any) => {
-      const ps = item.payment_system || item.paymentSystem; // Handle different response formats
-      const paymentSystemData = paymentSystemsLogos.find(
+      const ps = item.ps;
+      const paymentSystemData = paymentSystems.find(
         (paymentSystem) => paymentSystem.name == ps
       );
 

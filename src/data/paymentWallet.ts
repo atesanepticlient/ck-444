@@ -16,40 +16,24 @@ export const wallets: PaymentWallet[] = [
   },
 ];
 
-export const paymentSystemsLogos = [
+export const paymentSystems = [
   {
-    name: "bkash_a",
+    name: "EWALLET_BKASH",
     label: "Bkash",
     image:
       "https://res.cloudinary.com/dxs9u7pqc/image/upload/v1751090573/hkip9uxtopspwgnuergo.png",
   },
-  {
-    name: "bkash_b",
-    label: "Bkash",
-    image:
-      "https://res.cloudinary.com/dxs9u7pqc/image/upload/v1751090573/hkip9uxtopspwgnuergo.png",
-  },
-  {
-    name: "bkash_p2p",
-    label: "Bkash",
-    image:
-      "https://res.cloudinary.com/dxs9u7pqc/image/upload/v1751090573/hkip9uxtopspwgnuergo.png",
-  },
+
   {
     name: "nagad_b",
     label: "Nagad",
     image:
       "https://res.cloudinary.com/dxs9u7pqc/image/upload/v1750324929/rlqqxeoqlk3gb3k2nyyr.png",
   },
+
   {
-    name: "nagad_a",
-    label: "Nagad",
-    image:
-      "https://res.cloudinary.com/dxs9u7pqc/image/upload/v1750324929/rlqqxeoqlk3gb3k2nyyr.png",
-  },
-  {
-    name: "upay",
-    label: "Upay",
+    name: "EWALLET_ROCKET",
+    label: "Rocket",
     image:
       "https://res.cloudinary.com/dxs9u7pqc/image/upload/v1748973150/mxfaiajz2fawwkzy4l3e.png",
   },

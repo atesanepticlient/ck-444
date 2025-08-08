@@ -49,7 +49,6 @@ const WithdrawForm = ({ wallets }: WithdrawFormProps) => {
       .unwrap()
       .then((res) => {
         // setWithdraw(res.withdraw);
-        console.log({ res });
       })
       .catch((error) => {
         if (error.data.message) {

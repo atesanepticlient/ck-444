@@ -4,7 +4,8 @@ import { INTERNAL_SERVER_ERROR } from "@/error";
 import { db } from "@/lib/db";
 import { NextRequest } from "next/server";
 
-import { generateTrxId } from "@/lib/utils";
+import { generateTrxId, getCurrentTimestamp } from "@/lib/utils";
+import { makePayinTransaction } from "@/lib/payment";
 
 // export const POST = async (req: NextRequest) => {
 //   try {
@@ -222,61 +223,42 @@ import { generateTrxId } from "@/lib/utils";
 
 export const POST = async (req: NextRequest) => {
   try {
-    const { account_number, amount, ps } = await req.json();
-    console.log({ ps });
     const user: any = await findCurrentUser();
+
+    const { amount, ps } = await req.json();
+    const tradeNo = generateTrxId();
+    const orderDate = getCurrentTimestamp();
+
+    const businessPayload = {
+      versionNo: 1,
+      mchNo: process.env.MCH_NO,
+      price: amount, // in BDT
+      orderDate,
+      tradeNo,
+      payType: "01",
+      channelPayType: ps,
+      callbackUrl: process.env.CLIENT_URL,
+      notifyUrl: `${process.env.CLIENT_URL}/api/e86256b2787ee7ff0c33d0d4c6159cd922227b79/deposit?user=${user.playerId}`,
+    };
+
     if (!user)
       return Response.json(
         { message: "Authentication failed" },
         { status: 401 }
       );
 
-    const return_url = "https://www.mbuzz88.com";
-
-    let data = {};
-    switch (ps) {
-      case "bkash_a":
-        data = { return_url, account_number: account_number || user.phone };
-        break;
-      case "nagad_b":
-        data = { return_url };
-        break;
-      case "upay":
-        data = { return_url };
-        break;
-    }
-
-    const trx_id = generateTrxId();
-
-    const response = await fetch(
-      `${process.env.APAY_DOMAIN}/Remotes/create-deposit?project_id=${process.env.APAY_PROJECT_ID}`,
-      {
-        method: "POST",
-        headers: {
-          apikey: `${process.env.APAY_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          amount: amount,
-          currency: "BDT",
-          payment_system: ps,
-          custom_transaction_id: trx_id,
-          custom_user_id: user.playerId,
-          webhook_id: process.env.APAY_WEBHOOK_ID,
-          data,
-        }),
-      }
-    );
-    const paymentData = await response.json();
-    console.log({ paymentData });
-    if (!paymentData.success) {
-      return Response.json({ message: "Deposit Failed" }, { status: 500 });
+    let response;
+    try {
+      response = await makePayinTransaction(businessPayload);
+      console.log("Deposit API LOG : ", response);
+    } catch (error: any) {
+      return Response.json({ message: error.message }, { status: 500 });
     }
 
     await db.aPayDeposit.create({
       data: {
-        orderId: paymentData.order_id,
-        trxId: trx_id,
+        orderId: response.tradeNo,
+        trxId: response.transNo,
         ps,
         user: {
           connect: {
@@ -286,12 +268,8 @@ export const POST = async (req: NextRequest) => {
       },
     });
 
-    return Response.json(
-      { payload: paymentData, success: true },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.log({ error });
+    return Response.json({ payload: response, success: true }, { status: 200 });
+  } catch {
     return Response.json({ message: INTERNAL_SERVER_ERROR }, { status: 500 });
   }
 };

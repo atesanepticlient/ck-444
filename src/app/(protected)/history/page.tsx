@@ -41,7 +41,6 @@ export default function HistoryPage() {
     status,
     page,
   });
-  console.log("HISOTRY : ", data);
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>(
     {}
   );
@@ -91,19 +90,19 @@ export default function HistoryPage() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "PENDING":
+      case "01":
         return (
           <Badge variant="secondary">
             <Loader className="mr-1 h-3 w-3" /> Pending
           </Badge>
         );
-      case "APPROVED":
+      case "00":
         return (
           <Badge variant="secondary">
             <Check className="mr-1 h-3 w-3" /> Approved
           </Badge>
         );
-      case "REJECTED":
+      case "02":
         return (
           <Badge variant="destructive">
             <X className="mr-1 h-3 w-3" /> Rejected

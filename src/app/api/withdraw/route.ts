@@ -2,7 +2,8 @@
 import { findCurrentUser } from "@/data/user";
 import { INTERNAL_SERVER_ERROR } from "@/error";
 import { db } from "@/lib/db";
-import { generateTrxId } from "@/lib/utils";
+import { makePayoutTransaction } from "@/lib/payment";
+import {getCurrentTimestamp } from "@/lib/utils";
 import bcrypt from "bcryptjs";
 
 import { NextRequest } from "next/server";
@@ -152,50 +153,27 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
-    let data = {};
+    const orderDate = getCurrentTimestamp();
+    const businessPayload = {
+      versionNo: 1,
+      mchNo: process.env.MCH_NO,
+      price: 200, // BDT
+      orderDate,
+      tradeNo: "PO" + Date.now(),
+      notifyUrl: `${process.env.CLIENT_URL}/api/e86256b2787ee7ff0c33d0d4c6159cd922227b79/deposit?user=${user.playerId}`,
+      mode: "S1", // S1 = Settlement, S0 = Realtime
+      accBankCode: ps, // Bank or wallet code
+      accName: user.name || user.playerId, // Receiver name
+      accCardNo: account_number, // Receiver wallet no.
+      purpose: "Real Payouts",
+    };
 
-    switch (ps) {
-      case "bkash_a":
-        data = { account_email: user.email, account_number };
-        break;
-      case "nagad_a":
-        data = { account_number };
-        break;
-      case "upay":
-        data = { account_email: user.email, account_number };
-        break;
-    }
-
-    const trx_id = generateTrxId();
-
-    const response = await fetch(
-      `${process.env.APAY_DOMAIN}/Remotes/create-withdrawal?project_id=${process.env.APAY_PROJECT_ID}`,
-      {
-        method: "POST",
-        headers: {
-          apikey: `${process.env.APAY_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          amount: amount,
-          currency: "BDT",
-          payment_system: ps,
-          custom_transaction_id: trx_id,
-          custom_user_id: user.playerId,
-          webhook_id: process.env.APAY_WEBHOOK_ID,
-          data,
-        }),
-      }
-    );
-    const paymentData = await response.json();
-    if (!paymentData.success) {
-      return Response.json({ message: "Withdraw Failed" }, { status: 500 });
-    }
+    const response = await makePayoutTransaction(businessPayload);
 
     await db.aPayWithdraw.create({
       data: {
-        orderId: paymentData.order_id,
-        trxId: trx_id,
+        orderId: response.tradeNo,
+        trxId: response.transNo,
         ps,
         user: {
           connect: {
@@ -215,10 +193,7 @@ export const POST = async (req: NextRequest) => {
       },
     });
 
-    return Response.json(
-      { payload: paymentData, success: true },
-      { status: 200 }
-    );
+    return Response.json({ payload: response, success: true }, { status: 200 });
   } catch (error) {
     console.log({ error });
     return Response.json({ message: INTERNAL_SERVER_ERROR }, { status: 500 });
