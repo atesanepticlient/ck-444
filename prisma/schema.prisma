@@ -41,6 +41,7 @@ model User{
   signinBonus       ClaimedSigninReward[]
 
   bettingRecord     BettingRecord?
+  bets              Bet[]
 }
 
 model BettingRecord {
@@ -298,4 +299,33 @@ model Notification {
   metadata    Json?
 
   @@index([userId])
+}
+
+
+enum BetStatus {
+  RUNNING
+  SETTLED
+  CANCELED
+}
+enum BetResult {
+  WON
+  LOST
+  TIE
+  VOID
+}
+
+model Bet {
+  id            String           @id @default(cuid())
+  productType   String
+  gameType      String
+  gameId        String
+  amount        Decimal
+  winloss       Decimal?
+  transferCode  String
+  transactionId String
+  status        BetStatus @default(RUNNING)
+  result        BetResult?
+  userId        String
+  user          User @relation(fields: [userId], references: [id])
+  createdAt   DateTime         @default(now())
 }
