@@ -25,6 +25,7 @@ const Play = () => {
           const iframeMode = res.content.game.iframe;
           if (iframeMode == "0") {
             location.href = url;
+            console.log(url);
           } else {
             console.log("url ", url);
             setIframe(url);

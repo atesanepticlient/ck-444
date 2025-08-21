@@ -20,6 +20,7 @@ const SlotGames = () => {
 
   const { getGames } = useGames((state) => state);
   const gamesList = getGames(Categories.Slots, undefined, 20);
+  // console.log({gamesList})
   return (
     <div
       className="my-4"

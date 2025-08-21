@@ -129,12 +129,13 @@ const SlotPage = () => {
 
   const [search, setSearch] = useState<string>();
   const [provider, setProvider] = useState<Title>();
-  const [limit, setLimit] = useState(30);
+  const [limit, setLimit] = useState(230);
   const [isFilterLoading, setIsFilterLoading] = useState(false);
 
   const { getGames } = useGames((state) => state);
-  const gamesList = getGames(Categories.Slots, search, limit, provider);
-
+  // const gamesList = getGames('Categories.Slots', search, undefined, provider);
+  const gamesList = getGames(Categories.Slots, undefined,);
+console.log({gamesList})
   const hasIntersectedOnce = useRef(false);
   useEffect(() => {
     const observer = new IntersectionObserver(

@@ -37,6 +37,7 @@ export const publicRoutes = [
   "/hot",
   "/api/apay/deposit",
   "/api/apay/withdraw",
+  "/api/getBalance",
 ];
 
 /**

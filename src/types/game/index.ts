@@ -36,7 +36,7 @@ export enum Categories {
 export enum Title {
   Evolution = "evolution",
   FastGames = "fast_games",
-  Jili = "jili",
+  Jili = "JiLiGaming",
   Microgaming = "microgaming",
   NetEnt = "NetEnt",
   Pgsoft = "pgsoft",
