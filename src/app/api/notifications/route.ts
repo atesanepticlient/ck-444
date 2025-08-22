@@ -1,10 +1,10 @@
-// app/api/notifications/route.ts
 import { createNotification } from "@/action/notifications";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+// GET handler remains the same
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const userId = searchParams.get("userId");
@@ -39,6 +39,7 @@ export async function GET(request: Request) {
     );
   }
 }
+
 const notificationSchema = z.object({
   userId: z.string(),
   title: z.string(),
@@ -47,6 +48,7 @@ const notificationSchema = z.object({
   metadata: z.any().optional(),
 });
 
+// POST handler for creating a notification
 export async function POST(req: Request) {
   const session = await auth();
 
@@ -64,7 +66,17 @@ export async function POST(req: Request) {
     );
   }
 
-  const result = await createNotification(validation.data);
+  // Ensure that the userId is always present before passing to createNotification
+  const { userId, title, description, icon, metadata } = validation.data;
+
+  // Now we call the `createNotification` function
+  const result = await createNotification({
+    userId,  // userId is now guaranteed to be present
+    title, 
+    description, 
+    icon, 
+    metadata
+  });
 
   if (!result.success) {
     return NextResponse.json({ error: result.error }, { status: 500 });

@@ -301,11 +301,11 @@ model Notification {
   @@index([userId])
 }
 
-
 enum BetStatus {
   RUNNING
   SETTLED
   CANCELED
+  VOID 
 }
 enum BetResult {
   WON
@@ -314,12 +314,13 @@ enum BetResult {
   VOID
 }
 
+
 model Bet {
   id            String           @id @default(cuid())
   productType   String
   gameType      String
   gameId        String
-  amount        Decimal
+  amount        Decimal 
   winloss       Decimal?
   transferCode  String
   transactionId String
@@ -328,4 +329,7 @@ model Bet {
   userId        String
   user          User @relation(fields: [userId], references: [id])
   createdAt   DateTime         @default(now())
+
+  @@unique([transferCode, transactionId]) // Add this composite unique constraint
 }
+

@@ -3,19 +3,40 @@ import { NextRequest } from "next/server";
 
 export const POST = async (req: NextRequest) => {
   try {
+    // Extract the required fields from the request body
     const {
-      Amount,
+      CompanyKey,
       Username,
       ProductType,
       GameType,
       GameId,
+      Amount,
       TransferCode,
       TransactionId,
     } = await req.json();
+
+    // Validate that the necessary fields are provided
+    if (
+      !CompanyKey ||
+      !Username ||
+      !ProductType ||
+      !GameType ||
+      !Amount ||
+      !TransferCode ||
+      !TransactionId
+    ) {
+      return Response.json(
+        { ErrorCode: 400, ErrorMessage: "Missing required parameters" },
+        { status: 400 }
+      );
+    }
+
+    // Fetch the user from the database
     const user = await db.user.findUnique({
       where: { playerId: Username },
       include: { wallet: true },
     });
+
     if (!user) {
       return Response.json(
         { ErrorCode: 1, ErrorMessage: "Member not exist" },
@@ -23,6 +44,7 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
+    // Update the user's wallet balance and betting record
     await db.user.update({
       where: {
         id: user.id,
@@ -31,20 +53,21 @@ export const POST = async (req: NextRequest) => {
         wallet: {
           update: {
             balance: {
-              decrement: Amount,
+              decrement: Amount, // Deduct the amount from the wallet
             },
           },
         },
         bettingRecord: {
           update: {
             totalBet: {
-              increment: Amount,
+              increment: Amount, // Increment the total bet amount
             },
           },
         },
       },
     });
 
+    // Create a new bet record in the database
     await db.bet.create({
       data: {
         productType: ProductType,
@@ -55,12 +78,13 @@ export const POST = async (req: NextRequest) => {
         amount: Amount,
         user: {
           connect: {
-            id: user!.id,
+            id: user.id,
           },
         },
       },
     });
 
+    // Return a successful response with the account information
     return Response.json(
       {
         AccountName: user.name,
@@ -71,11 +95,11 @@ export const POST = async (req: NextRequest) => {
       },
       { status: 200 }
     );
-  } catch {
+  } catch (error) {
+    console.error("Error processing bet request:", error);
     return Response.json(
       { ErrorCode: 7, ErrorMessage: "Internal Error" },
-      { status: 200 }
+      { status: 500 }
     );
   }
-  
 };
