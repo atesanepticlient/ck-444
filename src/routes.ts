@@ -38,6 +38,13 @@ export const publicRoutes = [
   "/api/apay/deposit",
   "/api/apay/withdraw",
   "/api/getBalance",
+  "/api/Deduct",
+  "/api/Settle",
+  "/api/Rollback",
+  "/api/Cancel",
+  "/api/Bonus",
+  "/api/GetBetStatus",
+  "/getBalance",
 ];
 
 /**

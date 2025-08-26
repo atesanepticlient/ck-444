@@ -43,6 +43,27 @@ model User{
   bettingRecord     BettingRecord?
   bets              Bet[]
 }
+model Bet {
+  id            String   @id @default(cuid())
+  productType   Int
+  gameType      Int
+  gameId        Int
+  amount        Decimal
+  winloss       Decimal?
+  transferCode  String
+  transactionId String
+  status        BetStatus @default(RUNNING)
+  result        BetResult?
+  userId        String
+  user          User @relation(fields: [userId], references: [id])
+  createdAt     DateTime @default(now())
+
+  // REMOVE this ↓
+  // @@unique([transferCode, transactionId])
+
+  // (Optional) add a simple index for lookups
+  @@index([transferCode, transactionId])
+}
 
 model BettingRecord {
   id                String @id @default(cuid()) 
@@ -301,6 +322,8 @@ model Notification {
   @@index([userId])
 }
 
+
+
 enum BetStatus {
   RUNNING
   SETTLED
@@ -315,21 +338,5 @@ enum BetResult {
 }
 
 
-model Bet {
-  id            String           @id @default(cuid())
-  productType   String
-  gameType      String
-  gameId        String
-  amount        Decimal 
-  winloss       Decimal?
-  transferCode  String
-  transactionId String
-  status        BetStatus @default(RUNNING)
-  result        BetResult?
-  userId        String
-  user          User @relation(fields: [userId], references: [id])
-  createdAt   DateTime         @default(now())
 
-  @@unique([transferCode, transactionId]) // Add this composite unique constraint
-}
 

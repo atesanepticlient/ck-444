@@ -28,7 +28,7 @@ export const POST = async (req: NextRequest) => {
     }
 
     const user = await db.user.findUnique({
-      where: { playerId: Username },
+      where: { phone: Username },
       include: { wallet: true },
     });
     if (!user) {
