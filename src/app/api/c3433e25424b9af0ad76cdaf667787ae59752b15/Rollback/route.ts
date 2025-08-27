@@ -12,7 +12,7 @@ export const POST = async (req: NextRequest) => {
       WinLoss,
     } = await req.json();
     const user = await db.user.findUnique({
-      where: { phone: Username },
+      where: { playerId: Username },
       include: { wallet: true },
     });
     if (!user) {

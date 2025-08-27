@@ -23,7 +23,15 @@ export const POST = async (req: NextRequest) => {
 
     if (bet?.status == "CANCELED") {
       return Response.json(
-        { ErrorCode: 2002, ErrorMessage: "Bet Already Canceled" },
+        {
+          TransferCode: TransferCode,
+          TransactionId: TransactionId,
+          Status: "Void",
+          WinLoss: bet.winloss || +bet.amount + 0,
+          Stake: bet.amount,
+          ErrorCode: 0,
+          ErrorMessage: "No Error",
+        },
         { status: 200 }
       );
     }
@@ -52,29 +60,18 @@ export const POST = async (req: NextRequest) => {
       },
       { status: 200 }
     );
-
-    
   } catch {
-     return Response.json(
-        { ErrorCode: 6, ErrorMessage: "Bet not exists" },
-        { status: 200 }
-      );
-  }
- 
-      return Response.json(
-      { ErrorCode: 7, ErrorMessage: "Internal Error" },
+    return Response.json(
+      { ErrorCode: 6, ErrorMessage: "Bet not exists" },
       { status: 200 }
     );
+  }
+
+  return Response.json(
+    { ErrorCode: 7, ErrorMessage: "Internal Error" },
+    { status: 200 }
+  );
 };
-
-
-
-
-
-
-
-
-
 
 //written by client
 // import { db } from "@/lib/db";
