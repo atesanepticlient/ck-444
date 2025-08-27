@@ -29,7 +29,7 @@ export const POST = async (req: NextRequest) => {
     }
 
     const user = await db.user.findUnique({
-      where: { phone: Username },
+      where: { playerId: Username },
       include: { wallet: true },
     });
 
