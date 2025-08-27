@@ -84,11 +84,16 @@ export const POST = async (req: NextRequest) => {
         },
       },
     });
-
+    const userBalance = (
+      await db.user.findUnique({
+        where: { playerId: Username },
+        select: { wallet: { select: { balance: true } } },
+      })
+    ).wallet.balance;
     return Response.json(
       {
         AccountName: user.playerId,
-        Balance: (+user.wallet?.balance - Amount).toFixed(2),
+        Balance: userBalance.toFixed(2),
         ErrorCode: 0,
         ErrorMessage: "No Error",
         BetAmount: Amount,

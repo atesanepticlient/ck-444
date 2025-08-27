@@ -52,6 +52,8 @@ export const POST = async (req: NextRequest) => {
       },
       { status: 200 }
     );
+
+    
   } catch {
      return Response.json(
         { ErrorCode: 6, ErrorMessage: "Bet not exists" },
