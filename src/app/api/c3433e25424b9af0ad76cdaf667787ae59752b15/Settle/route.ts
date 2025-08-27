@@ -39,7 +39,7 @@ export const POST = async (req: NextRequest) => {
       );
     }
     const user = await db.user.findUnique({
-      where: { phone: Username },
+      where: { playerId: Username },
       include: { wallet: true },
     });
     if (!user) {
@@ -76,11 +76,16 @@ export const POST = async (req: NextRequest) => {
       where: { id: bet!.id },
       data: { status: "SETTLED", result: betResult, winloss: WinLoss },
     });
-
+    const userBalance = (
+      await db.user.findUnique({
+        where: { playerId: Username },
+        select: { wallet: { select: { balance: true } } },
+      })
+    ).wallet.balance;
     return Response.json(
       {
         AccountName: user.name,
-        Balance: user.wallet?.balance,
+        Balance: userBalance,
         ErrorCode: 0,
         ErrorMessage: "No Error",
       },

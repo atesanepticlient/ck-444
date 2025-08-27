@@ -19,7 +19,7 @@ export const POST = async (req: NextRequest) => {
         transferCode: TransferCode,
       },
     });
-``
+    ``;
     if (!bet) {
       return Response.json(
         { ErrorCode: 6, ErrorMessage: "Bet not exists" },
@@ -75,11 +75,16 @@ export const POST = async (req: NextRequest) => {
       where: { id: bet!.id },
       data: { status: "RUNNING", result: undefined, winloss: undefined },
     });
-
+    const userBalance = (
+      await db.user.findUnique({
+        where: { playerId: Username },
+        select: { wallet: { select: { balance: true } } },
+      })
+    ).wallet.balance;
     return Response.json(
       {
         AccountName: user.name,
-        Balance: user.wallet?.balance,
+        Balance: userBalance,
         ErrorCode: 0,
         ErrorMessage: "No Error",
       },
@@ -91,5 +96,4 @@ export const POST = async (req: NextRequest) => {
       { status: 200 }
     );
   }
-
 };

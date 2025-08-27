@@ -81,8 +81,8 @@ export const POST = async (req: NextRequest) => {
 
     return Response.json(
       {
-        AccountName: user.phone,
-        Balance: user.wallet?.balance,
+        AccountName: user.name,
+        Balance: +user.wallet?.balance - Amount,
         ErrorCode: 0,
         ErrorMessage: "No Error",
         BetAmount: Amount,

@@ -26,9 +26,8 @@ export const POST = async (req: NextRequest) => {
         { status: 200 }
       );
     }
-
     const user = await db.user.findUnique({
-      where: { phone: Username },
+      where: { playerId: Username },
       include: { wallet: true },
     });
     if (!user) {
@@ -37,16 +36,63 @@ export const POST = async (req: NextRequest) => {
         { status: 200 }
       );
     }
+    if (bet?.status == "RUNNING") {
+      await db.user.update({
+        where: { playerId: Username },
+        data: {
+          wallet: {
+            update: {
+              balance: {
+                increment: bet.amount,
+              },
+            },
+          },
+        },
+      });
+    } else if (bet?.status == "SETTLED") {
+      if (bet.result == "WON") {
+        await db.user.update({
+          where: { playerId: Username },
+          data: {
+            wallet: {
+              update: {
+                balance: {
+                  increment: bet.winloss,
+                },
+              },
+            },
+          },
+        });
+      } else if (bet.result == "LOST") {
+        await db.user.update({
+          where: { playerId: Username },
+          data: {
+            wallet: {
+              update: {
+                balance: {
+                  increment: bet.amount,
+                },
+              },
+            },
+          },
+        });
+      }
+    }
 
     await db.bet.update({
       where: { id: bet!.id },
       data: { status: "CANCELED", result: "VOID", winloss: undefined },
     });
-
+    const userBalance = (
+      await db.user.findUnique({
+        where: { playerId: Username },
+        select: { wallet: { select: { balance: true } } },
+      })
+    ).wallet.balance;
     return Response.json(
       {
         AccountName: user.name,
-        Balance: user.wallet?.balance,
+        Balance: userBalance,
         ErrorCode: 0,
         ErrorMessage: "No Error",
       },
@@ -59,7 +105,3 @@ export const POST = async (req: NextRequest) => {
     );
   }
 };
-
-
-
-
