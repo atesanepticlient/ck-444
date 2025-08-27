@@ -1,84 +1,101 @@
-// import { db } from "@/lib/db";
-// import { NextRequest } from "next/server";
+import { db } from "@/lib/db";
+import { NextRequest } from "next/server";
 
-// export const POST = async (req: NextRequest) => {
-//   try {
-//     const {
-//       Amount,
-//       Username,
-//       ProductType,
-//       GameType,
-//       GameId,
-//       TransferCode,
-//       TransactionId,
-//     } = await req.json();
-//     const user = await db.user.findUnique({
-//       where: { phone: Username },
-//       include: { wallet: true },
-//     });
-//     if (!user) {
-//       return Response.json(
-//         { ErrorCode: 1, ErrorMessage: "Member not exist" },
-//         { status: 200 }
-//       );
-//     }
+export const POST = async (req: NextRequest) => {
+  try {
+    const {
+      Amount,
+      Username,
+      ProductType,
+      GameType,
+      GameId,
+      TransferCode,
+      TransactionId,
+    } = await req.json();
 
-//     await db.user.update({
-//       where: {
-//         id: user.id,
-//       },
-//       data: {
-//         wallet: {
-//           update: {
-//             balance: {
-//               decrement: Amount,
-//             },
-//           },
-//         },
-//         bettingRecord: {
-//           update: {
-//             totalBet: {
-//               increment: Amount,
-//             },
-//           },
-//         },
-//       },
-//     });
+    const existingBet = await db.bet.findFirst({
+      where: { transactionId: TransactionId, transferCode: TransferCode },
+    });
 
-//     await db.bet.create({
-//       data: {
-//         productType: ProductType,
-//         gameType: GameType,
-//         gameId: GameId,
-//         transferCode: TransferCode,
-//         transactionId: TransactionId,
-//         amount: Amount,
-//         user: {
-//           connect: {
-//             phone: user!.phone,
-//           },
-//         },
-//       },
-//     });
+    if (existingBet) {
+      return Response.json(
+        { ErrorCode: 5003, ErrorMessage: "Bet With Same RefNo Exists" },
+        { status: 200 }
+      );
+    }
 
-//     return Response.json(
-//       {
-//         AccountName: user.phone,
-//         Balance: user.wallet?.balance,
-//         ErrorCode: 0,
-//         ErrorMessage: "No Error",
-//         BetAmount: Amount,
-//       },
-//       { status: 200 }
-//     );
-//   } catch {
-//     return Response.json(
-//       { ErrorCode: 7, ErrorMessage: "Internal Error" },
-//       { status: 200 }
-//     );
-//   }
-  
-// };
+    const user = await db.user.findUnique({
+      where: { phone: Username },
+      include: { wallet: true },
+    });
+    if (!user) {
+      return Response.json(
+        { ErrorCode: 1, ErrorMessage: "Member not exist" },
+        { status: 200 }
+      );
+    }
+
+    if (Amount > user.wallet.balance) {
+      return Response.json(
+        { ErrorCode: 5, ErrorMessage: "Not enough balance" },
+        { status: 200 }
+      );
+    }
+    await db.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        wallet: {
+          update: {
+            balance: {
+              decrement: Amount,
+            },
+          },
+        },
+        bettingRecord: {
+          update: {
+            totalBet: {
+              increment: Amount,
+            },
+          },
+        },
+      },
+    });
+
+    await db.bet.create({
+      data: {
+        productType: ProductType,
+        gameType: GameType,
+        gameId: GameId,
+        transferCode: TransferCode,
+        transactionId: TransactionId,
+        amount: Amount,
+        user: {
+          connect: {
+            phone: user!.phone,
+          },
+        },
+      },
+    });
+
+    return Response.json(
+      {
+        AccountName: user.phone,
+        Balance: user.wallet?.balance,
+        ErrorCode: 0,
+        ErrorMessage: "No Error",
+        BetAmount: Amount,
+      },
+      { status: 200 }
+    );
+  } catch {
+    return Response.json(
+      { ErrorCode: 7, ErrorMessage: "Internal Error" },
+      { status: 200 }
+    );
+  }
+};
 
 // import { db } from "@/lib/db";
 // import { NextRequest } from "next/server";
@@ -175,156 +192,147 @@
 //   }
 // };
 
+// import { db } from "@/lib/db";
+// import { NextRequest } from "next/server";
 
+// export const POST = async (req: NextRequest) => {
+//   try {
+//     const body = await req.json();
 
+//     const Username: string = String(body?.Username ?? "");
+//     const Amount = Number(body?.Amount);
+//     const ProductType = Number(body?.ProductType);
+//     const GameType = Number(body?.GameType);
+//     const GameId = Number(body?.GameId);
+//     const TransferCode = String(body?.TransferCode ?? "");
+//     const TransactionId = String(body?.TransactionId ?? "");
 
+//     // ---- Validation ----
+//     if (!Username || !Number.isFinite(Amount)) {
+//       return Response.json(
+//         { ErrorCode: 3, ErrorMessage: "Invalid request payload" },
+//         { status: 200 }
+//       );
+//     }
 
+//     // Minimum amount check
+//     if (Amount < 10) {
+//       return Response.json(
+//         {
+//           ErrorCode: 7,
+//           ErrorMessage: "Bet amount must be at least 10",
+//           Balance: 0,
+//         },
+//         { status: 200 }
+//       );
+//     }
 
+//     // ---- User fetch ----
+//     const user = await db.user.findUnique({
+//       where: { phone: Username },
+//       include: { wallet: true, bettingRecord: true },
+//     });
 
+//     if (!user || !user.wallet) {
+//       return Response.json(
+//         { ErrorCode: 1, ErrorMessage: "Member not exist", Balance: 0 },
+//         { status: 200 }
+//       );
+//     }
 
+//     const currentBalance = Number(user.wallet.balance ?? 0);
 
+//     // --- Balance check ---
+//     if (currentBalance <= 0 || currentBalance < Amount) {
+//       return Response.json(
+//         {
+//           ErrorCode: 8, // use a separate code for insufficient funds
+//           ErrorMessage: "Insufficient balance",
+//           Balance: currentBalance.toFixed(2),
+//           AccountName: user.phone,
+//         },
+//         { status: 200 }
+//       );
+//     }
 
-import { db } from "@/lib/db";
-import { NextRequest } from "next/server";
+//     // Ensure bettingRecord exists
+//     if (!user.bettingRecord) {
+//       await db.bettingRecord.create({
+//         data: {
+//           user: { connect: { id: user.id } },
+//           totalBet: 0,
+//           totalWin: 0,
+//         },
+//       });
+//     }
 
-export const POST = async (req: NextRequest) => {
-  try {
-    const body = await req.json();
+//     // ---- Transaction ----
+//     const result = await db.$transaction(async (tx) => {
+//       await tx.user.update({
+//         where: { id: user.id },
+//         data: {
+//           wallet: { update: { balance: { decrement: Amount } } },
+//           bettingRecord: { update: { totalBet: { increment: Amount } } },
+//         },
+//       });
 
-    const Username: string = String(body?.Username ?? "");
-    const Amount = Number(body?.Amount);
-    const ProductType = Number(body?.ProductType);
-    const GameType = Number(body?.GameType);
-    const GameId = Number(body?.GameId);
-    const TransferCode = String(body?.TransferCode ?? "");
-    const TransactionId = String(body?.TransactionId ?? "");
+//       const bet = await tx.bet.create({
+//         data: {
+//           productType: ProductType,
+//           gameType: GameType,
+//           gameId: GameId,
+//           transferCode: TransferCode,
+//           transactionId: TransactionId,
+//           amount: Amount,
+//           user: { connect: { id: user.id } },
+//         },
+//       });
 
-    // ---- Validation ----
-    if (!Username || !Number.isFinite(Amount)) {
-      return Response.json(
-        { ErrorCode: 3, ErrorMessage: "Invalid request payload" },
-        { status: 200 }
-      );
-    }
+//       const refreshed = await tx.user.findUnique({
+//         where: { id: user.id },
+//         include: { wallet: true },
+//       });
 
-    // Minimum amount check
-    if (Amount < 10) {
-      return Response.json(
-        {
-          ErrorCode: 7,
-          ErrorMessage: "Bet amount must be at least 10",
-          Balance: 0,
-        },
-        { status: 200 }
-      );
-    }
+//       return {
+//         betId: bet.id,
+//         balance: Number(refreshed?.wallet?.balance ?? 0),
+//       };
+//     });
 
-    // ---- User fetch ----
-    const user = await db.user.findUnique({
-      where: { phone: Username },
-      include: { wallet: true, bettingRecord: true },
-    });
+//     return Response.json(
+//       {
+//         ErrorCode: 0,
+//         AccountName: user.phone,
+//         BetAmount: Amount,
+//         Balance: result.balance.toFixed(2),
+//       },
+//       { status: 200 }
+//     );
+//   } catch (err: any) {
+//     console.error("[Deduct API] bet/create failed:", {
+//       message: err?.message,
+//       code: err?.code,
+//       meta: err?.meta,
+//       stack: err?.stack,
+//     });
 
-    if (!user || !user.wallet) {
-      return Response.json(
-        { ErrorCode: 1, ErrorMessage: "Member not exist", Balance: 0 },
-        { status: 200 }
-      );
-    }
+//     if (err?.code === "P2002") {
+//       return Response.json(
+//         { ErrorCode: 6, ErrorMessage: "Duplicate bet (transfer/transaction exists)" },
+//         { status: 200 }
+//       );
+//     }
 
-    const currentBalance = Number(user.wallet.balance ?? 0);
+//     if (err?.code === "P2021") {
+//       return Response.json(
+//         { ErrorCode: 7, ErrorMessage: "Bet table missing (run migration/db push)", Balance: 0 },
+//         { status: 200 }
+//       );
+//     }
 
-    // --- Balance check ---
-    if (currentBalance <= 0 || currentBalance < Amount) {
-      return Response.json(
-        {
-          ErrorCode: 8, // use a separate code for insufficient funds
-          ErrorMessage: "Insufficient balance",
-          Balance: currentBalance.toFixed(2),
-          AccountName: user.phone,
-        },
-        { status: 200 }
-      );
-    }
-
-    // Ensure bettingRecord exists
-    if (!user.bettingRecord) {
-      await db.bettingRecord.create({
-        data: {
-          user: { connect: { id: user.id } },
-          totalBet: 0,
-          totalWin: 0,
-        },
-      });
-    }
-
-    // ---- Transaction ----
-    const result = await db.$transaction(async (tx) => {
-      await tx.user.update({
-        where: { id: user.id },
-        data: {
-          wallet: { update: { balance: { decrement: Amount } } },
-          bettingRecord: { update: { totalBet: { increment: Amount } } },
-        },
-      });
-
-      const bet = await tx.bet.create({
-        data: {
-          productType: ProductType,
-          gameType: GameType,
-          gameId: GameId,
-          transferCode: TransferCode,
-          transactionId: TransactionId,
-          amount: Amount,
-          user: { connect: { id: user.id } },
-        },
-      });
-
-      const refreshed = await tx.user.findUnique({
-        where: { id: user.id },
-        include: { wallet: true },
-      });
-
-      return {
-        betId: bet.id,
-        balance: Number(refreshed?.wallet?.balance ?? 0),
-      };
-    });
-
-    return Response.json(
-      {
-        ErrorCode: 0,
-        AccountName: user.phone,
-        BetAmount: Amount,
-        Balance: result.balance.toFixed(2),
-      },
-      { status: 200 }
-    );
-  } catch (err: any) {
-    console.error("[Deduct API] bet/create failed:", {
-      message: err?.message,
-      code: err?.code,
-      meta: err?.meta,
-      stack: err?.stack,
-    });
-
-    if (err?.code === "P2002") {
-      return Response.json(
-        { ErrorCode: 6, ErrorMessage: "Duplicate bet (transfer/transaction exists)" },
-        { status: 200 }
-      );
-    }
-
-    if (err?.code === "P2021") {
-      return Response.json(
-        { ErrorCode: 7, ErrorMessage: "Bet table missing (run migration/db push)", Balance: 0 },
-        { status: 200 }
-      );
-    }
-
-    return Response.json(
-      { ErrorCode: 7, ErrorMessage: "Internal Error", Balance: 0 },
-      { status: 200 }
-    );
-  }
-};
+//     return Response.json(
+//       { ErrorCode: 7, ErrorMessage: "Internal Error", Balance: 0 },
+//       { status: 200 }
+//     );
+//   }
+// };
