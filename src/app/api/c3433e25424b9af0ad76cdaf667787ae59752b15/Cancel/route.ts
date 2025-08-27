@@ -68,7 +68,7 @@ export const POST = async (req: NextRequest) => {
             wallet: {
               update: {
                 balance: {
-                  decrement: bet.amount,
+                  decrement: +bet.winloss - +bet.amount,
                 },
               },
             },
