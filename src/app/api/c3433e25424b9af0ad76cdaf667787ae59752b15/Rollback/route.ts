@@ -54,16 +54,16 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
-    if (bet?.status == "CANCELED") {
-      return Response.json(
-        {
-          ErrorCode: 2002,
-          ErrorMessage: "Bet Already Canceled",
-          Balance: user.wallet.balance.toFixed(2),
-        },
-        { status: 200 }
-      );
-    }
+    // if (bet?.status == "CANCELED") {
+    //   return Response.json(
+    //     {
+    //       ErrorCode: 2002,
+    //       ErrorMessage: "Bet Already Canceled",
+    //       Balance: user.wallet.balance.toFixed(2),
+    //     },
+    //     { status: 200 }
+    //   );
+    // }
 
     if (bet.result == "WON") {
       await db.wallet.update({
