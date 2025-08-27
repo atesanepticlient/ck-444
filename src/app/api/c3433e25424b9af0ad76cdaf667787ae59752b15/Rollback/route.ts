@@ -74,7 +74,16 @@ export const POST = async (req: NextRequest) => {
           },
         },
       });
-    } else if (bet.result == "TIE") {
+    } else if (bet.result == "TIE" || bet.result == "VOID") {
+      await db.wallet.update({
+        where: { userId: user.id },
+        data: {
+          balance: {
+            decrement: bet?.amount,
+          },
+        },
+      });
+    } else if (bet.result == "LOST") {
       await db.wallet.update({
         where: { userId: user.id },
         data: {
@@ -84,7 +93,6 @@ export const POST = async (req: NextRequest) => {
         },
       });
     }
-
     await db.bet.update({
       where: { id: bet!.id },
       data: { status: "RUNNING", result: undefined, winloss: undefined },
