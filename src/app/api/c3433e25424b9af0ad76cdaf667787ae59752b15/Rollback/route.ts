@@ -11,6 +11,19 @@ export const POST = async (req: NextRequest) => {
       ResultType,
       WinLoss,
     } = await req.json();
+    const user = await db.user.findUnique({
+      where: { phone: Username },
+      include: { wallet: true },
+    });
+    if (!user) {
+      return Response.json(
+        {
+          ErrorCode: 1,
+          ErrorMessage: "Member not exist",
+        },
+        { status: 200 }
+      );
+    }
 
     const bet = await db.bet.findFirst({
       where: {
@@ -22,31 +35,32 @@ export const POST = async (req: NextRequest) => {
     ``;
     if (!bet) {
       return Response.json(
-        { ErrorCode: 6, ErrorMessage: "Bet not exists" },
+        {
+          ErrorCode: 6,
+          ErrorMessage: "Bet not exists",
+          Balance: user.wallet.balance.toFixed(2),
+        },
         { status: 200 }
       );
     }
     if (bet?.status == "RUNNING") {
       return Response.json(
-        { ErrorCode: 2003, ErrorMessage: "Bet Already Rollback" },
+        {
+          ErrorCode: 2003,
+          ErrorMessage: "Bet Already Rollback",
+          Balance: user.wallet.balance.toFixed(2),
+        },
         { status: 200 }
       );
     }
 
     if (bet?.status == "CANCELED") {
       return Response.json(
-        { ErrorCode: 2002, ErrorMessage: "Bet Already Canceled" },
-        { status: 200 }
-      );
-    }
-
-    const user = await db.user.findUnique({
-      where: { phone: Username },
-      include: { wallet: true },
-    });
-    if (!user) {
-      return Response.json(
-        { ErrorCode: 1, ErrorMessage: "Member not exist" },
+        {
+          ErrorCode: 2002,
+          ErrorMessage: "Bet Already Canceled",
+          Balance: user.wallet.balance.toFixed(2),
+        },
         { status: 200 }
       );
     }
@@ -83,8 +97,8 @@ export const POST = async (req: NextRequest) => {
     ).wallet.balance;
     return Response.json(
       {
-        AccountName: user.name,
-        Balance: userBalance,
+        AccountName: user.playerId,
+        Balance: userBalance.toFixed(2),
         ErrorCode: 0,
         ErrorMessage: "No Error",
       },

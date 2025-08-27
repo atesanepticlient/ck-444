@@ -12,18 +12,6 @@ export const POST = async (req: NextRequest) => {
       TransferCode,
       TransactionId,
     } = await req.json();
-
-    const existingBet = await db.bet.findFirst({
-      where: { transactionId: TransactionId, transferCode: TransferCode },
-    });
-
-    if (existingBet) {
-      return Response.json(
-        { ErrorCode: 5003, ErrorMessage: "Bet With Same RefNo Exists" },
-        { status: 200 }
-      );
-    }
-
     const user = await db.user.findUnique({
       where: { playerId: Username },
       include: { wallet: true },
@@ -34,10 +22,28 @@ export const POST = async (req: NextRequest) => {
         { status: 200 }
       );
     }
+    const existingBet = await db.bet.findFirst({
+      where: { transactionId: TransactionId, transferCode: TransferCode },
+    });
+
+    if (existingBet) {
+      return Response.json(
+        {
+          ErrorCode: 5003,
+          ErrorMessage: "Bet With Same RefNo Exists",
+          Balance: user.wallet.balance.toFixed(2),
+        },
+        { status: 200 }
+      );
+    }
 
     if (Amount > user.wallet.balance) {
       return Response.json(
-        { ErrorCode: 5, ErrorMessage: "Not enough balance" },
+        {
+          ErrorCode: 5,
+          ErrorMessage: "Not enough balance",
+          Balance: user.wallet.balance.toFixed(2),
+        },
         { status: 200 }
       );
     }
@@ -81,8 +87,8 @@ export const POST = async (req: NextRequest) => {
 
     return Response.json(
       {
-        AccountName: user.name,
-        Balance: +user.wallet?.balance - Amount,
+        AccountName: user.playerId,
+        Balance: (+user.wallet?.balance - Amount).toFixed(2),
         ErrorCode: 0,
         ErrorMessage: "No Error",
         BetAmount: Amount,

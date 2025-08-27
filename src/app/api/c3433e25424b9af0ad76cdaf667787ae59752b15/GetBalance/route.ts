@@ -17,7 +17,7 @@ export const POST = async (req: NextRequest) => {
     }
 
     return Response.json({
-      AccountName: user.name,
+      AccountName: user.playerId,
       Balance: user.wallet!.balance.toFixed(2),
       ErrorCode: 0,
       ErrorMessage: "No Error",
