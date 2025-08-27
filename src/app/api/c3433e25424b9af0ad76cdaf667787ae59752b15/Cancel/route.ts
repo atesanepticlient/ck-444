@@ -13,7 +13,6 @@ export const POST = async (req: NextRequest) => {
         {
           ErrorCode: 1,
           ErrorMessage: "Member not exist",
-         
         },
         { status: 200 }
       );
@@ -48,48 +47,48 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
-    // if (bet?.status == "RUNNING") {
-    //   await db.user.update({
-    //     where: { playerId: Username },
-    //     data: {
-    //       wallet: {
-    //         update: {
-    //           balance: {
-    //             increment: bet.amount,
-    //           },
-    //         },
-    //       },
-    //     },
-    //   });
-    // } else if (bet?.status == "SETTLED") {
-    //   if (bet.result == "WON") {
-    //     await db.user.update({
-    //       where: { playerId: Username },
-    //       data: {
-    //         wallet: {
-    //           update: {
-    //             balance: {
-    //               increment: bet.winloss,
-    //             },
-    //           },
-    //         },
-    //       },
-    //     });
-    //   } else if (bet.result == "LOST") {
-    //     await db.user.update({
-    //       where: { playerId: Username },
-    //       data: {
-    //         wallet: {
-    //           update: {
-    //             balance: {
-    //               increment: bet.amount,
-    //             },
-    //           },
-    //         },
-    //       },
-    //     });
-    //   }
-    // }
+    if (bet?.status == "RUNNING") {
+      await db.user.update({
+        where: { playerId: Username },
+        data: {
+          wallet: {
+            update: {
+              balance: {
+                increment: bet.amount,
+              },
+            },
+          },
+        },
+      });
+    } else if (bet?.status == "SETTLED") {
+      if (bet.result == "WON") {
+        await db.user.update({
+          where: { playerId: Username },
+          data: {
+            wallet: {
+              update: {
+                balance: {
+                  decrement: bet.amount,
+                },
+              },
+            },
+          },
+        });
+      } else if (bet.result == "LOST") {
+        await db.user.update({
+          where: { playerId: Username },
+          data: {
+            wallet: {
+              update: {
+                balance: {
+                  increment: bet.amount,
+                },
+              },
+            },
+          },
+        });
+      }
+    }
 
     await db.bet.update({
       where: { id: bet!.id },
