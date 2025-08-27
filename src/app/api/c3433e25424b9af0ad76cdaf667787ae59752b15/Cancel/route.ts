@@ -68,7 +68,7 @@ export const POST = async (req: NextRequest) => {
             wallet: {
               update: {
                 balance: {
-                  decrement: bet.winloss,
+                  decrement: bet.amount,
                 },
               },
             },
@@ -95,6 +95,7 @@ export const POST = async (req: NextRequest) => {
       data: { status: "CANCELED", result: "VOID", winloss: undefined },
     });
     const userBalance = (
+
       await db.user.findUnique({
         where: { playerId: Username },
         select: { wallet: { select: { balance: true } } },
