@@ -326,7 +326,7 @@ model Notification {
 
 enum BetStatus {
   RUNNING
-  SETTLED
+  SETTLED 
   CANCELED
   VOID 
 }
