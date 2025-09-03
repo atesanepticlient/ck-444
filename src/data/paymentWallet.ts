@@ -25,16 +25,9 @@ export const paymentSystems = [
   },
 
   {
-    name: "nagad_b",
+    name: "EWALLET_NAGAD",
     label: "Nagad",
     image:
       "https://res.cloudinary.com/dxs9u7pqc/image/upload/v1750324929/rlqqxeoqlk3gb3k2nyyr.png",
-  },
-
-  {
-    name: "EWALLET_ROCKET",
-    label: "Rocket",
-    image:
-      "https://res.cloudinary.com/dxs9u7pqc/image/upload/v1748973150/mxfaiajz2fawwkzy4l3e.png",
   },
 ];

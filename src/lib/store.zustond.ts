@@ -290,7 +290,7 @@ export const useGames = create<GameType>((set, get) => ({
 
     if (search) {
       filtedGames = filtedGames.filter((game: any) =>
-        game.gameInfos[0].name.toLowerCase().includes(search.toLowerCase())
+        game.gameInfos[0]?.gameName.toLowerCase().includes(search.toLowerCase())
       );
     }
     if (limit !== undefined && limit > 0) {
