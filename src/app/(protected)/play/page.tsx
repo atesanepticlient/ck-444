@@ -1,47 +1,45 @@
 "use client";
 import SecondaryButton from "@/components/buttons/SecondaryButton";
 import GameOpeningLoader from "@/components/loader/GameOpeningLoader";
+import useCurrentUser from "@/hook/useCurrentUser";
 
-import { useOpenGameMutation } from "@/lib/features/gamesApiSlice";
+import {
+  useLogin568WinMutation,
+  useOpenGameMutation,
+} from "@/lib/features/gamesApiSlice";
+import { loginGames } from "@/lib/player";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const Play = () => {
-  const [openGame, { isLoading }] = useOpenGameMutation();
+  const user: any = useCurrentUser();
   const [isIframeLoading, setIsLoading] = useState(true);
   const gameId = useSearchParams().get("gameId") || "";
+  const gpId = useSearchParams().get("gpId") || "";
 
   const [iframe, setIframe] = useState("");
 
   const [error, setError] = useState(false);
 
+  const [loginGame, { isLoading: loginLoading }] = useLogin568WinMutation();
+
   useEffect(() => {
-    openGame({ gameId, demo: "0" })
+    loginGame({ username: user.playerId, gameid: gameId, gpid: gpId })
       .unwrap()
       .then((res) => {
-        if (res) {
-          const url = res.content.game.url;
-          const iframeMode = res.content.game.iframe;
-          if (iframeMode == "0") {
-            location.href = url;
-            console.log(url);
-          } else {
-            console.log("url ", url);
-            setIframe(url);
-          }
-        }
+        const url = "https:" + res.payload.url;
+        setIframe(url);
       })
       .catch((error) => {
-        console.log("Opend game error ", error);
         setError(true);
       });
-  }, [gameId]);
+  }, [gameId, gpId]);
 
   return (
     <div>
-      {(isLoading || isIframeLoading) && !error && <GameOpeningLoader />}
-      {!isLoading && !error && iframe && (
+      {(loginLoading || isIframeLoading) && !error && <GameOpeningLoader />}
+      {!loginLoading && !error && iframe && (
         <div className="w-full h-screen ">
           <iframe
             src={iframe}
@@ -51,7 +49,7 @@ const Play = () => {
           />
         </div>
       )}
-      {!isLoading && error && (
+      {!loginLoading && error && (
         <div className="w-full h-screen bg-[#006165] flex justify-center items-center">
           <div className="w-[280px] md:w-[320px] lg:w-[350px] bg-white overflow-hidden rounded-xl">
             <div className="h-[70%] w-full bg-red-500 px-8 py-2">

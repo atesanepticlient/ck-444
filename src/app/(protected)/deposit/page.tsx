@@ -42,7 +42,7 @@ const App: React.FC = () => {
     number | null
   >();
   const quickAmounts = [
-    100, 400, 500, 800, 1000, 1500, 2000, 5000, 10000, 25000,
+    100, 400, 500, 800, 1000, 1500, 2000, 5000, 10000
   ];
 
   const [error, setError] = useState("");

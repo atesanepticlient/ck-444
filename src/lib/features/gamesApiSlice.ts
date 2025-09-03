@@ -33,11 +33,27 @@ const depositApiSlice = apiSlice.injectEndpoints({
         body: body,
       }),
     }),
+
+    fetch568WinGames: builder.query({
+      query: () => ({
+        url: "api/568win",
+        method: "GET",
+      }),
+    }),
+    login568Win: builder.mutation({
+      query: (body) => ({
+        url: "api/568win/login",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
 export const {
   useFetchGamesListQuery,
   useOpenGameMutation,
-  useFetchNewProviderGamesListQuery,  // Export the new query hook
+  useFetchNewProviderGamesListQuery,
+  useFetch568WinGamesQuery,
+  useLogin568WinMutation,
 } = depositApiSlice;

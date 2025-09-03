@@ -18,15 +18,15 @@ import { LocalArrayStorage } from "@/lib/favorites";
 const storage = LocalArrayStorage<string>();
 
 interface GameCardWithProviderProps {
-  game: NetEnt;
+  game: any;
 }
 export const GameCardWithProvider = ({ game }: GameCardWithProviderProps) => {
   const [imageLoaded, setImageLoad] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [isFav, setFav] = useState(false);
   const [iframe, setIframe] = useState("");
-  const { img, name, title, id } = game;
-
+  const { gameProviderId, gameID, gameInfos } = game;
+  const { gameIconUrl, gameName } = gameInfos[0];
   const [openGame, { isLoading }] = useOpenGameMutation();
 
   const handleImageLoad = () => {
@@ -42,7 +42,7 @@ export const GameCardWithProvider = ({ game }: GameCardWithProviderProps) => {
     }
     return provider?.imageWhite;
   };
-  const providerImag = findProviderImage(title);
+  // const providerImag = findProviderImage(title);
 
   const handleOpenGame = (gameId: string) => {
     openGame({ gameId, demo: "0" })
@@ -66,32 +66,31 @@ export const GameCardWithProvider = ({ game }: GameCardWithProviderProps) => {
 
   const [loaded, setLoaded] = useState(false);
   const [imageSrc, setImageSrc] = useState<any>(null);
-
   useEffect(() => {
     const imgC = new window.Image();
-    imgC.src = img;
+    imgC.src = gameIconUrl;
     imgC.onload = () => {
-      setImageSrc(img);
+      setImageSrc(gameIconUrl);
       setLoaded(true);
     };
-  }, [img]);
+  }, [gameIconUrl]);
 
   const handleAddToFav = (gameId: string) => {
     setFav(!isFav);
     storage.push("favorites-games", gameId);
   };
 
-  useEffect(() => {
-    setFav(storage.exists("favorites-games", id));
-  }, [storage]);
+  // useEffect(() => {
+  //   setFav(storage.exists("favorites-games", ));
+  // }, [storage]);
 
   return (
     <>
       {loaded && imageSrc ? (
-        <div className="relative">
+        <div className="relative " title={gameName}>
           <Link
-            href={`/play?gameId=${id}`}
-            onClick={() => handleOpenGame(id)}
+            href={`/play?gameId=${gameID}&gpId=${gameProviderId}`}
+            // onClick={() => handleOpenGame(id)}
             className="relative game-main overflow-hidden"
           >
             <div
@@ -101,14 +100,14 @@ export const GameCardWithProvider = ({ game }: GameCardWithProviderProps) => {
             >
               <div className="shiny-card w-full">
                 <img
-                  alt={name}
+                  alt={gameName}
                   src={imageSrc}
-                  className="w-full h-auto  align-middle "
+                  className="w-full  align-middle aspect-square "
                   onLoad={handleImageLoad}
                 />
               </div>
 
-              {providerImag && (
+              {/* {providerImag && (
                 <div className="absolute z-10 left-0 bottom-0  flex justify-center items-center game-card-provider-overllay rounded-2xl">
                   <Image
                     src={providerImag}
@@ -119,7 +118,7 @@ export const GameCardWithProvider = ({ game }: GameCardWithProviderProps) => {
                     className="w-[35px] h-auto  align-middle"
                   />
                 </div>
-              )}
+              )} */}
             </div>
             {/* <div className="play absolute top-0 left-0 rounded-2xl w-full h-[97%] bg-transparent flex justify-center items-center">
             <SecondaryButton
@@ -132,7 +131,7 @@ export const GameCardWithProvider = ({ game }: GameCardWithProviderProps) => {
           </div> */}
           </Link>
           <div className="absolute top-2 right-2 z-10 ">
-            <button
+            {/* <button
               onClick={() => handleAddToFav(id)}
               className="w-[18px] h-[18px] rounded-full bg-white/10 flex justify-center items-center "
             >
@@ -142,7 +141,7 @@ export const GameCardWithProvider = ({ game }: GameCardWithProviderProps) => {
                   isFav ? "text-pink-500" : "text-white"
                 } `}
               />
-            </button>
+            </button> */}
           </div>
         </div>
       ) : (

@@ -112,7 +112,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { GameCardWithProvider } from "@/components/GameCards";
 import { useGames } from "@/lib/store.zustond";
-import { Categories, Title } from "@/types/game";
+import { Categories, GameProvider, Title } from "@/types/game";
 import PrimaryInput from "@/components/form/input";
 import GameLoader from "@/components/loader/GameLoader";
 
@@ -128,14 +128,14 @@ const SlotPage = () => {
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
   const [search, setSearch] = useState<string>();
-  const [provider, setProvider] = useState<Title>();
-  const [limit, setLimit] = useState(230);
+  const [provider, setProvider] = useState<string>();
+  const [limit, setLimit] = useState(100);
   const [isFilterLoading, setIsFilterLoading] = useState(false);
 
-  const { getGames } = useGames((state) => state);
+  const { getCustomeCategoriesGames } = useGames((state) => state);
   // const gamesList = getGames('Categories.Slots', search, undefined, provider);
-  const gamesList = getGames(Categories.Slots, undefined,);
-console.log({gamesList})
+  const gamesList = getCustomeCategoriesGames(provider, search, limit);
+
   const hasIntersectedOnce = useRef(false);
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -171,7 +171,7 @@ console.log({gamesList})
     };
   }, []);
 
-  const handleProviderChange = (provider: Title) => {
+  const handleProviderChange = (provider: GameProvider) => {
     setIsFilterLoading(true);
     setProvider(provider);
     // Simulate loading delay (you can remove this timeout in production)
@@ -184,7 +184,7 @@ console.log({gamesList})
     <SideNavLayout>
       <div>
         <AppHeader title="Slots" />
-        <main className="py-5 px-2 bg-[#003e3e]">
+        <main className="py-5 px-2 bg-[#003e3e] min-h-screen">
           <FilterProivder onSelect={handleProviderChange} />
           <div className="flex items-center gap-2">
             <PrimaryInput
@@ -196,7 +196,7 @@ console.log({gamesList})
             <Link
               href="/favorites"
               title="favorites"
-              className="bg-wwwwwwck-44-4comdaintree -mt-2 rounded-[10.4px] overflow-hidden border border-solid border-[#006165] shadow-[0px_2.08px_0px_#002631] p-3"
+              className="bg-wwwwwwck-44-4comdaintree -mt-2 rounded-[10.4px] overflow-hidden border border-solid border-[#006165] shadow-[0px_2.08px_0px_#002631] p-4"
             >
               <MdFavorite className="w-5 h-5 text-[#23ffc8]" />
             </Link>
@@ -216,7 +216,11 @@ console.log({gamesList})
 
                 {!gamesList && <GameLoader lenght={15} loading={true} />}
               </div>
-
+              {gamesList && gamesList.length == 0 && (
+                <p className="text-base w-full  font-semibold block text-center py-2 text-[#23ffc8]">
+                  No Games Found
+                </p>
+              )}
               <div
                 ref={loaderRef}
                 className="my-5 flex items-center justify-center"

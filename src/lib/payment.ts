@@ -94,13 +94,13 @@ export async function makePayinTransaction(businessPayload: any) {
       requestData,
       { headers: { "Content-Type": "application/json" } }
     );
-
+    console.log("Deposit response : ", response)
     if (response.data.state == "Failed") {
       throw Error;
     }
     const payload = decryptPayload(response.data.payload);
     return payload;
-  } catch  {
+  } catch (error)  {
     throw new Error("Deposit Failed! Try again");
   }
 }

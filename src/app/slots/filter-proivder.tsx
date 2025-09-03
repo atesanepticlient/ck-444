@@ -6,12 +6,12 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { providers } from "../../../data/api-providers";
 import Image from "next/image";
-import { Title } from "@/types/game";
+import { GameProvider, Title } from "@/types/game";
 
 const FilterProivder = ({
   onSelect,
 }: {
-  onSelect: (provider: Title) => void;
+  onSelect: (provider: GameProvider) => void;
 }) => {
   const [selectedProvider, setProvider] = useState<any>("all");
 
@@ -74,7 +74,7 @@ const FilterProivder = ({
           {providers.map((provider, i) => (
             <SwiperSlide key={i} className="max-w-max">
               <div
-                className="h-[45px] px-4 py-3"
+                className="h-[55px] px-4 py-3"
                 onClick={() => setProvider(provider.name)}
                 style={
                   provider.name == selectedProvider
@@ -89,7 +89,7 @@ const FilterProivder = ({
                       : provider.imageWhite
                   }
                   alt={provider.name}
-                  className="max-w-[85px]"
+                  className="w-[80%] h-full object-fill"
                 />
               </div>
             </SwiperSlide>

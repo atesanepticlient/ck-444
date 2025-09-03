@@ -9,6 +9,7 @@ import { db } from "@/lib/db";
 import { signIn } from "@/auth";
 import { LOGIN_SUCCESS } from "@/success";
 import { CredentialsSignin } from "next-auth";
+import { registerPlayer } from "@/lib/player";
 export const register = async (data: zod.infer<typeof registerSchema>) => {
   try {
     const {
@@ -56,7 +57,6 @@ export const register = async (data: zod.infer<typeof registerSchema>) => {
         };
       }
     }
-    console.log({ invitedBy });
     const playerId = await playerIdGenerate();
     const referId = await referIdGenerate();
     const hasedPassword = await bcrypt.hash(password, 10);
@@ -113,6 +113,8 @@ export const register = async (data: zod.infer<typeof registerSchema>) => {
         }
       }
     }
+
+    await registerPlayer(playerId);
 
     return { success: LOGIN_SUCCESS };
   } catch (error) {

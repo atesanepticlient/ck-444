@@ -26,8 +26,9 @@ interface GameType {
   ) => NetEnt[] | null;
 
   getCustomeCategoriesGames: (
-    category: string,
-    search?: string
+    category?: string,
+    search?: string,
+    limit?: number
   ) => NetEnt[] | null;
 
   getFavoriesGames: (gamesId: string[]) => NetEnt[] | null;
@@ -36,6 +37,7 @@ interface GameType {
   setLoading: (isLoading: boolean) => void;
   setError: (error: string) => void;
 }
+
 export const useGames = create<GameType>((set, get) => ({
   games: null,
   isLoading: true,
@@ -74,12 +76,197 @@ export const useGames = create<GameType>((set, get) => ({
 
     return flitedGames;
   },
-  getCustomeCategoriesGames: (category, search) => {
+  
+  getCustomeCategoriesGames: (category, search, limit) => {
     const games = get().games!;
     if (!games) return null;
-
     const allGamesArrays = Object.values(games).flat();
-    let flitedGames: any;
+    let filtedGames = allGamesArrays;
+    if (category && category != "all") {
+      filtedGames = allGamesArrays.filter((game) => {
+        return game.provider == category;
+      });
+    }
+
+    if (category == "Spribe") {
+      filtedGames.unshift({
+        gameProviderId: 1072,
+        gameID: 1,
+        gameType: 1,
+        newGameType: 202,
+        rank: 1,
+        device: "d/m",
+        platform: "",
+        provider: "Spribe",
+        rtp: 0.97,
+        rows: -1,
+        reels: -1,
+        lines: -1,
+        gameInfos: [
+          {
+            language: "en",
+            gameName: "Aviator",
+            gameIconUrl:
+              "https://cdn-test.cdn568.net/Spribe/1/1072_1_Aviator.png?v=1",
+          },
+        ],
+        supportedCurrencies: [
+          "AED",
+          "AFN",
+          "ALL",
+          "AMD",
+          "ARS",
+          "AMG",
+          "AOA",
+          "AUD",
+          "AWG",
+          "AZN",
+          "BAM",
+          "BBD",
+          "BDT",
+          "BGN",
+          "BHD",
+          "BIF",
+          "BMD",
+          "BND",
+          "BOB",
+          "BRL",
+          "BSD",
+          "BTN",
+          "BWP",
+          "BYN",
+          "BZD",
+          "CAD",
+          "CDF",
+          "CHF",
+          "CLP",
+          "CNY",
+          "COP",
+          "CRC",
+          "CUP",
+          "CVE",
+          "CZK",
+          "DJF",
+          "DKK",
+          "DOP",
+          "DZD",
+          "EGP",
+          "ERN",
+          "ETB",
+          "EUR",
+          "FJD",
+          "FKP",
+          "GBP",
+          "GEL",
+          "GHS",
+          "GIP",
+          "GMD",
+          "GNF",
+          "GTQ",
+          "GYD",
+          "HKD",
+          "HNL",
+          "HTG",
+          "HUF",
+          "IDR",
+          "ILS",
+          "INR",
+          "IQD",
+          "ISK",
+          "JMD",
+          "JOD",
+          "JPY",
+          "KES",
+          "KGS",
+          "KHR",
+          "KMF",
+          "KPW",
+          "KRW",
+          "KWD",
+          "KYD",
+          "KZT",
+          "LAK",
+          "LBP",
+          "LKR",
+          "LRD",
+          "LSL",
+          "LYD",
+          "MAD",
+          "MDL",
+          "MGA",
+          "MKD",
+          "MMK",
+          "MNT",
+          "MOP",
+          "MRU",
+          "MUR",
+          "MVR",
+          "MWK",
+          "MXN",
+          "MYR",
+          "MZN",
+          "NAD",
+          "NGN",
+          "NIO",
+          "NOK",
+          "NPR",
+          "NZD",
+          "OMR",
+          "PAB",
+          "PEN",
+          "PGK",
+          "PKR",
+          "PLN",
+          "PYG",
+          "QAR",
+          "RON",
+          "RSD",
+          "RWF",
+          "SAR",
+          "SBD",
+          "SCR",
+          "SDG",
+          "SEK",
+          "SOS",
+          "SRD",
+          "SYP",
+          "SZL",
+          "THB",
+          "TMP",
+          "TJS",
+          "TMT",
+          "TND",
+          "TOP",
+          "TRY",
+          "TTD",
+          "TZS",
+          "UAH",
+          "UGX",
+          "USD",
+          "UYU",
+          "UZS",
+          "VES",
+          "VND",
+          "VUV",
+          "WST",
+          "XAF",
+          "XCD",
+          "XOF",
+          "XPF",
+          "YER",
+          "ZAR",
+          "ZMW",
+          "MYK",
+        ],
+        blockCountries: [],
+        isMaintain: false,
+        isEnabled: true,
+        isProvideCommission: false,
+        hasHedgeBet: false,
+        providerStatus: "Online",
+        isProviderOnline: true,
+      });
+    }
     if (category == "hot") {
       const gamesId = [
         "8892",
@@ -98,16 +285,19 @@ export const useGames = create<GameType>((set, get) => ({
         "10269",
         "9896",
       ];
-      flitedGames = allGamesArrays.filter((game) => gamesId.includes(game.id));
+      filtedGames = allGamesArrays.filter((game) => gamesId.includes(game.id));
     }
 
     if (search) {
-      const searchLower = search.toLowerCase();
-      flitedGames = flitedGames.filter((game: any) =>
-        game.name.toLowerCase().includes(searchLower)
+      filtedGames = filtedGames.filter((game: any) =>
+        game.gameInfos[0].name.toLowerCase().includes(search.toLowerCase())
       );
     }
-    return flitedGames;
+    if (limit !== undefined && limit > 0) {
+      return filtedGames.slice(1, limit);
+    }
+
+    return filtedGames;
   },
   getFavoriesGames: (gamesId) => {
     const games = get().games!;
@@ -124,3 +314,5 @@ export const useGames = create<GameType>((set, get) => ({
   setLoading: (isLoading) => set((state) => ({ ...state, isLoading })),
   setError: (error) => set((state) => ({ ...state, error })),
 }));
+
+

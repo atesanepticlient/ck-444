@@ -82,152 +82,164 @@ import wd_black from "../public/games/provider/WD-BLACK.png";
 import zitro_white from "../public/games/provider/ZITRO.png";
 import zitro_black from "../public/games/provider/ZITRO-BLACK.png";
 
-import { Title } from "@/types/game";
+import spribe_white from "../public/games/provider/SPB-WHITE.png";
+import spribe_black from "../public/games/provider/SPB-BLACK.png";
 
-export const providers = [
+import { GameProvider, Title } from "@/types/game";
+
+export const providers: {
+  name: GameProvider;
+  imageBlack: any;
+  imageWhite: any;
+}[] = [
   {
-    name: Title.Jili,
+    name: "JiLiGaming",
     imageBlack: jili_black,
     imageWhite: jili_white,
   },
   {
-    name: Title.Evolution,
+    name: "EvolutionGaming",
     imageBlack: evo_black,
     imageWhite: evo_white,
   },
 
   {
-    name: Title.Pgsoft,
+    name: "PGSoft",
     imageBlack: pg_black,
     imageWhite: pg_white,
   },
 
-  {
-    name: Title.NetEnt,
-    imageBlack: ne_black,
-    imageWhite: ne_white,
-  },
+  // {
+  //   name: Title.NetEnt,
+  //   imageBlack: ne_black,
+  //   imageWhite: ne_white,
+  // },
 
   {
-    name: Title.Playngo,
+    name: "PlayNgo",
     imageBlack: playngo_black,
     imageWhite: playngo_white,
   },
 
   {
-    name: Title.RedTiger,
+    name: "RedTiger",
     imageBlack: rt_black,
     imageWhite: rt_white,
   },
 
+  // {
+  //   name: Title.Microgaming,
+  //   imageBlack: mg_black,
+  //   imageWhite: mg_white,
+  // },
+  // {
+  //   name: Title.Amatic,
+  //   imageBlack: amatic_black,
+  //   imageWhite: amatic_white,
+  // },
+  // {
+  //   name: Title.AmigoGaming,
+  //   imageBlack: amg_black,
+  //   imageWhite: amg_white,
+  // },
+  // {
+  //   name: Title.Apex,
+  //   imageBlack: apex_black,
+  //   imageWhite: apex_white,
+  // },
   {
-    name: Title.Microgaming,
-    imageBlack: mg_black,
-    imageWhite: mg_white,
-  },
-  {
-    name: Title.Amatic,
-    imageBlack: amatic_black,
-    imageWhite: amatic_white,
-  },
-  {
-    name: Title.AmigoGaming,
-    imageBlack: amg_black,
-    imageWhite: amg_white,
-  },
-  {
-    name: Title.Apex,
-    imageBlack: apex_black,
-    imageWhite: apex_white,
-  },
-  {
-    name: Title.Apollo,
+    name: "Apollo",
     imageBlack: apollo_black,
     imageWhite: apollo_white,
   },
   {
-    name: Title.Aristocrat,
-    imageBlack: aricart_black,
-    imageWhite: aricart_white,
+    name: "Spribe",
+    imageBlack: spribe_black,
+    imageWhite: spribe_white,
   },
+  // {
+  //   name: Title.Aristocrat,
+  //   imageBlack: aricart_black,
+  //   imageWhite: aricart_white,
+  // },
+  // {
+  //   name: Title.Bingo,
+  //   imageBlack: bingo_black,
+  //   imageWhite: bingo_white,
+  // },
+  // {
+  //   name: Title.Booming,
+  //   imageBlack: booming_black,
+  //   imageWhite: booming_white,
+  // },
+  // {
+  //   name: Title.Egt,
+  //   imageBlack: egt_black,
+  //   imageWhite: egt_white,
+  // },
+  // {
+  //   name: Title.Firekirin,
+  //   imageBlack: firekirin_black,
+  //   imageWhite: firekirin_white,
+  // },
+  // {
+  //   name: Title.Goldenrace,
+  //   imageBlack: goldenrace_black,
+  //   imageWhite: goldenrace_white,
+  // },
   {
-    name: Title.Bingo,
-    imageBlack: bingo_black,
-    imageWhite: bingo_white,
-  },
-  {
-    name: Title.Booming,
-    imageBlack: booming_black,
-    imageWhite: booming_white,
-  },
-  {
-    name: Title.Egt,
-    imageBlack: egt_black,
-    imageWhite: egt_white,
-  },
-  {
-    name: Title.Firekirin,
-    imageBlack: firekirin_black,
-    imageWhite: firekirin_white,
-  },
-  {
-    name: Title.Goldenrace,
-    imageBlack: goldenrace_black,
-    imageWhite: goldenrace_white,
-  },
-  {
-    name: Title.Habanero,
+    name: "Habanero",
     imageBlack: hadbanero_black,
     imageWhite: hadbanero_white,
   },
+  // {
+  //   name: Title.Igt,
+  //   imageBlack: igt_black,
+  //   imageWhite: igt_white,
+  // },
+  // {
+  //   name: Title.Kajot,
+  //   imageBlack: kajot_black,
+  //   imageWhite: kajot_white,
+  // },
+  // {
+  //   name: Title.Keno,
+  //   imageBlack: keno_black,
+  //   imageWhite: keno_white,
+  // },
+  // {
+  //   name: Title.Mancala,
+  //   imageBlack: mancala_black,
+  //   imageWhite: mancala_white,
+  // },
   {
-    name: Title.Igt,
-    imageBlack: igt_black,
-    imageWhite: igt_white,
-  },
-  {
-    name: Title.Kajot,
-    imageBlack: kajot_black,
-    imageWhite: kajot_white,
-  },
-  {
-    name: Title.Keno,
-    imageBlack: keno_black,
-    imageWhite: keno_white,
-  },
-  {
-    name: Title.Mancala,
-    imageBlack: mancala_black,
-    imageWhite: mancala_white,
-  },
-  {
-    name: Title.Pragmatic,
+    name: "PragmaticPlaySlot",
     imageBlack: pp_black,
     imageWhite: pp_white,
   },
-  {
-    name: Title.Quickspin,
-    imageBlack: quickspin_black,
-    imageWhite: quickspin_white,
-  },
-  {
-    name: Title.Rubyplay,
-    imageBlack: rubyplay_black,
-    imageWhite: rubyplay_white,
-  },
-  {
-    name: Title.Vegas,
-    imageBlack: vegas_black,
-    imageWhite: vegas_white,
-  },
-  {
-    name: Title.Wazdan,
-    imageBlack: wd_black,
-    imageWhite: wd_white,
-  },
-  {
-    name: Title.Zitro,
-    imageBlack: zitro_black,
-    imageWhite: zitro_white,
-  },
+  // {
+  //   name: Title.Quickspin,
+  //   imageBlack: quickspin_black,
+  //   imageWhite: quickspin_white,
+  // },
+  // {
+  //   name: Title.Rubyplay,
+  //   imageBlack: rubyplay_black,
+  //   imageWhite: rubyplay_white,
+  // },
+  // {
+  //   name: Title.Vegas,
+  //   imageBlack: vegas_black,
+  //   imageWhite: vegas_white,
+  // },
+  // {
+  //   name: Title.Wazdan,
+  //   imageBlack: wd_black,
+  //   imageWhite: wd_white,
+  // },
+  // {
+  //   name: Title.Zitro,
+  //   imageBlack: zitro_black,
+  //   imageWhite: zitro_white,
+  // },
 ];
