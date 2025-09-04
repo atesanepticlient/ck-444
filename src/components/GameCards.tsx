@@ -75,14 +75,15 @@ export const GameCardWithProvider = ({ game }: GameCardWithProviderProps) => {
     };
   }, [gameIconUrl]);
 
-  const handleAddToFav = (gameId: string) => {
+  const handleAddToFav = (gameId: string, gpId: string) => {
     setFav(!isFav);
-    storage.push("favorites-games", gameId);
+    const value = gameId + "-" + gpId;
+    storage.push("favorites-games", value);
   };
 
-  // useEffect(() => {
-  //   setFav(storage.exists("favorites-games", ));
-  // }, [storage]);
+  useEffect(() => {
+    setFav(storage.exists("favorites-games", gameProviderId + "-" + gameID));
+  }, [storage]);
 
   return (
     <>
@@ -131,8 +132,8 @@ export const GameCardWithProvider = ({ game }: GameCardWithProviderProps) => {
           </div> */}
           </Link>
           <div className="absolute top-2 right-2 z-10 ">
-            {/* <button
-              onClick={() => handleAddToFav(id)}
+            <button
+              onClick={() => handleAddToFav(gameProviderId, gameID)}
               className="w-[18px] h-[18px] rounded-full bg-white/10 flex justify-center items-center "
             >
               {}
@@ -141,7 +142,7 @@ export const GameCardWithProvider = ({ game }: GameCardWithProviderProps) => {
                   isFav ? "text-pink-500" : "text-white"
                 } `}
               />
-            </button> */}
+            </button>
           </div>
         </div>
       ) : (

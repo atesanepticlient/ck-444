@@ -74,6 +74,7 @@ export const loginGames = async (
 };
 
 export const getGames = (
+  gamesId?: string[],
   provider?: string,
   search?: string,
   limit: number = 99
@@ -84,10 +85,24 @@ export const getGames = (
     (game) => Array.isArray(game.gameInfos) && game.gameInfos.length > 0
   );
 
-  if (provider&& provider != "all") {
+  if (gamesId) {
+    const gamesIdParsed = gamesId.map((fullId) => {
+      const gameIdSegments = fullId.split("-");
+      const gpId = gameIdSegments[0];
+      const gameId = gameIdSegments[1];
+      return { gpId, gameId };
+    });
+    games = games.filter((game) => {
+      return gamesIdParsed.some(gameIdParsed=>{
+        return gameIdParsed.gameId == game.gameID && gameIdParsed.gpId == game.gameProviderId
+      });
+    });
+    console.log({games})
+  }
+
+  if (provider && provider != "all") {
     games = games.filter((game) => game.provider == provider);
   }
-  console.log("games from local server ", provider);
 
   if (search) {
     games = games.filter((game) =>

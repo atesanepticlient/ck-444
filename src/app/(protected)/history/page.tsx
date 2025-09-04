@@ -26,6 +26,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Wallet, CreditCard, Check, X, Loader } from "lucide-react";
 import SiteHeader from "@/components/SiteHeader";
+import { paymentSystems } from "@/data/paymentWallet";
 
 export default function HistoryPage() {
   const searchParams = useSearchParams();
@@ -41,6 +42,7 @@ export default function HistoryPage() {
     status,
     page,
   });
+  console.log({ data });
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>(
     {}
   );
@@ -88,23 +90,23 @@ export default function HistoryPage() {
     });
   };
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status: string ) => {
     switch (status) {
       case "01":
         return (
-          <Badge variant="secondary">
+          <Badge variant="secondary" className="bg-[#FACC15] text-[#1E293B]">
             <Loader className="mr-1 h-3 w-3" /> Pending
           </Badge>
         );
       case "00":
         return (
-          <Badge variant="secondary">
+          <Badge variant="secondary" className="bg-[#16A34A] text-[#FFFFFF]">
             <Check className="mr-1 h-3 w-3" /> Approved
           </Badge>
         );
       case "02":
         return (
-          <Badge variant="destructive">
+          <Badge variant="destructive" className="bg-[#DC2626] text-[##FFFFFF]">
             <X className="mr-1 h-3 w-3" /> Rejected
           </Badge>
         );
@@ -113,6 +115,16 @@ export default function HistoryPage() {
     }
   };
 
+  const getWalletImage = (walletName: string) => {
+    const paymentSystem = paymentSystems.find((ps) => ps.name == walletName);
+    return (
+      <img
+        alt={paymentSystem.label}
+        src={paymentSystem.image}
+        className="w-[50px]"
+      />
+    );
+  };
   return (
     <div>
       <SiteHeader title="Transaction History" />
@@ -159,7 +171,7 @@ export default function HistoryPage() {
                 onClick={() => toggleExpand(item.id)}
               >
                 <div className="flex items-center gap-4">
-                  {item.amount ? (
+                  {item.price ? (
                     <>
                       {item.type == "withdraw" ? (
                         <CreditCard className="h-6 w-6 text-red-500" />
@@ -168,7 +180,7 @@ export default function HistoryPage() {
                       )}
                       <div>
                         <div className="font-medium">
-                          {item.amount}{" "}
+                          {item.price}{" "}
                           {item?.depositWallet?.currency ||
                             item?.card?.container?.currency ||
                             "BDT"}
@@ -250,16 +262,12 @@ export default function HistoryPage() {
                           <div className="flex items-center gap-2">
                             <Wallet className="h-4 w-4" />
 
-                            <img
-                              alt={item.label}
-                              src={item.image}
-                              className="w-[50px]"
-                            />
+                            {getWalletImage(item.ps)}
                           </div>
                           <div className="flex items-center gap-2">
                             <CreditCard className="h-4 w-4" />
 
-                            <span>Order Id: {item.order_id}</span>
+                            <span>Order Id: {item.tradeNo}</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <Calendar className="h-4 w-4" />
@@ -272,7 +280,11 @@ export default function HistoryPage() {
                         <div className="space-y-1 text-sm">
                           <div>
                             <span className="font-medium">Status:</span>{" "}
-                            {item.status}
+                            {item.status == "01"
+                              ? "Pending"
+                              : item.state == "00"
+                              ? "Approved"
+                              : "Rejected"}
                           </div>
                           {item.status === "Pending" && (
                             <div className="text-warning">

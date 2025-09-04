@@ -225,11 +225,36 @@ export const GET = async (request: Request) => {
         skip: type === "all" ? 0 : (page - 1) * limit,
         orderBy: { createdAt: "desc" },
       });
-
       deposits = await pmap(
         dbDeposits,
         async (dbDeposit) => {
           const response = await queryPayinTransaction(dbDeposit.orderId);
+
+          const orderDate = response.orderDate
+          const year = orderDate.substring(0, 4);
+          const month = orderDate.substring(4, 6);
+          const day = orderDate.substring(6, 8);
+          const hour = orderDate.substring(8, 10);
+          const minute = orderDate.substring(10, 12);
+          const second = orderDate.substring(12, 14);
+
+          const orderDateObj = new Date(
+            `${year}-${month}-${day}T${hour}:${minute}:${second}`
+          );
+          // Now
+          const now = new Date();
+
+          // Difference in ms
+          const diffMs = now.getTime() - orderDateObj.getTime();
+
+          // Convert to minutes
+          const diffMinutes = diffMs / (1000 * 60);
+
+          let status = response.status
+
+          if (diffMinutes >= 15) {
+            status = "02"
+          }
 
           // Merge database fields with API response
           return {
@@ -238,10 +263,13 @@ export const GET = async (request: Request) => {
             id: dbDeposit.id,
             userId: dbDeposit.userId,
             createdAt: dbDeposit.createdAt,
+            ps: dbDeposit.ps,
+            status
           };
         },
         { concurrency: 5 }
       );
+      console.log({ deposits });
     }
 
     if (type === "all" || type === "withdraw") {

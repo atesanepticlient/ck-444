@@ -133,7 +133,7 @@ const SlotPage = () => {
   const [limit, setLimit] = useState(99);
   const [isFilterLoading, setIsFilterLoading] = useState(false);
 
-  const gamesList = getGames(provider, search, limit);
+  const gamesList = getGames(undefined,provider, search, limit);
 
   const hasIntersectedOnce = useRef(false);
   useEffect(() => {
