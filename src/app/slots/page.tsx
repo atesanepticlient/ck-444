@@ -123,18 +123,17 @@ import Link from "next/link";
 import { MdFavorite } from "react-icons/md";
 import { ClipLoader } from "react-spinners";
 import SideNavLayout from "@/components/SideNavLayout";
+import { getGames } from "@/lib/player";
 
 const SlotPage = () => {
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
   const [search, setSearch] = useState<string>();
   const [provider, setProvider] = useState<string>();
-  const [limit, setLimit] = useState(100);
+  const [limit, setLimit] = useState(99);
   const [isFilterLoading, setIsFilterLoading] = useState(false);
 
-  const { getCustomeCategoriesGames } = useGames((state) => state);
-  // const gamesList = getGames('Categories.Slots', search, undefined, provider);
-  const gamesList = getCustomeCategoriesGames(provider, search, limit);
+  const gamesList = getGames(provider, search, limit);
 
   const hasIntersectedOnce = useRef(false);
   useEffect(() => {
@@ -180,6 +179,10 @@ const SlotPage = () => {
     }, 500);
   };
 
+  const hanleLoadMore = () => {
+    setLimit((state) => state + 9);
+  };
+
   return (
     <SideNavLayout>
       <div>
@@ -221,12 +224,14 @@ const SlotPage = () => {
                   No Games Found
                 </p>
               )}
-              <div
-                ref={loaderRef}
-                className="my-5 flex items-center justify-center"
-              >
-                {gamesList && gamesList.length > 29 && (
-                  <ClipLoader color="#FFB800" size={25} />
+              <div className="my-5 flex items-center justify-center">
+                {gamesList && gamesList.length > 98 && (
+                  <button
+                    onClick={hanleLoadMore}
+                    className="text-base text-yellow-300 font-semibold"
+                  >
+                    Load More
+                  </button>
                 )}
               </div>
             </>
