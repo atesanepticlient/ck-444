@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
       "c.animaapp.com",
       "res.cloudinary.com",
       "cdn-test.cdn568.net",
+      "gp-demo.ggppqqgg.com"
     ],
   },
   eslint: {

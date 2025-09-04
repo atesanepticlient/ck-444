@@ -28,7 +28,7 @@ const Play = () => {
     loginGame({ username: user.playerId, gameid: gameId, gpid: gpId })
       .unwrap()
       .then((res) => {
-        const url = "https:" + res.payload.url;
+        const url = res.payload.url;
         setIframe(url);
       })
       .catch((error) => {

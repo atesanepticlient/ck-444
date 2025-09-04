@@ -51,7 +51,6 @@ export default async function RootLayout({
               <Toaster />
               <ShadcnToastProvider />
               <StoreProvider>
-                <GamesLoader />
                 {children}
                 {session?.user && (
                   <NotificationToaster userId={session.user.id} />
