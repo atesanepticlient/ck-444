@@ -209,27 +209,13 @@
 //   }
 // };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import { db } from "@/lib/db";
+import { reduceTurnOver } from "@/lib/turnover";
 import { BetStatus } from "@prisma/client";
 import { NextRequest } from "next/server";
 
-
-
-const COMPANY_KEY = process.env.COMPANY_KEY ?? "F4D8A3106EA44C5D969D0AAE0B472762";
+const COMPANY_KEY =
+  process.env.COMPANY_KEY ?? "F4D8A3106EA44C5D969D0AAE0B472762";
 const MIN_STAKE = 10;
 
 export const POST = async (req: NextRequest) => {
@@ -269,12 +255,16 @@ export const POST = async (req: NextRequest) => {
 
     if ([1, 2, 3, 5, 7, 9].includes(productType) && amount < MIN_STAKE) {
       return Response.json(
-        { ErrorCode: 7, ErrorMessage: "Bet amount must be at least 10", Balance: 0 },
+        {
+          ErrorCode: 7,
+          ErrorMessage: "Bet amount must be at least 10",
+          Balance: 0,
+        },
         { status: 200 }
       );
     }
 
-    const user = await db.user.findUnique({
+    const user : any = await db.user.findUnique({
       where: { phone: username },
       include: { wallet: true },
     });
@@ -291,7 +281,9 @@ export const POST = async (req: NextRequest) => {
         include: { wallet: true },
       });
       if (!fresh?.wallet) {
-        return { early: { ErrorCode: 1, ErrorMessage: "Member not exist", Balance: 0 } };
+        return {
+          early: { ErrorCode: 1, ErrorMessage: "Member not exist", Balance: 0 },
+        };
       }
       const bal = Number(fresh.wallet.balance);
 
@@ -324,8 +316,12 @@ export const POST = async (req: NextRequest) => {
         where: { userId: fresh.id, productType, gameType, transferCode },
         orderBy: { createdAt: "asc" },
       });
-      const runningBets = existing.filter((b) => b.status === BetStatus.RUNNING);
-      const concludedBets = existing.filter((b) => b.status !== BetStatus.RUNNING);
+      const runningBets = existing.filter(
+        (b) => b.status === BetStatus.RUNNING
+      );
+      const concludedBets = existing.filter(
+        (b) => b.status !== BetStatus.RUNNING
+      );
 
       // ---- Product-specific rules ----
 
@@ -355,7 +351,8 @@ export const POST = async (req: NextRequest) => {
             return {
               early: {
                 ErrorCode: 7,
-                ErrorMessage: "Raise amount must be greater than previous total",
+                ErrorMessage:
+                  "Raise amount must be greater than previous total",
                 Balance: bal.toFixed(2),
               },
             };
@@ -366,26 +363,29 @@ export const POST = async (req: NextRequest) => {
           return {
             early: {
               ErrorCode: 5003,
-              ErrorMessage: "Duplicate transferCode not allowed after conclusion",
+              ErrorMessage:
+                "Duplicate transferCode not allowed after conclusion",
               Balance: bal.toFixed(2),
             },
           };
         }
       }
 
-   
       let debit = amount;
       if ([3, 7].includes(productType) && runningBets.length >= 1) {
         const prev = runningBets[runningBets.length - 1];
         debit = amount - Number(prev.amount); // only the delta on a raise
       }
       if (productType === 9) {
-         
       }
 
       if (debit > bal) {
         return {
-          early: { ErrorCode: 5, ErrorMessage: "Insufficient balance", Balance: bal.toFixed(2) },
+          early: {
+            ErrorCode: 5,
+            ErrorMessage: "Insufficient balance",
+            Balance: bal.toFixed(2),
+          },
         };
       }
 
@@ -425,6 +425,8 @@ export const POST = async (req: NextRequest) => {
         betAmountString = String(amount);
       }
 
+      await reduceTurnOver(body.Amount, user.userId)
+
       return {
         ok: {
           ErrorCode: 0,
@@ -436,10 +438,10 @@ export const POST = async (req: NextRequest) => {
       };
     });
 
-    if ((result as any).early) return Response.json((result as any).early, { status: 200 });
+    if ((result as any).early)
+      return Response.json((result as any).early, { status: 200 });
     return Response.json((result as any).ok, { status: 200 });
   } catch (err) {
-    console.error("Deduct error:", err);
     return Response.json(
       { ErrorCode: 7, ErrorMessage: "Internal Error", Balance: 0 },
       { status: 200 }

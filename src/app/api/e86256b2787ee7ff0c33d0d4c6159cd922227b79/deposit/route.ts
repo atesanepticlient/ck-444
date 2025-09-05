@@ -39,6 +39,12 @@ export async function POST(req: NextRequest) {
           },
         },
       });
+      await createNotification({
+        title: `Deposit Successfull`,
+        description: `Your ${decryptedData.price}BDT Deposit was Added`,
+        userId: user!.id!,
+        icon: "MONEY",
+      });
     } else {
       await createNotification({
         title: `Deposit Failed!`,

@@ -295,11 +295,15 @@ import useCurrentUser from "@/hook/useCurrentUser";
 import { Skeleton } from "@/components/ui/skeleton";
 import AuthModal from "@/components/logout-modal";
 import LogOutModal from "@/components/logout-modal";
+import { FaArrowLeftLong } from "react-icons/fa6";
+import { useRouter } from "next/navigation";
 const App: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [lastUpdateTime, setLastUpdateTime] = useState(new Date());
+
+  const router = useRouter()
 
   const user: any = useCurrentUser();
   const {
@@ -312,7 +316,7 @@ const App: React.FC = () => {
   const balance = Number(data?.payload!.balance);
 
   const handleCopyPlayerId = () => {
-    navigator.clipboard.writeText("BT78945612");
+    navigator.clipboard.writeText(user.playerId);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -338,6 +342,10 @@ const App: React.FC = () => {
     }
   }, [showToast]);
 
+
+  const handleBack =()=>{
+    router.back()
+  }
   return (
     <div className="bg-[url(https://c.animaapp.com/m9drzmnaxdV67z/img/background.png)] bg-cover bg-[50%_50%] w-full min-h-screen px-2 py-3 text-gray-800 pb-16 md:pb-4 md:flex md:flex-col md:items-center">
       {/* Main Container for Desktop */}
@@ -365,7 +373,9 @@ const App: React.FC = () => {
           }}
         >
           <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center">
+            <div className="flex items-center gap-4">
+              <button onClick={handleBack}><FaArrowLeftLong className="w-5 h-5 text-white" /></button>
+              <div className="flex items-center">
               <UserAvatar imageUrl="https://images.51939393.com//TCG_PROD_IMAGES/B2C/01_PROFILE/PROFILE/0.png" />
               <div className="ml-3">
                 <h2 className="font-medium text-lg md:text-xl">{user?.name}</h2>
@@ -381,6 +391,8 @@ const App: React.FC = () => {
                   </button>
                 </div>
               </div>
+            
+            </div>
             </div>
             <LogOutModal>
               <button className="text-white p-2 rounded-full hover:bg-[#00292f] cursor-pointer">
